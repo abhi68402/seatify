@@ -12,6 +12,8 @@ const I = {
   info: svg('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),
   pin: svg('<path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'),
   bookmark: svg('<path d="M6 4h12v17l-6-4-6 4z"/>'),
+  moon: svg('<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>'),
+  sun: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
   people: svg('<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.8.3 5 2.6 5 5.8"/>'),
   bulb: svg('<path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/>'),
   film: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/>'),
@@ -37,6 +39,28 @@ const store = {
   set(v) { try { localStorage.setItem('seatify.saved', JSON.stringify(v)); localStorage.removeItem('darshan.saved'); } catch {} },
 };
 let SAVED = store.get();
+
+// ───────────────────────── theme ─────────────────────────
+// index.html sets <html data-theme> before first paint (saved choice, else the system setting).
+// Choosing a theme here saves it; until then the page follows system changes live.
+const isDark = () => document.documentElement.dataset.theme === 'dark';
+function setTheme(t, save = true) {
+  const root = document.documentElement;
+  root.classList.add('theme-anim');
+  root.dataset.theme = t;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', t === 'dark' ? '#100e0c' : '#f7f6f3');
+  if (save) try { localStorage.setItem('seatify.theme', t); } catch {}
+  setTimeout(() => root.classList.remove('theme-anim'), 350);
+  const live = document.getElementById('announce');
+  if (live && save) live.textContent = t === 'dark' ? 'Dark mode on' : 'Light mode on';
+}
+try {
+  const mq = matchMedia('(prefers-color-scheme: dark)');
+  mq.addEventListener('change', (e) => {
+    let saved = null; try { saved = localStorage.getItem('seatify.theme'); } catch {}
+    if (!saved) { setTheme(e.matches ? 'dark' : 'light', false); if (S.route === 'home') render(); }
+  });
+} catch {}
 const isSaved = (tid, si, id) => SAVED.some((s) => s.tid === tid && s.si === si && s.id === id);
 
 // ───────────────────────── state & layout ─────────────────────────
@@ -155,11 +179,11 @@ function cityMap(list) {
   const pins = list.map((t) => `<g class="pin" tabindex="0" role="button" aria-label="${esc(t.name)}, ${esc(t.area)}" data-a="theatre" data-id="${t.id}" transform="translate(${px(t.lng).toFixed(1)},${py(t.lat).toFixed(1)})">
       <circle r="14" class="halo ${t.source === 'bms' ? 'v' : ''}"/><circle class="dot ${t.source === 'bms' ? 'v' : ''}" r="5.5"/><title>${esc(t.name)}</title></g>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Map of theatres in Hyderabad">
-    <defs><pattern id="g" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" stroke="rgba(23,20,17,.05)" stroke-width="1"/></pattern></defs>
+    <defs><pattern id="g" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" style="stroke:var(--map-grid)" stroke-width="1"/></pattern></defs>
     <rect width="${W}" height="${H}" fill="url(#g)"/>
-    <ellipse cx="${px(78.4735)}" cy="${py(17.4239)}" rx="15" ry="11" fill="#cfe3ec"/>
+    <ellipse cx="${px(78.4735)}" cy="${py(17.4239)}" rx="15" ry="11" style="fill:var(--water)"/>
     <text x="${px(78.4735) + 18}" y="${py(17.4239) + 16}" class="lbl-water" text-anchor="start" aria-hidden="true">Hussain Sagar</text>
-    <polyline points="${musi}" fill="none" stroke="#cfe3ec" stroke-width="3" stroke-linecap="round"/>
+    <polyline points="${musi}" fill="none" style="stroke:var(--water)" stroke-width="3" stroke-linecap="round"/>
     <g aria-hidden="true">${areas.map(([n, a, o]) => `<text x="${px(o)}" y="${py(a)}" class="lbl-area" text-anchor="middle">${n}</text>`).join('')}</g>
     ${pins}</svg>`;
 }
@@ -188,12 +212,13 @@ function renderHome() {
     <p class="loc"><span class="loc-ico" aria-hidden="true">${I.pin}</span><span>Hyderabad <small>· ${THEATRES.length} theatres</small></span></p>
     <nav class="appbar-actions" aria-label="Site">
       <button class="nav-btn" data-a="how" aria-label="How seats are scored">${I.info}<span>How scoring works</span></button>
+      <button class="nav-btn theme-btn" data-a="theme" aria-pressed="${isDark()}" aria-label="Dark mode" title="${isDark() ? 'Switch to light mode' : 'Switch to dark mode'}">${isDark() ? I.sun : I.moon}</button>
       <button class="nav-btn" data-a="saved" aria-label="Saved seats${SAVED.length ? ` (${SAVED.length})` : ''}">${I.bookmark}<span>Saved</span>${SAVED.length ? `<span class="count" aria-hidden="true">${SAVED.length}</span>` : ''}</button>
     </nav></div></header>
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
-      <p class="hero-brand"><span class="logo" aria-hidden="true">${I.seat}</span><span>Seatify</span></p>
-      <h1 id="hero-h">See your seat<br><em>before you sit.</em></h1>
+      <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>Seatify</h1>
+      <p class="tagline">See your seat <em>before you sit.</em></p>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
       <ul class="facts" aria-label="At a glance"><li><b>${THEATRES.length}</b> theatres</li><li><b>${totalSeats.toLocaleString('en-IN')}</b> seats scored</li><li><b>${verifiedN}</b> matched to BookMyShow</li></ul>
     </section>
@@ -254,11 +279,11 @@ function sectionSvg(Lx) {
     let p = `M${X(Lx.balcony.parapetZ)},${Y(Lx.balcony.undersideY)} L${X(Lx.balcony.parapetZ)},${Y(Lx.balcony.floorY + 0.9)}`;
     bs.rows.forEach((r) => { p += ` L${X(r.z - r.pitch / 2)},${Y(r.floorY)} L${X(r.z + r.pitch / 2)},${Y(r.floorY)}`; });
     p += ` L${X(maxZ)},${Y(bs.rows.at(-1).floorY)} L${X(maxZ)},${Y(Lx.balcony.undersideY)} Z`;
-    balc = `<path d="${p}" fill="rgba(181,79,11,.08)" stroke="#b54f0b" stroke-width="1"/>`;
+    balc = `<path d="${p}" fill="rgba(181,79,11,.08)" style="stroke:var(--warn)" stroke-width="1"/>`;
   }
-  const heads = Lx.rows.map((r) => `<circle cx="${X(r.z + 0.15)}" cy="${Y(r.floorY + 1.15)}" r="1.7" fill="#c8432e" opacity=".85"/>`).join('');
+  const heads = Lx.rows.map((r) => `<circle cx="${X(r.z + 0.15)}" cy="${Y(r.floorY + 1.15)}" r="1.7" style="fill:var(--accent)" opacity=".85"/>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Side section of the hall: screen on the left, rows rising to the right">
-    <line x1="${X(0.05)}" y1="${Y(sc.bottom)}" x2="${X(0.05)}" y2="${Y(sc.top)}" stroke="#17140f" stroke-width="3" stroke-linecap="round"/>
+    <line x1="${X(0.05)}" y1="${Y(sc.bottom)}" x2="${X(0.05)}" y2="${Y(sc.top)}" style="stroke:var(--text)" stroke-width="3" stroke-linecap="round"/>
     <path d="${floor}" fill="none" stroke="#8f8477" stroke-width="1.5"/>${balc}${heads}</svg>`;
 }
 
@@ -691,6 +716,7 @@ function act(el) {
       break;
     case 'seats': go('seats', { heat: false, zoom: null, top: -1, focus: null, open: false }); break;
     case 'how': openHow(); break;
+    case 'theme': setTheme(isDark() ? 'light' : 'dark'); render(); break;
     case 'closemodal': closeModal(); break;
     case 'heat': S.heat = !S.heat; S.keepScroll = $('.mapwrap')?.scrollLeft; renderSeats(); break;
     case 'zoom': S.zoom = Math.max(1, Math.min(4, S.zoom * (+el.dataset.d > 0 ? 1.3 : 1 / 1.3))); S.keepScroll = $('.mapwrap')?.scrollLeft; renderSeats(); break;
