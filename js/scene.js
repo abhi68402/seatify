@@ -50,7 +50,12 @@ export class TheatreView {
     this.tier = detectTier();
     this.low = this.tier === 'low';
     this.reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const r = (this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' }));
+    // Performance (no visual change):
+    // - High tier anti-aliases inside the composer's 4× MSAA target; the canvas only receives a
+    //   full-screen quad, so a multisampled canvas would be pure extra fill and resolve work.
+    // - preserveDrawingBuffer forces a full-screen copy every frame (costly in Firefox). snapshot()
+    //   reads the canvas right after draw() in the same task, which works without it.
+    const r = (this.renderer = new THREE.WebGLRenderer({ antialias: this.low, preserveDrawingBuffer: false, powerPreference: 'high-performance' }));
     this.maxDpr = Math.min(window.devicePixelRatio || 1, this.low ? 1.5 : 2);
     this.dpr = this.maxDpr;
     r.setPixelRatio(this.dpr);
@@ -163,6 +168,7 @@ export class TheatreView {
   resize() {
     const w = this.el.clientWidth, h = this.el.clientHeight;
     if (!w || !h) return;
+    this.interact = performance.now(); // render every frame while the window is being resized (no stale/black frames)
     this.renderer.setSize(w, h);
     this.composer?.setSize(w, h);
     const aspect = w / h;
@@ -632,14 +638,22 @@ export class TheatreView {
     requestAnimationFrame(this.loop);
     if (document.hidden) return;
     const now = performance.now();
-    const raw = now - this.last;
-    const dt = Math.min(0.05, raw / 1000);
+    const raw = now - this.last; // display-frame interval (kept per rAF, so adaptive resolution stays accurate)
     this.last = now;
     this.frame++;
 
-    const busy = !!this.tween || this.look.drag || now - (this.interact || 0) < 1200 || Math.abs(this.house - this.houseTarget) > 0.01;
-    // low tier: when nothing moves, render every other frame (~30 fps) to save battery
-    if (this.low && !busy && this.frame % 2) return;
+    const busy = !!this.tween || this.look.drag || this.previewing || now - (this.interact || 0) < 1200 || Math.abs(this.house - this.houseTarget) > 0.01
+      || (this.mode === 'aerial' && Math.abs(this.orbit.tDist - this.orbit.dist) + Math.abs(this.orbit.tYaw - this.orbit.yaw) + Math.abs(this.orbit.tPitch - this.orbit.pitch) > 0.01)
+      || Math.abs(this.look.ty - this.look.yaw) + Math.abs(this.look.tp - this.look.pitch) > 0.05;
+    // The film plays at 30 fps whatever the display rate (it was tied to every other frame, i.e.
+    // 60 fps on 120 Hz screens): same 2K/1K resolution, half the canvas draws and texture uploads.
+    const filmDue = now - (this.filmAt || 0) >= 1000 / 30 - 2;
+    // When nothing moves, the only change on screen is the film, so render only on new film frames.
+    // Any drag, glide, zoom or house-light fade renders at the full display rate.
+    if (!busy && !filmDue) return;
+    // animation step = time since the last RENDERED frame, so fans and fades keep their speed when idle
+    const dt = Math.min(0.05, (now - (this.drawnAt || now - 16)) / 1000);
+    this.drawnAt = now;
 
     // adaptive resolution: drop a notch when frames stay slow, recover when fast again
     this.avg = this.avg ? this.avg * 0.95 + Math.min(raw, 100) * 0.05 : 16;
@@ -650,11 +664,14 @@ export class TheatreView {
       else if (this.avg < 18 && this.dpr < this.maxDpr) { this.dpr = Math.min(this.maxDpr, this.dpr + 0.25); this.renderer.setPixelRatio(this.dpr); this.resize(); }
     }
 
-    if (this.frame % 2 === 0 || this.low) {
+    if (filmDue) {
+      this.filmAt = now;
       drawMovie(this.mctx, this.mc.width, this.mc.height, (now - this.t0) / 1000, this.movieId);
       this.tex.needsUpdate = true;
     }
-    if (this.frame % 10 === 0) {
+    // Screen-spill tint: a 4×4 GPU readback, ~3× a second is plenty (the light lerps smoothly anyway).
+    if (filmDue && now - (this.tintAt || 0) > 300) {
+      this.tintAt = now;
       this.sctx.drawImage(this.mc, 0, 0, 4, 4);
       const px = this.sctx.getImageData(0, 0, 4, 4).data;
       let r = 0, gg = 0, b = 0;
