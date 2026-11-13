@@ -314,6 +314,15 @@ svg { display: block; }
 #app.full .st-full { animation: hint 3.2s ease .6s forwards; }
 @keyframes hint { 0% { opacity: 0; } 15%, 75% { opacity: 1; } 100% { opacity: 0; } }
 #stage.no-seat .seat-pill, #stage.no-seat .st-seg, #stage.no-seat .st-move, #stage.no-seat .st-hint { display: none; }
+/* 3D couldn't start: say why, offer a retry, keep the seat card (scores don't need WebGL) */
+#stage.no3d .st-tools, #stage.no3d .st-seg, #stage.no3d .st-move, #stage.no3d .st-hint { display: none; }
+.st-fail { position: absolute; left: 50%; top: calc((100% - var(--sheet-h)) / 2); transform: translate(-50%, -50%); width: min(420px, calc(100% - 32px)); max-height: calc(100% - var(--sheet-h) - 140px); overflow-y: auto; display: grid; gap: 10px; justify-items: center; text-align: center; padding: 24px 20px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--line); }
+.st-fail h2 { font-family: var(--display); font-weight: 800; font-size: 22px; line-height: 1.2; }
+.st-fail p { color: var(--muted); font-size: 15px; line-height: 1.5; }
+.st-fail .btn { margin-top: 6px; min-width: 160px; }
+#app[data-sheet='side'] .st-fail { left: calc((100% - min(380px, 46vw)) / 2); top: 50%; width: min(400px, calc(100% - min(380px, 46vw) - 32px)); max-height: calc(100% - 96px); }
+#app[data-sheet='float'] .st-fail { top: 84px; transform: translateX(-50%); max-height: calc(100% - 104px); padding: 20px; }
+@media (min-width: 1360px) { #app[data-sheet='float'] .st-fail { left: calc(420px + (100% - 420px) / 2); top: 50%; transform: translate(-50%, -50%); } }
 
 /* seat card: bottom sheet (phone/tablet portrait) · side panel (landscape) · floating (split) */
 .seat-card { position: absolute; background: rgba(21, 16, 17, .95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--line); overflow-y: auto; scrollbar-width: none; transition: transform .45s cubic-bezier(.2, .9, .3, 1), opacity .35s; }

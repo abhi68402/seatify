@@ -402,17 +402,53 @@ function markSelected() {
 
 // ───────────────────────── 3D STAGE ─────────────────────────
 let view3d = null, viewLoading = null;
+// Each failure gets a `kind` so the stage can say what actually went wrong:
+// 'browser' (no import maps), 'webgl' (no GPU context), 'load' (module files didn't arrive), 'error'.
+const fail3D = (kind, cause) => Object.assign(new Error('3D view unavailable: ' + kind, { cause }), { kind });
+function webglAvailable() {
+  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; }
+}
 function getView() {
   if (view3d) return Promise.resolve(view3d);
-  if (!viewLoading) viewLoading = import('./scene.js').then((m) => (view3d = new m.TheatreView(glEl)));
+  if (!viewLoading) {
+    viewLoading = (async () => {
+      if (window.HTMLScriptElement?.supports && !HTMLScriptElement.supports('importmap')) throw fail3D('browser');
+      if (!webglAvailable()) throw fail3D('webgl');
+      let m;
+      try { m = await import('./scene.js'); } catch (e) { throw fail3D('load', e); }
+      try { return (view3d = new m.TheatreView(glEl)); } catch (e) {
+        glEl.replaceChildren();
+        throw fail3D(/webgl|context/i.test(e?.message || '') ? 'webgl' : 'error', e);
+      }
+    })();
+    // Never cache a failure: a later tap retries (e.g. once the connection is back).
+    viewLoading.catch(() => { viewLoading = null; });
+  }
   return viewLoading;
 }
+function failCopy(kind) {
+  if (kind === 'browser') return ['This browser is too old for 3D', 'Update it, or open Darshan in a current Chrome, Edge, Firefox or Safari (16.4 or later). Seat scores still work below.'];
+  if (kind === 'webgl') return ['3D graphics are turned off', 'This browser or device has WebGL disabled or unavailable. Turn on hardware acceleration in the browser settings, or try another browser. Seat scores still work below.'];
+  if (kind === 'load') return navigator.onLine === false
+    ? ['3D view didn’t finish loading', 'You went offline before the 3D files downloaded. Reconnect and tap Try again: once loaded, the 3D view keeps working offline.']
+    : ['3D view didn’t finish loading', 'Some of the 3D files failed to download. Tap Try again, or reload the page.'];
+  return ['The 3D view hit a problem', 'Something went wrong drawing this hall on this device. Tap Try again, or reload the page.'];
+}
+function show3DFailure(e) {
+  const [title, body] = failCopy(e?.kind);
+  stageEl.classList.add('no3d');
+  let box = $('#st-fail', stageEl);
+  if (!box) { box = document.createElement('div'); box.id = 'st-fail'; box.className = 'st-fail pe'; box.setAttribute('role', 'alert'); stageEl.prepend(box); }
+  box.innerHTML = `<h2>${title}</h2><p>${body}</p><button class="btn light" data-a="retry3d">Try again</button>`;
+  requestAnimationFrame(positionFloating);
+}
+function clear3DFailure() { stageEl.classList.remove('no3d'); $('#st-fail', stageEl)?.remove(); }
 function warmHall() { const Lx = L(); getView().then((v) => v.loadHall(Lx, crowd(Lx), MOVIES[S.content].id)).catch(() => {}); }
 
 function stop3D() {
   glEl.classList.remove('on');
   S.scenePrimed = false; S.sceneKey = '';
-  stageEl.innerHTML = '';
+  stageEl.innerHTML = ''; stageEl.classList.remove('no3d');
   setTimeout(() => { if (!exploring()) { view3d?.setActive(false); glEl.hidden = true; } }, 400);
 }
 
@@ -509,14 +545,14 @@ function updateViewUI() {
 // Keep the picture centred in the free area beside/above the seat card.
 function positionFloating() {
   const card = $('.seat-card');
-  if (!view3d || !card) return;
-  if (S.full || !S.focus) { app.style.setProperty('--sheet-h', '0px'); view3d.setInset(0); return; }
+  if (!card) return;
+  if (S.full || !S.focus) { app.style.setProperty('--sheet-h', '0px'); view3d?.setInset(0); return; }
   const mode = app.dataset.sheet;
-  if (mode === 'float') { view3d.setInset(0); return; }
-  if (mode === 'side') { view3d.setInset(card.offsetWidth, true); return; }
+  if (mode === 'float') { view3d?.setInset(0); return; }
+  if (mode === 'side') { view3d?.setInset(card.offsetWidth, true); return; }
   const h = card.offsetHeight;
   app.style.setProperty('--sheet-h', h + 'px');
-  view3d.setInset(Math.min(h, innerHeight * 0.5));
+  view3d?.setInset(Math.min(h, innerHeight * 0.5));
 }
 
 async function startScene() {
@@ -536,9 +572,10 @@ async function startScene() {
     positionFloating();
     if (seat) { v.flyTo(seat, !S.scenePrimed); S.scenePrimed = true; } else { v.preview(); S.scenePrimed = false; }
     requestAnimationFrame(() => glEl.classList.add('on'));
+    clear3DFailure();
   } catch (e) {
-    console.error(e);
-    toast('The 3D view needs WebGL, which this browser or device has turned off.');
+    console.error(e, e?.cause);
+    if (exploring()) show3DFailure(e);
   }
 }
 
@@ -647,6 +684,7 @@ function act(el) {
     case 'seat': chooseSeat(id); break;
     case 'sit': if (id) { if (S.route === 'theatre') go(isSplit() ? 'seats' : 'view', { focus: id, heat: false, zoom: null, open: false }); else chooseSeat(id); } break;
     case 'change': if (isSplit()) go('theatre'); else go('seats'); break;
+    case 'retry3d': { const b = $('#st-fail button'); if (b) { b.disabled = true; b.textContent = 'Loading…'; } startScene(); break; }
     case 'crowd': S.crowd = !S.crowd; view3d?.setAudience(S.crowd); updateViewUI(); toast(S.crowd ? 'Full house: see whose head is in front of you' : 'Empty hall'); break;
     case 'lights': S.lights = !S.lights; view3d?.setHouseLights(S.lights); updateViewUI(); toast(S.lights ? 'House lights up' : 'Lights down. Showtime.'); break;
     case 'content': S.content = (S.content + 1) % MOVIES.length; view3d?.setContent(MOVIES[S.content].id); toast(`On screen: ${MOVIES[S.content].title}`); break;
