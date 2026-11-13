@@ -33,8 +33,8 @@ const hallName = (h) => h.name.split(' · ')[0];
 
 // ───────────────────────── storage ─────────────────────────
 const store = {
-  get() { try { return JSON.parse(localStorage.getItem('darshan.saved') || '[]'); } catch { return []; } },
-  set(v) { try { localStorage.setItem('darshan.saved', JSON.stringify(v)); } catch {} },
+  get() { try { return JSON.parse(localStorage.getItem('seatify.saved') || localStorage.getItem('darshan.saved') || '[]'); } catch { return []; } },
+  set(v) { try { localStorage.setItem('seatify.saved', JSON.stringify(v)); localStorage.removeItem('darshan.saved'); } catch {} },
 };
 let SAVED = store.get();
 const isSaved = (tid, si, id) => SAVED.some((s) => s.tid === tid && s.si === si && s.id === id);
@@ -65,7 +65,7 @@ function syncLayout() {
   return l;
 }
 
-const TITLES = { home: 'Darshan · See your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Darshan' };
+const TITLES = { home: 'Seatify · See your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Seatify' };
 function go(route, patch = {}) {
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
@@ -93,7 +93,7 @@ function render() {
   if (r === 'view') { stageEl.setAttribute('role', 'main'); stageEl.removeAttribute('aria-label'); }
   else if (r === 'seats' && isSplit()) { stageEl.setAttribute('role', 'region'); stageEl.setAttribute('aria-label', '3D seat view'); }
   else { stageEl.removeAttribute('role'); stageEl.removeAttribute('aria-label'); }
-  document.title = TITLES[r] || `${T()?.name ?? 'Darshan'} · Darshan`;
+  document.title = TITLES[r] || `${T()?.name ?? 'Seatify'} · Seatify`;
   if (r === 'home') renderHome();
   else if (r === 'theatre') renderTheatre();
   else if (r === 'saved') renderSaved();
@@ -155,11 +155,11 @@ function cityMap(list) {
   const pins = list.map((t) => `<g class="pin" tabindex="0" role="button" aria-label="${esc(t.name)}, ${esc(t.area)}" data-a="theatre" data-id="${t.id}" transform="translate(${px(t.lng).toFixed(1)},${py(t.lat).toFixed(1)})">
       <circle r="14" class="halo ${t.source === 'bms' ? 'v' : ''}"/><circle class="dot ${t.source === 'bms' ? 'v' : ''}" r="5.5"/><title>${esc(t.name)}</title></g>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Map of theatres in Hyderabad">
-    <defs><pattern id="g" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/></pattern></defs>
+    <defs><pattern id="g" width="18" height="18" patternUnits="userSpaceOnUse"><path d="M18 0H0V18" fill="none" stroke="rgba(23,20,17,.05)" stroke-width="1"/></pattern></defs>
     <rect width="${W}" height="${H}" fill="url(#g)"/>
-    <ellipse cx="${px(78.4735)}" cy="${py(17.4239)}" rx="15" ry="11" fill="#17323f" opacity=".9"/>
+    <ellipse cx="${px(78.4735)}" cy="${py(17.4239)}" rx="15" ry="11" fill="#cfe3ec"/>
     <text x="${px(78.4735) + 18}" y="${py(17.4239) + 16}" class="lbl-water" text-anchor="start" aria-hidden="true">Hussain Sagar</text>
-    <polyline points="${musi}" fill="none" stroke="#17323f" stroke-width="3" stroke-linecap="round"/>
+    <polyline points="${musi}" fill="none" stroke="#cfe3ec" stroke-width="3" stroke-linecap="round"/>
     <g aria-hidden="true">${areas.map(([n, a, o]) => `<text x="${px(o)}" y="${py(a)}" class="lbl-area" text-anchor="middle">${n}</text>`).join('')}</g>
     ${pins}</svg>`;
 }
@@ -185,14 +185,14 @@ function renderHome() {
   const verifiedN = THEATRES.filter((t) => t.source === 'bms').length;
   screenEl.innerHTML = `
   <header class="appbar"><div class="appbar-in wide">
-    <p class="brand"><span class="logo" aria-hidden="true"></span><span>Darshan</span></p>
+    <p class="loc"><span class="loc-ico" aria-hidden="true">${I.pin}</span><span>Hyderabad <small>· ${THEATRES.length} theatres</small></span></p>
     <nav class="appbar-actions" aria-label="Site">
       <button class="nav-btn" data-a="how" aria-label="How seats are scored">${I.info}<span>How scoring works</span></button>
       <button class="nav-btn" data-a="saved" aria-label="Saved seats${SAVED.length ? ` (${SAVED.length})` : ''}">${I.bookmark}<span>Saved</span>${SAVED.length ? `<span class="count" aria-hidden="true">${SAVED.length}</span>` : ''}</button>
     </nav></div></header>
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
-      <p class="eyebrow">${I.pin} Hyderabad · ${THEATRES.length} theatres</p>
+      <p class="hero-brand"><span class="logo" aria-hidden="true">${I.seat}</span><span>Seatify</span></p>
       <h1 id="hero-h">See your seat<br><em>before you sit.</em></h1>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
       <ul class="facts" aria-label="At a glance"><li><b>${THEATRES.length}</b> theatres</li><li><b>${totalSeats.toLocaleString('en-IN')}</b> seats scored</li><li><b>${verifiedN}</b> matched to BookMyShow</li></ul>
@@ -224,9 +224,9 @@ function renderHome() {
     </div>
   </main>
   <footer class="site-foot"><div class="foot-in">
-    <p class="brand sm"><span class="logo" aria-hidden="true"></span><span>Darshan</span></p>
+    <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span><span>Seatify</span></p>
     <p class="fine">“Approximate layout” halls are reconstructions from public descriptions. “Matched” halls follow the BookMyShow seat map row for row. Screen sizes and floor slope are estimates unless noted.</p>
-    <p class="fine">Darshan is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
+    <p class="fine">Seatify is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
   </div></footer>`;
 }
 const countText = (n) => (n === THEATRES.length ? `All ${n} theatres` : `${n} of ${THEATRES.length} theatres`);
@@ -254,11 +254,11 @@ function sectionSvg(Lx) {
     let p = `M${X(Lx.balcony.parapetZ)},${Y(Lx.balcony.undersideY)} L${X(Lx.balcony.parapetZ)},${Y(Lx.balcony.floorY + 0.9)}`;
     bs.rows.forEach((r) => { p += ` L${X(r.z - r.pitch / 2)},${Y(r.floorY)} L${X(r.z + r.pitch / 2)},${Y(r.floorY)}`; });
     p += ` L${X(maxZ)},${Y(bs.rows.at(-1).floorY)} L${X(maxZ)},${Y(Lx.balcony.undersideY)} Z`;
-    balc = `<path d="${p}" fill="#2a1d18" stroke="#ff9d5c" stroke-width="1"/>`;
+    balc = `<path d="${p}" fill="rgba(181,79,11,.08)" stroke="#b54f0b" stroke-width="1"/>`;
   }
-  const heads = Lx.rows.map((r) => `<circle cx="${X(r.z + 0.15)}" cy="${Y(r.floorY + 1.15)}" r="1.7" fill="#e3b04b" opacity=".8"/>`).join('');
+  const heads = Lx.rows.map((r) => `<circle cx="${X(r.z + 0.15)}" cy="${Y(r.floorY + 1.15)}" r="1.7" fill="#c8432e" opacity=".85"/>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Side section of the hall: screen on the left, rows rising to the right">
-    <line x1="${X(0.05)}" y1="${Y(sc.bottom)}" x2="${X(0.05)}" y2="${Y(sc.top)}" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="${X(0.05)}" y1="${Y(sc.bottom)}" x2="${X(0.05)}" y2="${Y(sc.top)}" stroke="#17140f" stroke-width="3" stroke-linecap="round"/>
     <path d="${floor}" fill="none" stroke="#8f8477" stroke-width="1.5"/>${balc}${heads}</svg>`;
 }
 
@@ -347,7 +347,7 @@ function renderSeats() {
       const gap = Math.max(1, pxm * 0.07);
       const left = (s.x - s.sw / 2 + Lx.maxHalf) * pxm + gap;
       const w = Math.max(4, s.sw * pxm - gap * 2);
-      const bg = S.heat && !on ? `background:${heatColor(s.m.score)};` : '';
+      const bg = S.heat && !on ? `background:${heatColor(s.m.score)};color:#fff;` : '';
       return `<button class="${cls}" style="left:${left.toFixed(1)}px;width:${w.toFixed(1)}px;${bg}" data-a="seat" data-id="${esc(s.id)}" tabindex="${s.id === tabId ? 0 : -1}" aria-label="Row ${esc(s.rowLabel)} seat ${s.num}, ${esc(s.tierLabel)}, view score ${s.m.score}" aria-pressed="${on}">${w >= 13 && (on || S.zoom > 1.6) ? s.num : ''}</button>`;
     }).join('');
     return `${head}<div class="seatrow" style="height:${rh}px;margin-top:${walk}px"><span class="rl l" aria-hidden="true">${esc(r.label)}</span><div class="rs" style="width:${width}px">${seats}</div><span class="rl" aria-hidden="true">${esc(r.label)}</span></div>`;
@@ -369,7 +369,7 @@ function renderSeats() {
   <main id="main" class="seats-page" tabindex="-1">
     ${hs.length > 1 ? `<div class="seg wide" role="group" aria-label="Choose a screen">${hs.map((x, i) => `<button data-a="screen" data-id="${i}" aria-pressed="${i === S.si}">${esc(hallName(x))}</button>`).join('')}</div>` : ''}
     <div class="mapcard">
-      <div class="arc" aria-hidden="true"><svg viewBox="0 0 400 70" preserveAspectRatio="none"><defs><linearGradient id="sl" x1="0" x2="1"><stop offset="0" stop-color="#e3b04b" stop-opacity="0"/><stop offset=".5" stop-color="#ffe9b5"/><stop offset="1" stop-color="#e3b04b" stop-opacity="0"/></linearGradient><radialGradient id="sg" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#ffe9b5" stop-opacity=".22"/><stop offset="1" stop-color="#ffe9b5" stop-opacity="0"/></radialGradient></defs><path d="M20 26 Q200 -8 380 26 L380 70 L20 70 Z" fill="url(#sg)"/><path d="M20 26 Q200 -8 380 26" fill="none" stroke="url(#sl)" stroke-width="2.6"/></svg><span>SCREEN · ${h.screen.w} M</span></div>
+      <div class="arc" aria-hidden="true"><svg viewBox="0 0 400 70" preserveAspectRatio="none"><defs><linearGradient id="sl" x1="0" x2="1"><stop offset="0" stop-color="#c8432e" stop-opacity="0"/><stop offset=".5" stop-color="#c8432e"/><stop offset="1" stop-color="#c8432e" stop-opacity="0"/></linearGradient><radialGradient id="sg" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#c8432e" stop-opacity=".10"/><stop offset="1" stop-color="#c8432e" stop-opacity="0"/></radialGradient></defs><path d="M20 26 Q200 -8 380 26 L380 70 L20 70 Z" fill="url(#sg)"/><path d="M20 26 Q200 -8 380 26" fill="none" stroke="url(#sl)" stroke-width="2.6"/></svg><span>SCREEN · ${h.screen.w} M</span></div>
       <div class="mapwrap" role="group" aria-label="Seat map, screen at the top"><div class="mapinner" style="width:${width + 48}px">${rowsHtml}</div></div>
       ${S.heat ? '<div class="heatbar"><span>Weaker view</span><i></i><span>Better view</span></div>' : `<ul class="legend">${legend.map(([c, l]) => `<li><i class="sw ${c}"></i>${l}</li>`).join('')}</ul>`}
     </div>
@@ -413,11 +413,11 @@ function webglAvailable() {
 // are blocked or unsupported (ad/script blockers, older browsers).
 let sceneMod = null;
 function loadBundle() {
-  if (window.DarshanScene) return Promise.resolve(window.DarshanScene);
+  if (window.SeatifyScene) return Promise.resolve(window.SeatifyScene);
   return new Promise((res, rej) => {
     const s = document.createElement('script');
     s.src = new URL('./scene.bundle.js?v=' + Date.now(), import.meta.url).href;
-    s.onload = () => (window.DarshanScene ? res(window.DarshanScene) : rej(new Error('scene.bundle.js loaded but did not start')));
+    s.onload = () => (window.SeatifyScene ? res(window.SeatifyScene) : rej(new Error('scene.bundle.js loaded but did not start')));
     s.onerror = () => { s.remove(); rej(new Error('Could not download js/scene.bundle.js')); };
     document.head.append(s);
   });
@@ -447,7 +447,7 @@ function getView() {
   return viewLoading;
 }
 function failCopy(kind) {
-  if (kind === 'browser') return ['This browser is too old for 3D', 'Update it, or open Darshan in a current Chrome, Edge, Firefox or Safari (16.4 or later). Seat scores still work below.'];
+  if (kind === 'browser') return ['This browser is too old for 3D', 'Update it, or open Seatify in a current Chrome, Edge, Firefox or Safari (16.4 or later). Seat scores still work below.'];
   if (kind === 'webgl') return ['3D graphics are turned off', 'This browser or device has WebGL disabled or unavailable. Turn on hardware acceleration in the browser settings, or try another browser. Seat scores still work below.'];
   if (kind === 'load') return navigator.onLine === false
     ? ['3D view didn’t finish loading', 'You went offline before the 3D files downloaded. Reconnect and tap Try again: once loaded, the 3D view keeps working offline.']
@@ -641,7 +641,7 @@ let modalReturn = null;
 function openHow() {
   modalReturn = document.activeElement;
   modalEl.innerHTML = `<div class="m-back" data-a="closemodal"></div><div class="m-card" role="dialog" aria-modal="true" aria-labelledby="m-title"><button class="icon-btn m-x" data-a="closemodal" aria-label="Close">${I.close}</button>
-    <h2 id="m-title">How Darshan scores a seat</h2>
+    <h2 id="m-title">How Seatify scores a seat</h2>
     <p>Each hall is modelled in 3D from its seat map, screen size, row spacing, floor slope and balcony. For every seat we work out what your eyes actually see:</p>
     <dl>
       <dt>Field of view</dt><dd>The angle the screen fills. Target about 50° for standard halls and 60° for IMAX, large-format and 70mm.</dd>

@@ -1,4 +1,4 @@
-// Darshan — data for 10 Hyderabad theatres.
+// Seatify — data for the Hyderabad theatres.
 // All distances are in metres.
 //
 // Each theatre has `screens: [hall, ...]` (or a single `hall`). A hall's seats can be

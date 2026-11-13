@@ -1,10 +1,12 @@
 <div align="center">
 
-# 🎭 Darshan
+# 💺 Seatify
 
 ### *See your seat before you sit.*
 
 Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view is really like before you go.
+
+**[▶ Try it live](https://abhi68402.github.io/seatify/)**
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
@@ -17,13 +19,13 @@ Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view
 
 ---
 
-## ✨ Why Darshan?
+## ✨ Why Seatify?
 
-*Darshan* means "sight" or "view". Seat maps on booking sites are grids of squares. They hide neck strain, blocked sightlines and balcony overhangs, so you only find out once you're sitting there.
+Seat maps on booking sites are grids of squares. They hide neck strain, blocked sightlines and balcony overhangs, so you only find out once you're sitting there.
 
-Darshan fixes that. Pick a theatre, pick a seat, and **fly into the hall** to look around from exactly where you would sit.
+Seatify fixes that. Pick a theatre, pick a seat, and **fly into the hall** to look around from exactly where you would sit.
 
-> Darshan is a view guide, not a booking app. It has no showtimes, no payments and no tickets.
+> Seatify is a view guide, not a booking app. It has no showtimes, no payments and no tickets.
 
 ## 🚀 Features
 
@@ -58,9 +60,9 @@ python3 serve.py 8080     # custom port
 ## 🧱 Project structure
 
 ```
-darshan/
+seatify/
 ├── index.html      # app shell, import map, accessibility landmarks
-├── styles.css      # design system: cinema dark + warm gold
+├── styles.css      # design system: light, coral accent
 ├── serve.py        # local dev server (no-cache)
 ├── js/
 │   ├── data.js     # tiers, theatres and halls (the single source of truth)
@@ -79,7 +81,7 @@ Data flows one way: `data.js` → `layout.js` → `app.js` (UI) and `scene.js` (
 
 ## 🌐 Deploy
 
-Darshan is a static site, so it works on **GitHub Pages**. In the repo, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
+Seatify is a static site, so it works on **GitHub Pages**. In the repo, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
 
 ## 🤝 Contributing
 
@@ -87,4 +89,4 @@ Ideas and fixes are welcome. Please keep it offline (no CDN links) and accessibl
 
 ## 📄 Notes
 
-Darshan is a hackathon project. Theatre names belong to their owners and are used only to describe halls. Approximate halls are labelled as such in the app.
+Seatify is a hackathon project. Theatre names belong to their owners and are used only to describe halls. Approximate halls are labelled as such in the app.
