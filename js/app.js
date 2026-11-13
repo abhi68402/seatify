@@ -403,23 +403,39 @@ function markSelected() {
 // ───────────────────────── 3D STAGE ─────────────────────────
 let view3d = null, viewLoading = null;
 // Each failure gets a `kind` so the stage can say what actually went wrong:
-// 'browser' (no import maps), 'webgl' (no GPU context), 'load' (module files didn't arrive), 'error'.
+// 'webgl' (no GPU context), 'load' (neither the modules nor the single-file bundle arrived), 'error'.
 const fail3D = (kind, cause) => Object.assign(new Error('3D view unavailable: ' + kind, { cause }), { kind });
 function webglAvailable() {
   try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; }
+}
+// Fallback: js/scene.bundle.js is three.js + all 3D modules in ONE classic script (built by
+// tools/bundle-3d.mjs). It needs no import map and no module loading, so it works where those
+// are blocked or unsupported (ad/script blockers, older browsers).
+let sceneMod = null;
+function loadBundle() {
+  if (window.DarshanScene) return Promise.resolve(window.DarshanScene);
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = new URL('./scene.bundle.js?v=' + Date.now(), import.meta.url).href;
+    s.onload = () => (window.DarshanScene ? res(window.DarshanScene) : rej(new Error('scene.bundle.js loaded but did not start')));
+    s.onerror = () => { s.remove(); rej(new Error('Could not download js/scene.bundle.js')); };
+    document.head.append(s);
+  });
+}
+async function loadSceneModule() {
+  if (sceneMod) return sceneMod;
+  const maps = !window.HTMLScriptElement?.supports || HTMLScriptElement.supports('importmap');
+  if (maps) {
+    try { return (sceneMod = await import('./scene.js')); } catch (e1) { console.warn('3D modules failed; using the single-file bundle', e1); }
+  }
+  try { return (sceneMod = await loadBundle()); } catch (e) { throw fail3D('load', e); }
 }
 function getView() {
   if (view3d) return Promise.resolve(view3d);
   if (!viewLoading) {
     viewLoading = (async () => {
-      if (window.HTMLScriptElement?.supports && !HTMLScriptElement.supports('importmap')) throw fail3D('browser');
       if (!webglAvailable()) throw fail3D('webgl');
-      let m;
-      // A failed module fetch stays failed for this page's lifetime, so retry once with a fresh URL.
-      try { m = await import('./scene.js'); } catch (e1) {
-        console.warn('3D module failed, retrying with a fresh URL', e1);
-        try { m = await import('./scene.js?r=' + Date.now()); } catch (e) { throw fail3D('load', e); }
-      }
+      const m = await loadSceneModule();
       try { return (view3d = new m.TheatreView(glEl)); } catch (e) {
         glEl.replaceChildren();
         throw fail3D(/webgl|context/i.test(e?.message || '') ? 'webgl' : 'error', e);
@@ -816,4 +832,5 @@ let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTime
 lastLayout = layoutOf();
 render();
 // warm up three.js and paint the hall textures in idle time, so opening a hall is instant
-setTimeout(() => getView().then(() => import('./assets.js')).then((a) => a.prepareAssets()).catch(() => {}), 800);
+// (the bundle carries its own copy of assets.js, so use that one when the bundle was loaded)
+setTimeout(() => getView().then(() => (sceneMod?.prepareAssets ? sceneMod : import('./assets.js'))).then((a) => a.prepareAssets()).catch(() => {}), 800);

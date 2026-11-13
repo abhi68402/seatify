@@ -68,7 +68,10 @@ darshan/
 │   ├── scene.js    # three.js 3D hall, cameras and device tiers
 │   ├── assets.js   # procedural textures
 │   ├── movies.js   # procedural screen content
-│   └── app.js      # UI, routing and state
+│   ├── app.js      # UI, routing and state
+│   └── scene.bundle.js  # generated single-file 3D fallback (node tools/bundle-3d.mjs)
+├── tools/
+│   └── bundle-3d.mjs    # zero-dependency bundler for the fallback
 └── vendor/         # three.js 0.160 and self-hosted fonts
 ```
 
