@@ -1,0 +1,16 @@
+/* Self-hosted fonts (Latin subset, variable weight) so Darshan works offline.
+   Inter and Fraunces are licensed under the SIL Open Font License 1.1. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(inter-latin.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url(fraunces-latin.woff2) format('woff2');
+}

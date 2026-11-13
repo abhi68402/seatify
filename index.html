@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en-IN" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Darshan · See your seat before you sit</title>
+  <meta name="description" content="Sit in any seat of 13 Hyderabad theatres in 3D before you go: screen distance, viewing angle, sightlines and sound, scored for every seat." />
+  <meta name="theme-color" content="#0b0809" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta property="og:title" content="Darshan · See your seat before you sit" />
+  <meta property="og:description" content="A 3D, seat-by-seat view guide to Hyderabad cinema halls." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='35%25' cy='35%25'%3E%3Cstop offset='0' stop-color='%23fff2c8'/%3E%3Cstop offset='.45' stop-color='%23e3b04b'/%3E%3Cstop offset='1' stop-color='%238a5a10'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <!-- Everything is served from this folder: the app runs with no internet connection. -->
+  <link rel="stylesheet" href="vendor/fonts/fonts.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="modulepreload" href="vendor/three/build/three.module.js" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/build/three.module.js",
+        "three/addons/": "./vendor/three/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to main content</a>
+  <div id="app" data-layout="phone" data-sheet="bottom" data-route="home">
+    <div id="gl" hidden aria-hidden="true"></div>
+    <!-- Each route renders its own <header>, <main id="main"> and <footer> into #screen. -->
+    <div id="screen"></div>
+    <div id="stage" aria-live="off"></div>
+    <div id="modal" aria-hidden="true"></div>
+    <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <p id="announce" class="sr" aria-live="polite" aria-atomic="true"></p>
+  </div>
+  <noscript><p style="padding:24px;color:#f6efe6;font-family:system-ui,sans-serif">Darshan needs JavaScript to draw the 3D halls.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

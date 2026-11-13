@@ -1,0 +1,87 @@
+<div align="center">
+
+# 🎭 Darshan
+
+### *See your seat before you sit.*
+
+Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view is really like before you go.
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES%20Modules-F7DF1E?logo=javascript&logoColor=black)
+![three.js](https://img.shields.io/badge/three.js-0.160-000000?logo=threedotjs&logoColor=white)
+![Offline](https://img.shields.io/badge/runs-100%25%20offline-2ea44f)
+![Accessibility](https://img.shields.io/badge/a11y-WCAG%202.1%20AA%20target-8a5a10)
+
+</div>
+
+---
+
+## ✨ Why Darshan?
+
+*Darshan* means "sight" or "view". Seat maps on booking sites are grids of squares. They hide neck strain, blocked sightlines and balcony overhangs, so you only find out once you're sitting there.
+
+Darshan fixes that. Pick a theatre, pick a seat, and **fly into the hall** to look around from exactly where you would sit.
+
+> Darshan is a view guide, not a booking app. It has no showtimes, no payments and no tickets.
+
+## 🚀 Features
+
+| | |
+|---|---|
+| 🪑 **Seat-by-seat 3D view** | A human-eye camera with about 105° field of view, realistic seated eye heights and an anatomically sized audience. |
+| 📊 **0–100 view score** | Every seat is scored on field of view, off-axis angle, look-up angle, sightline clearance, balcony overhang and sound, with plain-language reasons. |
+| 🏛️ **13 Hyderabad theatres** | Maroon curtains, velvet and damask multiplexes, and whitewashed single screens with ceiling fans. |
+| ✅ **Honest data** | 7 halls are matched row-for-row to real seat maps. 6 are labelled approximate reconstructions. |
+| 🔖 **Saved seats** | Shortlist seats and compare them. Saved in your browser. |
+| 📱 **Responsive** | Phones from 360 px up to wide desktops. The desktop layout splits the seat map and the live 3D view. |
+| ♿ **Accessible** | Skip link, keyboard seat navigation with arrow keys, screen-reader announcements, focus management and reduced-motion support. |
+| 📴 **Fully offline** | No CDN links, web fonts or network calls. three.js and fonts are vendored. |
+
+## 🎬 Theatres
+
+**Matched to real seat maps:** Prasads · AMB · AAA · ALLU · ART · PVR Nexus · Lakshmikala
+
+**Approximate reconstructions:** Sudarshan · Sandhya · Devi · INOX GVK · PVR Inorbit · Cinépolis
+
+## 🛠️ Run locally
+
+The app uses ES modules, so it **must be served over HTTP**. Opening `index.html` from disk won't work.
+
+```bash
+python3 serve.py          # http://localhost:5317
+python3 serve.py 8080     # custom port
+```
+
+`serve.py` disables caching so edits show up on reload. There is no build step, npm or install.
+
+## 🧱 Project structure
+
+```
+darshan/
+├── index.html      # app shell, import map, accessibility landmarks
+├── styles.css      # design system: cinema dark + warm gold
+├── serve.py        # local dev server (no-cache)
+├── js/
+│   ├── data.js     # tiers, theatres and halls (the single source of truth)
+│   ├── layout.js   # hall geometry and per-seat view scoring
+│   ├── scene.js    # three.js 3D hall, cameras and device tiers
+│   ├── assets.js   # procedural textures
+│   ├── movies.js   # procedural screen content
+│   └── app.js      # UI, routing and state
+└── vendor/         # three.js 0.160 and self-hosted fonts
+```
+
+Data flows one way: `data.js` → `layout.js` → `app.js` (UI) and `scene.js` (3D). Adding or fixing a theatre is a change to `data.js` only.
+
+## 🌐 Deploy
+
+Darshan is a static site, so it works on **GitHub Pages**. In the repo, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
+
+## 🤝 Contributing
+
+Ideas and fixes are welcome. Please keep it offline (no CDN links) and accessible (text of at least 12 px, 4.5:1 contrast, 44 px targets). See [`CLAUDE.md`](CLAUDE.md) for detailed conventions.
+
+## 📄 Notes
+
+Darshan is a hackathon project. Theatre names belong to their owners and are used only to describe halls. Approximate halls are labelled as such in the app.
