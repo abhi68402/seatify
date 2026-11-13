@@ -415,7 +415,11 @@ function getView() {
       if (window.HTMLScriptElement?.supports && !HTMLScriptElement.supports('importmap')) throw fail3D('browser');
       if (!webglAvailable()) throw fail3D('webgl');
       let m;
-      try { m = await import('./scene.js'); } catch (e) { throw fail3D('load', e); }
+      // A failed module fetch stays failed for this page's lifetime, so retry once with a fresh URL.
+      try { m = await import('./scene.js'); } catch (e1) {
+        console.warn('3D module failed, retrying with a fresh URL', e1);
+        try { m = await import('./scene.js?r=' + Date.now()); } catch (e) { throw fail3D('load', e); }
+      }
       try { return (view3d = new m.TheatreView(glEl)); } catch (e) {
         glEl.replaceChildren();
         throw fail3D(/webgl|context/i.test(e?.message || '') ? 'webgl' : 'error', e);
@@ -431,7 +435,7 @@ function failCopy(kind) {
   if (kind === 'webgl') return ['3D graphics are turned off', 'This browser or device has WebGL disabled or unavailable. Turn on hardware acceleration in the browser settings, or try another browser. Seat scores still work below.'];
   if (kind === 'load') return navigator.onLine === false
     ? ['3D view didn’t finish loading', 'You went offline before the 3D files downloaded. Reconnect and tap Try again: once loaded, the 3D view keeps working offline.']
-    : ['3D view didn’t finish loading', 'Some of the 3D files failed to download. Tap Try again, or reload the page.'];
+    : ['3D view didn’t finish loading', 'Some of the 3D files failed to download. Reload the page to try again. Seat scores still work.'];
   return ['The 3D view hit a problem', 'Something went wrong drawing this hall on this device. Tap Try again, or reload the page.'];
 }
 function show3DFailure(e) {
@@ -439,7 +443,11 @@ function show3DFailure(e) {
   stageEl.classList.add('no3d');
   let box = $('#st-fail', stageEl);
   if (!box) { box = document.createElement('div'); box.id = 'st-fail'; box.className = 'st-fail pe'; box.setAttribute('role', 'alert'); stageEl.prepend(box); }
-  box.innerHTML = `<h2>${title}</h2><p>${body}</p><button class="btn light" data-a="retry3d">Try again</button>`;
+  const c = e?.cause || e;
+  const detail = String((c?.name ? c.name + ': ' : '') + (c?.message || c || 'Unknown error')).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
+  // A module that failed to load can only be refetched by reloading the page.
+  const retry = e?.kind === 'load' ? 'reload3d' : 'retry3d';
+  box.innerHTML = `<h2>${title}</h2><p>${body}</p><button class="btn light" data-a="${retry}">${retry === 'reload3d' ? 'Reload page' : 'Try again'}</button><details class="st-detail"><summary>Technical details</summary><code>${detail}</code><p>If this keeps happening, turn off ad or script blockers for this site.</p></details>`;
   requestAnimationFrame(positionFloating);
 }
 function clear3DFailure() { stageEl.classList.remove('no3d'); $('#st-fail', stageEl)?.remove(); }
@@ -684,6 +692,7 @@ function act(el) {
     case 'seat': chooseSeat(id); break;
     case 'sit': if (id) { if (S.route === 'theatre') go(isSplit() ? 'seats' : 'view', { focus: id, heat: false, zoom: null, open: false }); else chooseSeat(id); } break;
     case 'change': if (isSplit()) go('theatre'); else go('seats'); break;
+    case 'reload3d': location.reload(); break;
     case 'retry3d': { const b = $('#st-fail button'); if (b) { b.disabled = true; b.textContent = 'Loading…'; } startScene(); break; }
     case 'crowd': S.crowd = !S.crowd; view3d?.setAudience(S.crowd); updateViewUI(); toast(S.crowd ? 'Full house: see whose head is in front of you' : 'Empty hall'); break;
     case 'lights': S.lights = !S.lights; view3d?.setHouseLights(S.lights); updateViewUI(); toast(S.lights ? 'House lights up' : 'Lights down. Showtime.'); break;
