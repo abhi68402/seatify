@@ -2,7 +2,7 @@
    First visit: downloads and stores every file below (~3.0 MB). After that the
    site opens and runs with no internet. A deploy that changes any file changes VERSION, so
    browsers fetch the new set in the background and switch to it on the next visit. */
-const VERSION = 'fc590144b098';
+const VERSION = '59ea32e6cc8b';
 const CACHE = 'seatify-' + VERSION;
 const FILES = [
   "./",
@@ -12,6 +12,7 @@ const FILES = [
   "js/app.js",
   "js/assets.js",
   "js/data.js",
+  "js/info.js",
   "js/layout.js",
   "js/movies.js",
   "js/scene.bundle.js",

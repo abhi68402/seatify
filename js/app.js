@@ -1,6 +1,7 @@
 import { THEATRES, MOVIES, TIERS, theatreById } from './data.js';
 import { getLayout, crowd, topSeats, neighbour, heatColor, labelTone, insightFor } from './layout.js';
 import { profileOf, matchView, bestInTheatre, directorSeats, DNA_PRESETS, dnaProfile } from './twin.js';
+import { infoOf, INFO_AS_OF } from './info.js';
 
 // ───────────────────────── helpers ─────────────────────────
 const $ = (s, r = document) => r.querySelector(s);
@@ -29,6 +30,8 @@ const I = {
   check: svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
   seat: svg('<path d="M6 11V6a2 2 0 012-2h8a2 2 0 012 2v5"/><path d="M4 11h16v5H4zM6 16v4M18 16v4"/>'),
   twin: svg('<path d="M3 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0111 7v4"/><path d="M2 11h10v3.5H2zM3.5 14.5V18M10.5 14.5V18"/><path d="M13 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0121 7v4"/><path d="M12 11h10v3.5H12zM13.5 14.5V18M20.5 14.5V18"/>'),
+  star: svg('<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z" fill="currentColor" stroke="none"/>'),
+  ext: svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>'),
   heart: svg('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>'),
   dna: svg('<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.2" fill="currentColor"/><circle cx="15" cy="12" r="2.2" fill="currentColor"/><circle cx="7" cy="18" r="2.2" fill="currentColor"/>'),
   motion: svg('<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/><path d="M3.5 8.5a6 6 0 000 7M20.5 8.5a6 6 0 010 7"/>'),
@@ -178,6 +181,18 @@ function toast(msg) {
 }
 
 // ───────────────────────── small components ─────────────────────────
+// Audience rating with its source (js/info.js). Compact count: 130,468 -> 130K.
+const nfmt = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
+function ratingChip(t, { long = false } = {}) {
+  const r = infoOf(t.id)?.rating;
+  if (!r) return '';
+  const cnt = r.count ? ` · ${long ? r.count.toLocaleString('en-IN') : nfmt.format(r.count)} review${r.count === 1 ? '' : 's'}` : '';
+  const label = `Rated ${r.value} out of 5 on ${r.src}${r.count ? `, ${r.count.toLocaleString('en-IN')} reviews` : ''}`;
+  return long
+    ? `<a class="rating long" href="${r.url}" target="_blank" rel="noopener" aria-label="${esc(label)} (opens source)">${I.star}<b>${r.value.toFixed(1)}</b><span>${esc(r.src)}${cnt}</span>${I.ext}</a>`
+    : `<span class="rating" role="img" aria-label="${esc(label)}">${I.star}<b>${r.value.toFixed(1)}</b><span>${esc(r.src)}${cnt}</span></span>`;
+}
+
 function ring(score, size = 48) {
   const r = (size - 6) / 2, c = 2 * Math.PI * r;
   return `<span class="ring" style="--s:${size}px" role="img" aria-label="View score ${score} out of 100">
@@ -190,13 +205,13 @@ const verified = (t) => (t.source === 'bms'
 const iconBtn = (a, icon, label, extra = '') => `<button class="icon-btn" data-a="${a}" aria-label="${label}" title="${label}" ${extra}>${icon}</button>`;
 
 // ───────────────────────── HOME ─────────────────────────
-const FILTERS = [['all', 'All'], ['big', 'IMAX & large'], ['rec', 'Recliners'], ['single', 'Single screen'], ['atmos', 'Dolby Atmos'], ['balc', 'Balcony']];
+const FILTERS = [['all', 'All'], ['big', 'Large format'], ['rec', 'Recliners'], ['single', 'Single screen'], ['atmos', 'Dolby Atmos'], ['balc', 'Balcony']];
 function matchFilter(t) {
   const hs = screensOf(t);
   const q = S.q.trim().toLowerCase();
   if (q && !(t.name + ' ' + t.area).toLowerCase().includes(q)) return false;
   switch (S.filter) {
-    case 'big': return hs.some((h) => ['IMAX', 'PCX', 'LARGE', '70MM'].includes(h.format));
+    case 'big': return hs.some((h) => ['IMAX', 'PCX', 'PXL', 'LARGE', '70MM'].includes(h.format) || h.screen.w >= 16);
     case 'rec': return hs.some((_, i) => getLayout(t, i).seats.some((s) => s.tier === 'recliner' || s.tier === 'semi' || s.tier === 'lounger'));
     case 'single': return t.single;
     case 'atmos': return hs.some((h) => h.atmos);
@@ -233,7 +248,8 @@ function theatreCards() {
     const best = topSeats(getLayout(t, 0), 1)[0];
     const seats = hs.reduce((a, _, i) => a + getLayout(t, i).seats.length, 0);
     return `<li class="tcard">
-      <div class="tc-head">${ring(best.m.score, 52)}<div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}</p></div>${I.chevR}</div>
+      <div class="tc-head"><span class="ring-lbl">${ring(best.m.score, 52)}<small>best seat</small></span><div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}</p></div>${I.chevR}</div>
+      ${ratingChip(t)}
       <div class="tags">${verified(t)}${t.tags.slice(0, 2).map((g) => `<span class="tag">${esc(g)}</span>`).join('')}<span class="tag">${seats.toLocaleString('en-IN')} seats</span></div>
       <p class="best">Best seat <b>${best.id}</b> · ${best.m.dist.toFixed(0)} m from a ${hs[0].screen.w} m screen</p>
       ${(() => { const my = mySeat(); if (!my) return ''; if (my.t === t) return `<p class="mine-line">${I.heart} Your seat: <b>${esc(my.seat.id)}</b></p>`; const r = bestInTheatre(profileOf(my.seat), t); return `<p class="mine-line">${I.twin} Your seat here: <b>${esc(r.seat.id)}</b>${hs.length > 1 ? ' · ' + esc(hallName(r.L.hall)) : ''} · ${r.pct}% match</p>`; })()}
@@ -433,6 +449,22 @@ function directorMaths(Lx) {
   </section>`;
 }
 
+// Published specs for the selected hall, and the theatre's highlights (js/info.js), each linked to its source.
+const srcLink = (url, src) => `<a class="src" href="${url}" target="_blank" rel="noopener">${esc(src)}${I.ext}</a>`;
+function hallSpecs(t, si) {
+  const h = infoOf(t.id)?.halls?.[si];
+  if (!h) return '';
+  const parts = [h.width && `<li><b>${esc(h.width)}</b><span>screen width</span></li>`, `<li><b>${esc(h.projector)}</b><span>projection</span></li>`, `<li><b>${esc(h.sound)}</b><span>sound</span></li>`].filter(Boolean);
+  return `<div class="specs"><p class="specs-h">Published specs${h.which ? ` · ${esc(h.which)}` : ''}</p><ul class="specs-list">${parts.join('')}</ul>
+    <p class="fine specs-src">Source: ${srcLink(h.url, new URL(h.url).hostname.replace('www.', ''))} · checked ${INFO_AS_OF}</p></div>`;
+}
+function specialPanel(t) {
+  const inf = infoOf(t.id);
+  if (!inf?.highlights?.length) return '';
+  return `<section class="panel special" aria-labelledby="spec-h"><h2 class="h-sm" id="spec-h">What's special</h2>
+    <ul class="special-list">${inf.highlights.map((x) => `<li>${I.spark}<span>${esc(x.text)} ${srcLink(x.url, x.src)}</span></li>`).join('')}</ul></section>`;
+}
+
 function renderTheatre() {
   const t = T(), hs = screensOf(t), Lx = getLayout(t, S.si), h = hs[S.si];
   const tops = topSeats(Lx, 3);
@@ -444,7 +476,7 @@ function renderTheatre() {
     ${iconBtn('how', I.info, 'How seats are scored')}
   </div></header>
   <main id="main" class="page t-page" tabindex="-1">
-      <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1><div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div></div>
+      <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1>${ratingChip(t, { long: true })}<div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div></div>
       ${hs.length > 1 ? `<div class="seg wide" role="group" aria-label="Choose a screen">${hs.map((x, i) => `<button data-a="screen" data-id="${i}" aria-pressed="${i === S.si}">${esc(hallName(x))}</button>`).join('')}</div>` : ''}
       <div class="t-grid">
       <div class="t-main">
@@ -455,11 +487,13 @@ function renderTheatre() {
           <div class="stat"><b>${Lx.seats.length}</b><span>seats in ${Lx.rows.length} rows</span></div>
           <div class="stat"><b>${Lx.balcony ? 'Balcony' : h.riser < 0.2 ? 'Gentle' : 'Stadium'}</b><span>${Lx.balcony ? 'stalls + balcony' : 'floor slope'}</span></div>
         </div>
+        ${hallSpecs(t, S.si)}
         <figure class="section-svg">${sectionSvg(Lx)}<figcaption>Side section, to scale. Screen on the left.${h.screenNote ? ` <em>${esc(h.screenNote)}.</em>` : ''}</figcaption></figure>
       </section>
       ${directorMaths(Lx)}
       </div>
       <div class="t-side">
+      ${specialPanel(t)}
       <section aria-labelledby="know-h"><h2 class="h-sm" id="know-h">Know before you go</h2>${knowBeforeYouGo(Lx)}</section>
       ${(() => { const tw = myTwinIn(Lx); if (!tw) return ''; return `<section class="panel mine-panel" aria-labelledby="mine-h"><h2 class="h-sm" id="mine-h">${tw.own ? 'Your seat' : 'Your seat here'}</h2>
         <div class="mine-row"><span class="mine-ico">${tw.own ? I.heart : I.twin}</span><span><b>${esc(tw.seat.id)}</b><small>${tw.own ? 'The seat you marked as yours' : `${tw.pct}% match to your seat ${esc(mySeat().seat.id)} at ${esc(mySeat().t.short)}`}</small></span>

@@ -756,3 +756,29 @@ svg { display: block; }
 .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: min(100%, 560px); margin: 6px auto 0; }
 .facts li { display: grid; justify-items: center; gap: 2px; font-size: 13px; line-height: 1.3; text-align: center; }
 .facts b { font-size: clamp(20px, 3vw, 26px); margin: 0; letter-spacing: -.02em; }
+
+/* ───────────────────────── ratings, published specs, what's special ───────────────────────── */
+.ring-lbl { display: grid; justify-items: center; gap: 3px; flex: none; }
+.ring-lbl small { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+.rating { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--muted); }
+.rating svg:first-child { width: 16px; height: 16px; color: #e0a106; flex: none; }
+.rating b { color: var(--text); font-size: 15px; }
+.rating span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tcard .rating { margin-top: -4px; }
+.rating.long { justify-self: center; min-height: 40px; padding: 0 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); text-decoration: none; transition: border-color .2s; }
+.rating.long:hover { border-color: var(--accent); }
+.rating.long svg:last-child { width: 14px; height: 14px; color: var(--faint); }
+.rating.long span { white-space: normal; }
+.specs { margin: 4px 0 14px; padding: 14px; border-radius: var(--r-md); background: var(--surface-2); text-align: center; }
+.specs-h { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.specs-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; }
+.specs-list li { display: grid; justify-items: center; gap: 1px; }
+.specs-list b { font-size: 15px; }
+.specs-list span { font-size: 12px; color: var(--muted); }
+.specs-src { margin-top: 10px !important; font-size: 12px !important; max-width: none !important; }
+.src { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
+.src:hover { text-decoration: underline; }
+.src svg { width: 12px; height: 12px; }
+.special-list { display: grid; gap: 12px; }
+.special-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; line-height: 1.55; color: var(--text); text-align: left; }
+.special-list li > svg { width: 18px; height: 18px; flex: none; margin-top: 2px; color: var(--accent); }

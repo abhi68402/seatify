@@ -54897,10 +54897,11 @@ const THEATRES = [
   },
   {
     id: 'inox', name: 'INOX GVK One', short: 'INOX GVK One', area: 'Banjara Hills',
-    lat: 17.4193, lng: 78.4487, single: false, tags: ['Luxury', 'Recliners'],
+    lat: 17.4193, lng: 78.4487, single: false, tags: ['Recliners'],
     movies: ['neon', 'orbit', 'sand'],
     hall: {
-      name: 'Insignia · Screen 6', format: 'INSIGNIA', starCeiling: true,
+      name: 'Screen 6', format: '2D',
+      screenNote: 'Recliner layout is an approximation; screens listed as 2K xenon, Dolby 7.1 (hyderabadtheatres.com)',
       screen: { w: 12, h: 5.1, bottom: 1.3, curve: 0 },
       firstRow: 5.0, riser: 0.45, aisle: 1.3, labels: 'back',
       sections: [{ name: 'Lounge', rows: [
@@ -54910,11 +54911,12 @@ const THEATRES = [
   },
   {
     id: 'inorbit', name: 'PVR Inorbit', short: 'PVR Inorbit', area: 'Madhapur',
-    lat: 17.4344, lng: 78.3868, single: false, tags: ['IMAX', 'Recliners'],
+    lat: 17.4344, lng: 78.3868, single: false, tags: ['PXL', 'Recliners', 'Dolby Atmos'],
     movies: ['sand', 'orbit', 'deccan'],
     hall: {
-      name: 'Screen 1 · IMAX', format: 'IMAX', immersive: true, atmos: true,
-      screen: { w: 19.5, h: 10.3, bottom: 1.2, curve: 35 },
+      name: 'PXL · Screen 1', format: 'PXL', immersive: true, atmos: true,
+      screenNote: 'PXL is about 55 ft (16.8 m) wide, wall-to-wall Scope (Siasat); height estimated from 2.39:1',
+      screen: { w: 16.8, h: 7.0, bottom: 1.2, curve: 0 },
       firstRow: 6.4, riser: 0.52, aisle: 1.1, labels: 'back',
       sections: [{ name: 'Stalls', rows: [
         { n: 2, tier: 'classic', blocks: [4, 14, 4], price: 350 },
