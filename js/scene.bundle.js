@@ -55917,6 +55917,7 @@ class TheatreView {
       const dx = e.clientX - p.x, dy = e.clientY - p.y;
       p.x = e.clientX; p.y = e.clientY;
       this.interact = performance.now();
+      if (Math.abs(dx) + Math.abs(dy) > 1) this.onLook?.(); // app fades its HUD while you look around
       if (pts.size === 2 && this.mode === 'aerial') {
         const [a, b] = [...pts.values()];
         const d = Math.hypot(a.x - b.x, a.y - b.y);
@@ -56400,8 +56401,9 @@ class TheatreView {
         deviceQuat(M.q, ev.alpha, ev.beta, ev.gamma, screenAngle());
         M.e.setFromQuaternion(M.q, 'YXZ'); // yaw (y) and pitch (x) against the real horizon, no roll
         if (!M.base) M.base = { yaw: M.e.y, pitch: M.e.x };
-        M.ty = wrapPi(M.e.y - M.base.yaw);
-        M.tp = clamp(M.e.x - M.base.pitch, -1.4, 1.4);
+        const ty = wrapPi(M.e.y - M.base.yaw), tp = clamp(M.e.x - M.base.pitch, -1.4, 1.4);
+        if (Math.abs(ty - M.ty) + Math.abs(tp - M.tp) > 0.004) this.onLook?.(); // real phone movement, not sensor noise
+        M.ty = ty; M.tp = tp;
         M.got = true;
       };
       window.addEventListener('deviceorientation', this.onOrient);

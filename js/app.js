@@ -629,7 +629,7 @@ function getView() {
     viewLoading = (async () => {
       if (!webglAvailable()) throw fail3D('webgl');
       const m = await loadSceneModule();
-      try { return (view3d = new m.TheatreView(glEl)); } catch (e) {
+      try { view3d = new m.TheatreView(glEl); view3d.onLook = markLooking; return view3d; } catch (e) {
         glEl.replaceChildren();
         throw fail3D(/webgl|context/i.test(e?.message || '') ? 'webgl' : 'error', e);
       }
@@ -699,12 +699,16 @@ function renderStage() {
   setTimeout(() => $('.seat-card')?.classList.remove('enter'), 50);
 }
 
+// Seat details as a flat HUD: one slim bar docked along the bottom of the 3D view (score, seat,
+// three key numbers, actions) so the screen is never covered. "Details" opens a drawer (from the
+// right on wide screens, upwards on phones) with the full breakdown. Every existing action is kept.
 function cardHtml() {
   const t = T(), Lx = L();
   const seat = Lx.byId.get(S.focus);
   if (!seat) {
-    return `<div class="sc-empty"><h2>Pick a seat to sit in it</h2><p>Click any seat on the map and the camera flies there. Or let us choose.</p>
-      <button class="btn primary" data-a="top">${I.spark} Show me the best seat</button></div>`;
+    return `<div class="hud-main hud-empty"><span class="hud-empty-ico" aria-hidden="true">${I.seat}</span>
+      <div class="hud-id"><h2>Pick a seat to sit in it</h2><p class="tier">Tap any seat on the map and the camera flies there.</p></div>
+      <div class="hud-actions"><button class="hud-btn primary" data-a="top">${I.spark}<span>Show me the best seat</span></button></div></div>`;
   }
   const m = seat.m;
   const side = Math.abs(seat.x) < 0.15 ? 'dead centre' : seat.x < 0 ? 'left of centre' : 'right of centre';
@@ -712,21 +716,13 @@ function cardHtml() {
   const parts = [['Screen size', m.parts.angle], ['Off-axis', m.parts.skew], ['Neck', m.parts.neck], ['Sightline', m.parts.clear], ["Director's spot", m.parts.position]];
   const rank = Lx.seats.filter((s) => s.m.score > m.score).length + 1;
   const saved = isSaved(t.id, S.si, seat.id);
+  const mine = isMySeat(t.id, S.si, seat.id);
   const secName = Lx.sections[seat.row.section].name;
+  const halls = allLayouts().length - 1;
   return `
-    <button class="grip" data-a="grip" aria-label="${S.open ? 'Collapse' : 'Expand'} seat details" aria-expanded="${S.open}"><i></i></button>
-    <div class="sc-head"><div><span class="lbl ${labelTone(m.label)}">${m.label}</span><h2>Row ${esc(seat.rowLabel)} · Seat ${seat.num}</h2>
-      <p class="tier">${esc(seat.tierLabel)}${secName && secName !== seat.tierLabel ? ' · ' + esc(secName) : ''} · #${rank} of ${Lx.seats.length}</p></div>${ring(m.score, 60)}</div>
-    <div class="tiles">
-      <div class="tile"><b>${m.dist.toFixed(1)} m</b><span>to the screen</span></div>
-      <div class="tile"><b>${Math.round(m.fov)}°</b><span>field of view</span></div>
-      <div class="tile"><b>${Math.abs(seat.x) < 0.15 ? '0 m' : Math.abs(seat.x).toFixed(1) + ' m'}</b><span>${side}</span></div>
-    </div>
-    <div class="twin-row">
-      <button class="twin-btn" data-a="twin">${I.twin}<span><b>Seat Twin</b> <small>this view in ${allLayouts().length - 1} other halls</small></span>${I.chevR}</button>
-      <button class="myseat-btn" data-a="myseat" aria-pressed="${isMySeat(t.id, S.si, seat.id)}" title="${isMySeat(t.id, S.si, seat.id) ? 'This is your seat' : 'Mark as my seat'}">${I.heart}<span>${isMySeat(t.id, S.si, seat.id) ? 'My seat' : 'This is my seat'}</span></button>
-    </div>
-    <div class="more" ${S.open ? '' : 'inert'}>
+    <button class="grip" data-a="grip" aria-label="${S.open ? 'Hide' : 'Show'} seat details" aria-expanded="${S.open}" aria-controls="seat-more"><i></i></button>
+    <div class="more" id="seat-more" role="region" aria-label="Seat details" ${S.open ? '' : 'inert'}>
+      <div class="more-head"><h3>Why this score?</h3><button class="icon-btn more-x" data-a="sheet" aria-label="Close details">${I.close}</button></div>
       <div class="tiles">
         <div class="tile ${m.elevTop > 34 ? 'warn' : ''}"><b>${Math.round(m.elevTop)}°</b><span>look-up to top edge</span></div>
         <div class="tile ${C != null && C < 60 ? 'warn' : ''}"><b>${C == null ? 'Clear' : C + ' mm'}</b><span>sightline clearance</span></div>
@@ -734,11 +730,24 @@ function cardHtml() {
       </div>
       <div class="bars" aria-label="Score breakdown">${parts.map(([n, v]) => `<div><span>${n}</span><i style="--v:${Math.round(v * 100)}%"></i></div>`).join('')}</div>
       <ul class="insights">${insightFor(seat).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+      <button class="btn ghost back-map" data-a="change">${I.back} Back to the seat map</button>
     </div>
-    <button class="linkbtn" data-a="sheet" aria-expanded="${S.open}">${S.open ? 'Hide details' : 'Why this score?'} ${I.chev}</button>
-    <div class="actions">
-      <button class="btn ghost back-map" data-a="change">Seat map</button>
-      <button class="btn ${saved ? 'gold' : 'light'}" data-a="save" aria-pressed="${saved}">${I.bookmark}${saved ? 'Saved' : 'Save seat'}</button>
+    <div class="hud-main">
+      ${ring(m.score, 48)}
+      <div class="hud-id"><span class="lbl ${labelTone(m.label)}">${m.label}</span><h2>Row ${esc(seat.rowLabel)} · Seat ${seat.num}</h2>
+        <p class="hud-sub">${m.dist.toFixed(1)} m away · ${Math.round(m.fov)}° · ${side}</p>
+        <p class="tier">${esc(seat.tierLabel)}${secName && secName !== seat.tierLabel ? ' · ' + esc(secName) : ''} · #${rank} of ${Lx.seats.length}</p></div>
+      <ul class="hud-stats" aria-label="Key numbers">
+        <li><b>${m.dist.toFixed(1)} m</b><span>to the screen</span></li>
+        <li><b>${Math.round(m.fov)}°</b><span>field of view</span></li>
+        <li><b>${Math.abs(seat.x) < 0.15 ? '0 m' : Math.abs(seat.x).toFixed(1) + ' m'}</b><span>${side}</span></li>
+      </ul>
+      <div class="hud-actions">
+        <button class="hud-btn twin" data-a="twin" aria-label="Seat Twin: find this view in ${halls} other halls" title="Seat Twin: this view in ${halls} other halls">${I.twin}<span>Seat Twin</span></button>
+        <button class="hud-btn" data-a="myseat" aria-pressed="${mine}" aria-label="${mine ? 'This is your seat' : 'Mark as my seat'}" title="${mine ? 'This is your seat' : 'Mark as my seat'}">${I.heart}<span>My seat</span></button>
+        <button class="hud-btn save" data-a="save" aria-pressed="${saved}" aria-label="${saved ? 'Saved' : 'Save seat'}" title="${saved ? 'Saved' : 'Save seat'}">${I.bookmark}<span>${saved ? 'Saved' : 'Save'}</span></button>
+        <button class="hud-btn details" data-a="sheet" aria-expanded="${S.open}" aria-controls="seat-more" aria-label="${S.open ? 'Hide' : 'Show'} score details" title="Why this score?">${I.chev}<span>Details</span></button>
+      </div>
     </div>`;
 }
 
@@ -770,12 +779,20 @@ function positionFloating() {
   const card = $('.seat-card');
   if (!card) return;
   if (S.full || !S.focus) { app.style.setProperty('--sheet-h', '0px'); view3d?.setInset(0); return; }
-  const mode = app.dataset.sheet;
-  if (mode === 'float') { view3d?.setInset(0); return; }
-  if (mode === 'side') { view3d?.setInset(card.offsetWidth, true); return; }
-  const h = card.offsetHeight;
+  // HUD: only the bar takes space; the drawer floats over the picture when asked for.
+  const bar = $('.hud-main', card);
+  const h = (bar ? bar.offsetHeight : card.offsetHeight) + (app.dataset.sheet === 'bottom' ? 0 : 16);
   app.style.setProperty('--sheet-h', h + 'px');
-  view3d?.setInset(Math.min(h, innerHeight * 0.5));
+  view3d?.setInset(Math.min(h, innerHeight * 0.4));
+}
+
+// While the viewer drags to look around (or moves the phone in Motion Look), the HUD fades out of
+// the way and comes back ~0.7 s after the movement stops. Never while focus is inside it.
+let lookTimer = 0;
+function markLooking() {
+  stageEl.classList.add('looking');
+  clearTimeout(lookTimer);
+  lookTimer = setTimeout(() => stageEl.classList.remove('looking'), 700);
 }
 
 async function startScene() {

@@ -782,3 +782,89 @@ svg { display: block; }
 .special-list { display: grid; gap: 12px; }
 .special-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; line-height: 1.55; color: var(--text); text-align: left; }
 .special-list li > svg { width: 18px; height: 18px; flex: none; margin-top: 2px; color: var(--accent); }
+
+/* ───────────────────────── seat HUD: a flat bar that never covers the screen ───────────────────────── */
+/* The card is now a transparent frame: the bar (.hud-main) and the drawer (.more) carry the glass. */
+#app[data-sheet] .seat-card { left: 16px; right: 16px; bottom: 16px; top: auto; width: auto; max-width: 1180px; margin-inline: auto; max-height: none; overflow: visible; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; container: hud / inline-size; }
+#app[data-sheet='bottom'] .seat-card { left: 0; right: 0; bottom: 0; max-width: none; }
+#app[data-sheet] .seat-card.enter { transform: translateY(110%); }
+#app.full .seat-card, #app[data-sheet='side'].full .seat-card { transform: translateY(24px); }
+
+.hud-main { position: relative; display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 14px; border-radius: 20px; background: var(--glass-solid); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
+#app[data-sheet='bottom'] .hud-main { border-radius: 22px 22px 0 0; border-bottom: 0; padding: 14px 14px max(12px, env(safe-area-inset-bottom)); }
+.hud-main > .ring { flex: none; }
+.hud-id { flex: 1 1 auto; min-width: 0; display: grid; gap: 1px; }
+.hud-id .lbl { font-size: 11px; }
+.hud-id h2 { font-family: var(--display); font-weight: 800; font-size: 19px; line-height: 1.15; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-id .tier { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-sub { display: none; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-stats { flex: none; display: flex; gap: 6px; }
+.hud-stats li { display: grid; gap: 1px; min-width: 84px; padding: 6px 10px; border-radius: 12px; background: var(--surface-2); }
+.hud-stats b { font-size: 15px; line-height: 1.2; }
+.hud-stats span { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.hud-actions { flex: none; display: flex; gap: 6px; }
+.hud-btn { height: 44px; min-width: 44px; padding: 0 12px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--text); background: var(--surface-2); border: 1px solid var(--line); white-space: nowrap; transition: background .2s, color .2s, border-color .2s; }
+.hud-btn svg { width: 18px; height: 18px; flex: none; }
+.hud-btn:hover { border-color: var(--line-2); background: var(--surface-3); }
+.hud-btn.twin { background: var(--accent-soft); border-color: rgba(200, 67, 46, .22); }
+.hud-btn.twin svg { color: var(--accent); }
+.hud-btn[data-a='myseat'][aria-pressed='true'] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.hud-btn[data-a='myseat'][aria-pressed='true'] svg { fill: currentColor; }
+.hud-btn.save { background: var(--text); color: var(--on-text); border-color: var(--text); }
+.hud-btn.save:hover { background: var(--text-hover); }
+.hud-btn.save[aria-pressed='true'] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.hud-btn.save[aria-pressed='true'] svg { fill: currentColor; }
+.hud-btn.details svg { transform: rotate(180deg); transition: transform .25s; }
+.hud-btn.details[aria-expanded='true'] { border-color: var(--line-2); background: var(--surface-3); }
+.hud-btn.details[aria-expanded='true'] svg { transform: none; }
+.hud-btn.primary { background: var(--text); color: var(--on-text); border-color: var(--text); padding: 0 16px; }
+.hud-empty-ico { width: 44px; height: 44px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.hud-empty-ico svg { width: 22px; height: 22px; }
+
+/* the details drawer: floats over the picture only when asked for */
+.seat-card .more { position: absolute; z-index: 2; display: none; max-height: none; overflow-y: auto; padding: 16px 16px 18px; border-radius: 20px; background: var(--glass-solid); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid var(--line); box-shadow: var(--shadow-md); scrollbar-width: thin; }
+.seat-card.open .more { display: block; animation: hud-drawer .28s cubic-bezier(.2, .9, .3, 1); }
+@keyframes hud-drawer { from { opacity: 0; transform: translateY(10px); } }
+#app[data-sheet='float'] .seat-card .more, #app[data-sheet='side'] .seat-card .more { right: 0; bottom: calc(100% + 10px); width: min(380px, 100%); max-height: calc(100dvh - var(--sheet-h) - 120px); }
+#app[data-sheet='bottom'] .seat-card .more { left: 0; right: 0; bottom: 100%; max-height: min(58dvh, 520px); border-radius: 22px 22px 0 0; border-bottom: 0; box-shadow: 0 -12px 30px rgba(0, 0, 0, .18); }
+.more-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+.more-head h3 { font-size: 16px; font-weight: 800; letter-spacing: -.01em; }
+.more-head .icon-btn { width: 36px; height: 36px; }
+.seat-card .more .tiles { margin-top: 10px; }
+.seat-card .more .back-map { width: 100%; height: 46px; margin-top: 12px; }
+#app[data-layout='split'] .seat-card .more .back-map { display: none; }
+/* old card pieces that no longer exist */
+.seat-card .linkbtn, .seat-card .actions { display: none !important; }
+
+/* phone swipe handle sits on top of the bar */
+.seat-card .grip { display: none; }
+#app[data-sheet='bottom'] .seat-card .grip { display: block; position: absolute; z-index: 3; left: 50%; bottom: calc(var(--sheet-h) - 22px); width: 72px; height: 22px; margin: 0; transform: translateX(-50%); }
+#app[data-sheet='bottom'] .seat-card.open .grip { bottom: calc(var(--sheet-h) - 22px); }
+#app[data-sheet='bottom'] .seat-card .grip i { top: 8px; }
+
+/* narrower bars: labels go, numbers move under the title, actions become a row of equal buttons */
+@container hud (max-width: 900px) { .hud-btn:not(.save) span { display: none; } .hud-btn:not(.save) { padding: 0; width: 44px; } }
+@container hud (max-width: 760px) { .hud-stats { display: none; } .hud-sub { display: block; } .hud-id .tier { display: none; } }
+@container hud (max-width: 520px) {
+  .hud-main { flex-wrap: wrap; gap: 10px 12px; }
+  .hud-actions { flex: 1 1 100%; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .hud-btn, .hud-btn:not(.save) { width: auto; padding: 0 6px; }
+  .hud-btn:not(.save) span, .hud-btn span { display: inline; font-size: 12.5px; }
+}
+@container hud (max-width: 360px) { .hud-btn span { display: none !important; } }
+
+/* everything else in the stage docks above the bar */
+#app[data-sheet] .st-move { left: auto; right: 16px; bottom: calc(var(--sheet-h) + 12px); }
+#app[data-sheet='bottom'] .st-move { bottom: calc(var(--sheet-h) + 12px); }
+#app[data-sheet] .st-hint { left: 18px; right: auto; bottom: calc(var(--sheet-h) + 18px); max-width: calc(100% - 200px); text-align: left; }
+#app[data-sheet='side'] .st-top { right: 12px; }
+#app[data-sheet='side'] .st-seg { left: 50%; }
+
+/* fade out of the way while the viewer looks around (drag or Motion Look); back ~0.7 s after */
+.seat-card, .st-move, .st-hint { transition: opacity .25s ease, transform .45s cubic-bezier(.2, .9, .3, 1); }
+#stage.looking .seat-card:not(:focus-within), #stage.looking .st-move:not(:focus-within), #stage.looking .st-hint { opacity: .1; pointer-events: none; }
+
+@media (pointer: coarse) { .hud-main, .seat-card .more { backdrop-filter: none; -webkit-backdrop-filter: none; } }
+/* drawer sits above the move pad; the pad steps aside while details are open */
+#app[data-sheet] .seat-card { z-index: 3; }
+#stage:has(.seat-card.open) .st-move, #stage:has(.seat-card.open) .st-hint { opacity: 0; pointer-events: none; }
