@@ -615,3 +615,49 @@ svg { display: block; }
   .twin-list .btn { width: 100%; }
 }
 .m-card .eyebrow { color: var(--accent); font-size: 13px; }
+
+/* ───────────────────────── Seat Twin v2: director's seat, My Seat, Seat DNA ───────────────────────── */
+/* seat-map markers: director's seat (green ring), your seat (accent heart dot), your seat's twin (accent ring) */
+.seat.dir { box-shadow: inset 0 0 0 2px var(--good); }
+.seat.dir::before { content: ''; position: absolute; left: 50%; top: -5px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 1.5px var(--surface); }
+.seat.twin, .seat.mine { box-shadow: 0 0 0 2px var(--accent); z-index: 3; }
+.seat.mine { background: var(--accent-soft); }
+.seat.twin::before, .seat.mine::before { content: ''; position: absolute; left: 50%; top: -5px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1.5px var(--surface); }
+.sw.dir { background: var(--seat); box-shadow: inset 0 0 0 2px var(--good); }
+.sw.twin, .sw.mine { background: var(--seat); box-shadow: 0 0 0 2px var(--accent); }
+
+/* seat card: Seat Twin + My seat side by side */
+.twin-row { display: flex; gap: 8px; margin-top: 10px; }
+.twin-row .twin-btn { margin-top: 0; flex: 1; min-width: 0; }
+.myseat-btn { flex: none; min-height: 48px; display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; border-radius: 14px; border: 1px solid var(--line-2); background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 600; transition: all .2s; }
+.myseat-btn svg { width: 18px; height: 18px; }
+.myseat-btn:hover { color: var(--text); }
+.myseat-btn[aria-pressed='true'] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.myseat-btn[aria-pressed='true'] svg { fill: currentColor; }
+@media (max-width: 420px) { .myseat-btn span { display: none; } .myseat-btn { width: 48px; justify-content: center; padding: 0; } }
+
+/* theatre cards + theatre page */
+.mine-line { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--accent); font-weight: 600; margin-top: -4px; }
+.mine-line svg { width: 16px; height: 16px; flex: none; }
+.mine-line b { color: var(--text); }
+.mine-panel { border-color: rgba(200, 67, 46, .3); }
+.mine-row { display: flex; align-items: center; gap: 14px; }
+.mine-row > span:nth-child(2) { flex: 1; min-width: 0; display: grid; }
+.mine-row b { font-size: 22px; letter-spacing: -.02em; }
+.mine-row small { font-size: 13px; color: var(--muted); }
+.mine-ico { width: 44px; height: 44px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.mine-ico svg { width: 22px; height: 22px; }
+
+/* home card actions */
+.only-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 6px; }
+.only-actions .btn { margin-top: 0; }
+.only-card p b { color: var(--text); }
+
+/* Seat DNA dialog */
+.dna-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.dna-slider { display: grid; gap: 6px; }
+.dna-slider label { font-size: 15px; font-weight: 600; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; }
+.dna-slider label b { color: var(--accent); font-weight: 700; }
+.dna-slider input[type='range'] { width: 100%; height: 44px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.dna-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); margin-top: -8px; }
+.dna-sum { font-size: 14px !important; color: var(--muted); }

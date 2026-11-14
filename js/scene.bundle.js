@@ -55111,13 +55111,30 @@ function getLayout(theatre, screenIdx = 0) {
     byId: new Map(seats.map((s) => [s.id, s])),
   };
 
-  // audio sweet spot ≈ 2/3 of the way back in the stalls, centred
+  // The director's seat: on the centre line, about two-thirds of the way from the screen to the back
+  // wall. It is the reference position where a film's picture and sound are mixed and checked, so it
+  // is where the film looks and sounds as intended. Kept in the stalls, clear of any balcony overhang.
   const stalls = sections[0];
-  const sweetRow = stalls.rows[Math.round((stalls.rows.length - 1) * 0.62)];
-  L.sweet = { x: 0, y: sweetRow.floorY + 1.15, z: sweetRow.z };
+  const usable = stalls.rows.filter((r) => !L.balcony || r.z <= L.balcony.parapetZ);
+  const pool = usable.length ? usable : stalls.rows;
+  const refZ = Math.min(Math.max(backZ * 2 / 3, pool[0].z), pool.at(-1).z);
+  const refRow = pool.reduce((a, r) => (Math.abs(r.z - refZ) < Math.abs(a.z - refZ) ? r : a));
+  L.ref = { x: 0, y: refRow.floorY + TIERS[refRow.tier].eye, z: refZ };
+  L.sweet = L.ref; // sound is calibrated at the same spot
   L.depth = stallsEnd - hall.firstRow;
 
   seats.forEach((s) => (s.m = computeMetrics(s, L)));
+
+  // Director's seat = the best seat in the director zone (centre, within about a row of the
+  // two-thirds mark). The position score pulls every hall's best seat into this zone.
+  // zone: within ±6% of the room depth of the two-thirds mark, and as central as that row allows
+  // (some halls have a centre aisle, so 'central' is relative to the row's most central seat)
+  const rowMinX = (r) => Math.min(...r.seats.map((x) => Math.abs(x.x)));
+  const zone = pool.filter((r) => Math.abs(r.z - refZ) <= backZ * 0.06)
+    .flatMap((r) => r.seats.filter((s) => Math.abs(s.x) <= rowMinX(r) + 0.6 && s.m.overhangCut === 0));
+  const pick = (list) => list.reduce((a, s) => (!a || s.m.raw > a.m.raw || (s.m.raw === a.m.raw && Math.abs(s.x) < Math.abs(a.x)) ? s : a), null);
+  L.director = pick(zone) || pick(pool.flatMap((r) => r.seats));
+  L.director.m.label = 'DIRECTOR\'S SEAT';
   cache.set(key, L);
   return L;
 }
@@ -55168,17 +55185,23 @@ function computeMetrics(seat, L) {
 
   const audioD = Math.hypot(seat.x - L.sweet.x, seat.eyeY - L.sweet.y, seat.z - L.sweet.z);
 
+  // Screen size: SMPTE asks for at least 30° of view, THX about 36° from the back row and ~40° as
+  // ideal. Full marks inside a comfort band from 36° up to the format's target + 12° (50°/60° immersive),
+  // falling off outside it, steeply below SMPTE's 30°.
   const target = hall.immersive ? 60 : 50;
-  const sAngle = Math.exp(-(((fov - target) / 16) ** 2));
+  const lo = 36, hi = target + 12;
+  const sAngle = fov < lo ? Math.exp(-(((lo - fov) / (fov < 30 ? 5 : 8)) ** 2)) : fov > hi ? Math.exp(-(((fov - hi) / 12) ** 2)) : 1;
   const sSkew = clamp01(1 - Math.max(0, skew - 8) / 26);
   const sNeck = clamp01(1 - Math.max(0, elevTop - 30) / 18);
   const sClear = clearance == null ? 1 : clamp01((clearance * 1000 - 30) / 90);
-  const sAudio = Math.exp(-((audioD / (L.depth * 0.6 + 4)) ** 2));
-  const raw = 0.34 * sAngle + 0.2 * sSkew + 0.14 * sNeck + 0.14 * sClear + 0.18 * sAudio;
-  const score = Math.round(Math.min(99, raw * 100 * clamp01(1 - overhangCut * 2.2)));
+  // Director's position: how close you are to the two-thirds-back, centre-line reference seat.
+  const dz = (seat.z - L.ref.z) / L.room.backZ, dx = seat.x / L.room.halfW, dy = (seat.eyeY - L.ref.y) / L.room.height;
+  const sPos = Math.exp(-((dz / 0.15) ** 2) - ((dx / 0.35) ** 2) - ((dy / 0.3) ** 2)); // a balcony sits above the reference
+  const raw = (0.32 * sPos + 0.22 * sAngle + 0.14 * sSkew + 0.14 * sNeck + 0.18 * sClear) * clamp01(1 - overhangCut * 2.2);
+  const score = Math.round(Math.min(99, raw * 100));
 
-  const m = { fov, vfov, dist, skew, elevTop, elevCenter, clearance, overhangCut, audioD, target, score,
-    parts: { angle: sAngle, skew: sSkew, neck: sNeck, clear: sClear, audio: sAudio } };
+  const m = { fov, vfov, dist, skew, elevTop, elevCenter, clearance, overhangCut, audioD, target, score, raw,
+    parts: { angle: sAngle, skew: sSkew, neck: sNeck, clear: sClear, position: sPos } };
   m.label = labelFor(m);
   return m;
 }
@@ -55195,7 +55218,7 @@ function labelFor(m) {
 }
 
 function labelTone(label) {
-  if (label === 'SWEET SPOT' || label === 'GREAT VIEW' || label === 'IMMERSIVE') return 'good';
+  if (label === "DIRECTOR'S SEAT" || label === 'SWEET SPOT' || label === 'GREAT VIEW' || label === 'IMMERSIVE') return 'good';
   if (label === 'FULL PICTURE') return 'ok';
   return 'warn';
 }
@@ -55218,7 +55241,8 @@ function insightFor(seat) {
     else if (c < 100) out.push(`Fair sightline clearance (${c} mm) — mostly clear, tall heads may intrude.`);
     else out.push(`Clean sightline over the row in front (${c} mm clearance).`);
   }
-  if (seat.row.section === 0 && m.parts.audio > 0.85) out.push('You are near the mixing sweet spot — surround channels are balanced here.');
+  if (m.label === "DIRECTOR'S SEAT") out.unshift("This is the director's seat: centred, about two-thirds back, where films are mixed and checked. Picture and sound are exactly as intended here.");
+  else if (m.parts.position > 0.8) out.push("You're close to the director's seat (two-thirds back, centred): picture and sound are close to how the film was mixed.");
   return out;
 }
 
@@ -55252,7 +55276,7 @@ function crowd(L, fill = 0.72) {
 
 // Top-scoring seats, spread out so suggestions aren't all neighbours.
 function topSeats(L, n = 5) {
-  const sorted = L.seats.slice().sort((a, b) => b.m.score - a.m.score || Math.abs(a.x) - Math.abs(b.x));
+  const sorted = L.seats.slice().sort((a, b) => b.m.raw - a.m.raw || Math.abs(a.x) - Math.abs(b.x));
   const out = [];
   for (const s of sorted) {
     if (out.some((o) => o.row === s.row && Math.abs(o.x - s.x) < 1.5)) continue;
@@ -55286,40 +55310,7 @@ const heatColor = (score) => {
   return `hsl(${Math.round(k * 145)} 58% ${38 + k * 8}%)`;
 };
 
-// ───────── Seat Twin: the same VIEW in a different hall ─────────
-// A seat's experience is described by what your eyes get, not by its row letter:
-// how wide the screen looks (fov), how far you look up (elevTop), how far off to the side you sit
-// (skew), whether heads in front block the picture (clearance) and whether a balcony cuts it off.
-// Each difference is divided by "how much of a change you'd notice" so they can be added up.
-const blocked = (m) => (m.clearance == null ? 0 : clamp01((0.10 - m.clearance) / 0.10));
-function viewDistance(a, b) {
-  const t = [
-    (a.fov - b.fov) / 5,              // 5° wider/narrower screen is a clear difference
-    (a.elevTop - b.elevTop) / 5,      // 5° more look-up is noticeable on the neck
-    (a.skew - b.skew) / 6,            // side angle: left and right count the same
-    (blocked(a) - blocked(b)) / 0.5,  // sightline: clear vs blocked
-    (a.overhangCut - b.overhangCut) / 0.1,
-  ];
-  return Math.hypot(...t);
-}
-const matchPct = (d) => Math.round(100 * Math.exp((-d * d) / 6));
-
-// For one seat, the closest-view seat in every OTHER hall, best match first.
-function findTwins(seat, L, layouts) {
-  const out = [];
-  for (const L2 of layouts) {
-    if (L2 === L) continue;
-    let best = null, bd = Infinity;
-    for (const s of L2.seats) {
-      const d = viewDistance(seat.m, s.m);
-      if (d < bd - 1e-9 || (Math.abs(d - bd) < 1e-9 && s.m.score > best.m.score)) { bd = d; best = s; }
-    }
-    if (best) out.push({ L: L2, seat: best, d: bd, pct: matchPct(bd) });
-  }
-  return out.sort((a, b) => a.d - b.d);
-}
-
-return Object.freeze({ get getLayout() { return getLayout; }, get labelTone() { return labelTone; }, get insightFor() { return insightFor; }, get rng() { return rng; }, get crowd() { return crowd; }, get topSeats() { return topSeats; }, get neighbour() { return neighbour; }, get heatColor() { return heatColor; }, get viewDistance() { return viewDistance; }, get matchPct() { return matchPct; }, get findTwins() { return findTwins; } });
+return Object.freeze({ get getLayout() { return getLayout; }, get labelTone() { return labelTone; }, get insightFor() { return insightFor; }, get rng() { return rng; }, get crowd() { return crowd; }, get topSeats() { return topSeats; }, get neighbour() { return neighbour; }, get heatColor() { return heatColor; } });
 })();
 
 // ---- js/movies.js

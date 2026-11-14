@@ -1,5 +1,6 @@
 import { THEATRES, MOVIES, TIERS, theatreById } from './data.js';
-import { getLayout, crowd, topSeats, neighbour, heatColor, labelTone, insightFor, findTwins } from './layout.js';
+import { getLayout, crowd, topSeats, neighbour, heatColor, labelTone, insightFor } from './layout.js';
+import { profileOf, matchView, bestInTheatre, directorSeats, DNA_PRESETS, dnaProfile } from './twin.js';
 
 // ───────────────────────── helpers ─────────────────────────
 const $ = (s, r = document) => r.querySelector(s);
@@ -28,6 +29,8 @@ const I = {
   check: svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
   seat: svg('<path d="M6 11V6a2 2 0 012-2h8a2 2 0 012 2v5"/><path d="M4 11h16v5H4zM6 16v4M18 16v4"/>'),
   twin: svg('<path d="M3 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0111 7v4"/><path d="M2 11h10v3.5H2zM3.5 14.5V18M10.5 14.5V18"/><path d="M13 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0121 7v4"/><path d="M12 11h10v3.5H12zM13.5 14.5V18M20.5 14.5V18"/>'),
+  heart: svg('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>'),
+  dna: svg('<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.2" fill="currentColor"/><circle cx="15" cy="12" r="2.2" fill="currentColor"/><circle cx="7" cy="18" r="2.2" fill="currentColor"/>'),
   motion: svg('<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/><path d="M3.5 8.5a6 6 0 000 7M20.5 8.5a6 6 0 010 7"/>'),
   eye: svg('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
   arrow: (deg) => svg('<path d="M6 15l6-6 6 6"/>', `style="transform:rotate(${deg}deg)"`),
@@ -44,6 +47,34 @@ const store = {
   set(v) { try { localStorage.setItem('seatify.saved', JSON.stringify(v)); localStorage.removeItem('darshan.saved'); } catch {} },
 };
 let SAVED = store.get();
+
+// My Seat: the one seat a person calls theirs. Seat Twin then finds its view in every hall.
+// Stored as {tid, si, id}; dropped if that seat no longer exists in the data.
+let MYSEAT = (() => {
+  try {
+    const v = JSON.parse(localStorage.getItem('seatify.myseat') || 'null');
+    const t = v && theatreById(v.tid);
+    return t && (t.screens || [t.hall])[v.si] && getLayout(t, v.si).byId.has(v.id) ? v : null;
+  } catch { return null; }
+})();
+function mySeat() {
+  if (!MYSEAT) return null;
+  const t = theatreById(MYSEAT.tid), Lm = getLayout(t, MYSEAT.si);
+  return { t, L: Lm, seat: Lm.byId.get(MYSEAT.id) };
+}
+function setMySeat(v) {
+  MYSEAT = v;
+  try { v ? localStorage.setItem('seatify.myseat', JSON.stringify(v)) : localStorage.removeItem('seatify.myseat'); } catch {}
+}
+const isMySeat = (tid, si, id) => !!MYSEAT && MYSEAT.tid === tid && MYSEAT.si === si && MYSEAT.id === id;
+// The seat in hall Lx that matches My Seat's view (or My Seat itself in its own hall).
+function myTwinIn(Lx) {
+  const my = mySeat();
+  if (!my) return null;
+  if (my.L === Lx) return { seat: my.seat, pct: 100, own: true };
+  const r = matchView(profileOf(my.seat), [Lx])[0];
+  return r && { seat: r.seat, pct: r.pct, own: false };
+}
 
 // ───────────────────────── theme ─────────────────────────
 // index.html sets <html data-theme> before first paint (saved choice, else the system setting).
@@ -204,6 +235,7 @@ function theatreCards() {
       <div class="tc-head">${ring(best.m.score, 52)}<div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}</p></div>${I.chevR}</div>
       <div class="tags">${verified(t)}${t.tags.slice(0, 2).map((g) => `<span class="tag">${esc(g)}</span>`).join('')}<span class="tag">${seats.toLocaleString('en-IN')} seats</span></div>
       <p class="best">Best seat <b>${best.id}</b> · ${best.m.dist.toFixed(0)} m from a ${hs[0].screen.w} m screen</p>
+      ${(() => { const my = mySeat(); if (!my) return ''; if (my.t === t) return `<p class="mine-line">${I.heart} Your seat: <b>${esc(my.seat.id)}</b></p>`; const r = bestInTheatre(profileOf(my.seat), t); return `<p class="mine-line">${I.twin} Your seat here: <b>${esc(r.seat.id)}</b>${hs.length > 1 ? ' · ' + esc(hallName(r.L.hall)) : ''} · ${r.pct}% match</p>`; })()}
     </li>`;
   }).join('');
 }
@@ -242,8 +274,11 @@ function renderHome() {
         <li class="only-card">
           <span class="only-ico">${I.twin}</span>
           <h3>Seat Twin</h3>
-          <p>Loved a seat? We find the seat in every other hall that gives you the same view: same screen size in your eyes, same look-up, same angle. Seats are compared by what you see, not by row letters.</p>
-          <button class="btn primary" data-a="twin" data-tid="prasads" data-si="0" data-id="${esc(topSeats(getLayout(theatreById('prasads'), 0), 1)[0].id)}">${I.twin} See an example</button>
+          ${(() => { const my = mySeat(); return my ? `
+          <p>Your seat is <b>${esc(my.t.short)} · ${esc(hallName(my.L.hall))} · ${esc(my.seat.id)}</b>. Every theatre below now shows the seat that gives you the same view.</p>
+          <div class="only-actions"><button class="btn primary" data-a="mytwins">${I.twin} See my twins</button><button class="btn ghost" data-a="dna">${I.dna} Describe instead</button><button class="linkbtn" data-a="clearmine">Change my seat</button></div>` : `
+          <p>Find your seat in every hall. Tell us where you like to sit, by picking your usual seat or by describing the view, and we find that same view everywhere: same screen size in your eyes, same angle.</p>
+          <div class="only-actions"><button class="btn primary" data-a="pickmine">${I.heart} Pick my seat</button><button class="btn ghost" data-a="dna">${I.dna} Describe my seat</button></div>`; })()}
         </li>
         <li class="only-card">
           <span class="only-ico">${I.motion}</span>
@@ -356,8 +391,11 @@ function renderTheatre() {
       </section>
       <div class="t-side">
       <section aria-labelledby="know-h"><h2 class="h-sm" id="know-h">Know before you go</h2>${knowBeforeYouGo(Lx)}</section>
+      ${(() => { const tw = myTwinIn(Lx); if (!tw) return ''; return `<section class="panel mine-panel" aria-labelledby="mine-h"><h2 class="h-sm" id="mine-h">${tw.own ? 'Your seat' : 'Your seat here'}</h2>
+        <div class="mine-row"><span class="mine-ico">${tw.own ? I.heart : I.twin}</span><span><b>${esc(tw.seat.id)}</b><small>${tw.own ? 'The seat you marked as yours' : `${tw.pct}% match to your seat ${esc(mySeat().seat.id)} at ${esc(mySeat().t.short)}`}</small></span>
+        <button class="btn primary sm" data-a="sit" data-id="${esc(tw.seat.id)}">Sit there</button></div></section>`; })()}
       <section class="panel" aria-labelledby="best-h"><h2 class="h-sm" id="best-h">Best seats in this hall</h2>
-        <ol class="topseats">${tops.map((s, i) => `<li><button class="topseat" data-a="sit" data-id="${s.id}" aria-label="Number ${i + 1}: sit in ${s.id}, ${esc(s.tierLabel)}, score ${s.m.score}"><span class="rk" aria-hidden="true">#${i + 1}</span><b>${s.id}</b>${ring(s.m.score, 40)}<small>${esc(s.tierLabel)}</small></button></li>`).join('')}</ol>
+        <ol class="topseats">${tops.map((s, i) => `<li><button class="topseat" data-a="sit" data-id="${s.id}" aria-label="Number ${i + 1}: sit in ${s.id}, ${esc(s.tierLabel)}, score ${s.m.score}"><span class="rk" aria-hidden="true">#${i + 1}</span><b>${s.id}</b>${ring(s.m.score, 40)}<small>${s === Lx.director ? "Director's seat" : esc(s.tierLabel)}</small></button></li>`).join('')}</ol>
       </section>
       </div>
       </div>
@@ -377,6 +415,7 @@ function renderSeats() {
   const pxm = base * S.zoom;
   const width = Lx.maxHalf * 2 * pxm;
   const flash = new Set(S.flash || []);
+  const myTw = myTwinIn(Lx); // your seat (or its twin) in this hall, marked on the map
   const tabId = S.focus || Lx.seats[0].id;
   let lastKey = '';
   const rowsHtml = Lx.rows.map((r) => {
@@ -391,7 +430,7 @@ function renderSeats() {
     const walk = prev && !head && r.section === prev.section && r.z - prev.z - (r.pitch + prev.pitch) / 2 > 0.4 ? 12 : 0;
     const seats = r.seats.map((s) => {
       const on = s.id === S.focus;
-      const cls = ['seat', s.tier === 'recliner' || s.tier === 'lounger' || s.tier === 'semi' ? 'rec' : '', s.tier === 'motion' ? 'mot' : '', on ? 'sel' : '', isSaved(t.id, S.si, s.id) ? 'sv' : '', flash.has(s.id) ? 'sug' : ''].join(' ');
+      const cls = ['seat', s.tier === 'recliner' || s.tier === 'lounger' || s.tier === 'semi' ? 'rec' : '', s.tier === 'motion' ? 'mot' : '', on ? 'sel' : '', isSaved(t.id, S.si, s.id) ? 'sv' : '', flash.has(s.id) ? 'sug' : '', s === Lx.director ? 'dir' : '', myTw && s === myTw.seat ? (myTw.own ? 'mine' : 'twin') : ''].join(' ');
       const gap = Math.max(1, pxm * 0.07);
       const left = (s.x - s.sw / 2 + Lx.maxHalf) * pxm + gap;
       const w = Math.max(4, s.sw * pxm - gap * 2);
@@ -405,6 +444,8 @@ function renderSeats() {
   const legend = [['seat', 'Seat']];
   if (['recliner', 'semi', 'lounger'].some((k) => tiers.has(k))) legend.push(['rec', 'Recliner']);
   if (tiers.has('motion')) legend.push(['mot', '4DX']);
+  legend.push(['dir', "Director's seat"]);
+  if (myTw) legend.push([myTw.own ? 'mine' : 'twin', myTw.own ? 'Your seat' : `Your seat's twin · ${myTw.pct}%`]);
   legend.push(['sel', 'Your pick']);
   const focus = S.focus && Lx.byId.get(S.focus);
 
@@ -564,7 +605,7 @@ function cardHtml() {
   const m = seat.m;
   const side = Math.abs(seat.x) < 0.15 ? 'dead centre' : seat.x < 0 ? 'left of centre' : 'right of centre';
   const C = m.clearance == null ? null : Math.round(m.clearance * 1000);
-  const parts = [['Screen size', m.parts.angle], ['Off-axis', m.parts.skew], ['Neck', m.parts.neck], ['Sightline', m.parts.clear], ['Sound', m.parts.audio]];
+  const parts = [['Screen size', m.parts.angle], ['Off-axis', m.parts.skew], ['Neck', m.parts.neck], ['Sightline', m.parts.clear], ["Director's spot", m.parts.position]];
   const rank = Lx.seats.filter((s) => s.m.score > m.score).length + 1;
   const saved = isSaved(t.id, S.si, seat.id);
   const secName = Lx.sections[seat.row.section].name;
@@ -577,12 +618,15 @@ function cardHtml() {
       <div class="tile"><b>${Math.round(m.fov)}°</b><span>field of view</span></div>
       <div class="tile"><b>${Math.abs(seat.x) < 0.15 ? '0 m' : Math.abs(seat.x).toFixed(1) + ' m'}</b><span>${side}</span></div>
     </div>
-    <button class="twin-btn" data-a="twin">${I.twin}<span><b>Seat Twin</b> <small>this exact view in ${allLayouts().length - 1} other halls</small></span>${I.chevR}</button>
+    <div class="twin-row">
+      <button class="twin-btn" data-a="twin">${I.twin}<span><b>Seat Twin</b> <small>this view in ${allLayouts().length - 1} other halls</small></span>${I.chevR}</button>
+      <button class="myseat-btn" data-a="myseat" aria-pressed="${isMySeat(t.id, S.si, seat.id)}" title="${isMySeat(t.id, S.si, seat.id) ? 'This is your seat' : 'Mark as my seat'}">${I.heart}<span>${isMySeat(t.id, S.si, seat.id) ? 'My seat' : 'This is my seat'}</span></button>
+    </div>
     <div class="more" ${S.open ? '' : 'inert'}>
       <div class="tiles">
         <div class="tile ${m.elevTop > 34 ? 'warn' : ''}"><b>${Math.round(m.elevTop)}°</b><span>look-up to top edge</span></div>
         <div class="tile ${C != null && C < 60 ? 'warn' : ''}"><b>${C == null ? 'Clear' : C + ' mm'}</b><span>sightline clearance</span></div>
-        <div class="tile ${m.overhangCut > 0.05 ? 'warn' : ''}"><b>${m.overhangCut > 0.01 ? Math.round(m.overhangCut * 100) + '%' : m.audioD.toFixed(1) + ' m'}</b><span>${m.overhangCut > 0.01 ? 'screen hidden' : 'from the sound sweet spot'}</span></div>
+        <div class="tile ${m.overhangCut > 0.05 ? 'warn' : ''}"><b>${m.overhangCut > 0.01 ? Math.round(m.overhangCut * 100) + '%' : m.audioD.toFixed(1) + ' m'}</b><span>${m.overhangCut > 0.01 ? 'screen hidden' : "from the director's spot"}</span></div>
       </div>
       <div class="bars" aria-label="Score breakdown">${parts.map(([n, v]) => `<div><span>${n}</span><i style="--v:${Math.round(v * 100)}%"></i></div>`).join('')}</div>
       <ul class="insights">${insightFor(seat).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
@@ -714,40 +758,75 @@ function openModal(html, cls = '', focusSel = '.m-card .btn') {
   requestAnimationFrame(() => $(focusSel, modalEl)?.focus());
 }
 
-// Seat Twin: the seat in every other hall whose VIEW matches this one (layout.js findTwins).
+// Seat Twin: the seat in every other hall whose VIEW matches this one (twin.js matchView).
+const twinRows = (list) => list.map((x) => `<li>
+      <span class="twin-pct" aria-hidden="true"><b>${x.pct}%</b><small>match</small></span>
+      <span class="twin-info"><b>${esc(x.L.theatre.short)} <span>· ${esc(hallName(x.L.hall))}</span></b><span>Seat <strong>${esc(x.seat.id)}</strong> · ${Math.round(x.seat.m.fov)}° wide · ${Math.round(x.seat.m.elevTop)}° up · ${sideText(x.seat.m)}${x.seat === x.L.director ? " · director's seat" : ''}</span></span>
+      <button class="btn ghost sm" data-a="twin-go" data-tid="${x.L.theatre.id}" data-si="${x.L.screenIdx}" data-id="${esc(x.seat.id)}" data-pct="${x.pct}" aria-label="Sit in ${esc(x.L.theatre.short)} seat ${esc(x.seat.id)}, ${x.pct}% match">Sit here</button>
+    </li>`).join('');
 const sideText = (m) => (m.skew < 3 ? 'centre' : `${Math.round(m.skew)}° to the side`);
 function openTwin(tid, si, id) {
   const t = theatreById(tid), Lx = getLayout(t, si), seat = Lx.byId.get(id);
   if (!seat) return;
-  const twins = findTwins(seat, Lx, allLayouts()).slice(0, 8);
-  const m = seat.m, hallTitle = (L2) => `${esc(L2.theatre.short)} <span>· ${esc(hallName(L2.hall))}</span>`;
+  const twins = matchView(profileOf(seat), allLayouts(), { exclude: Lx }).slice(0, 8);
+  const m = seat.m;
   openModal(`
     <p class="eyebrow">${I.twin} Only on Seatify</p>
     <h2 id="m-title">Seat Twin</h2>
-    <p>Your view from <b>${esc(t.short)} · ${esc(hallName(Lx.hall))} · ${esc(seat.id)}</b>, found again in the other ${allLayouts().length - 1} halls.</p>
+    <p>${isMySeat(tid, si, id) ? 'Your seat' : 'The view from'} <b>${esc(t.short)} · ${esc(hallName(Lx.hall))} · ${esc(seat.id)}</b>, found again in the other ${allLayouts().length - 1} halls.</p>
     <ul class="twin-you" aria-label="Your view">
       <li><b>${Math.round(m.fov)}°</b> screen width</li><li><b>${Math.round(m.elevTop)}°</b> look-up</li><li><b>${m.skew < 3 ? 'Centre' : Math.round(m.skew) + '°'}</b> ${m.skew < 3 ? 'seat' : 'to the side'}</li>
       <li><b>${m.clearance == null || m.clearance >= 0.06 ? 'Clear' : 'Partly blocked'}</b> sightline</li>
     </ul>
-    <ol class="twin-list">${twins.map((x) => `<li>
-      <span class="twin-pct" aria-hidden="true"><b>${x.pct}%</b><small>match</small></span>
-      <span class="twin-info"><b>${hallTitle(x.L)}</b><span>Seat <strong>${esc(x.seat.id)}</strong> · ${Math.round(x.seat.m.fov)}° wide · ${Math.round(x.seat.m.elevTop)}° up · ${sideText(x.seat.m)}</span></span>
-      <button class="btn ghost sm" data-a="twin-go" data-tid="${x.L.theatre.id}" data-si="${x.L.screenIdx}" data-id="${esc(x.seat.id)}" data-pct="${x.pct}" aria-label="Sit in ${esc(x.L.theatre.short)} seat ${esc(x.seat.id)}, ${x.pct}% match">Sit here</button>
-    </li>`).join('')}</ol>
+    <ol class="twin-list">${twinRows(twins)}</ol>
     <p class="fine">We compare what your eyes get, not row letters: how wide the screen looks, how far you look up, how far off-centre you sit, whether heads in front block the picture and whether a balcony cuts it off.</p>`, 'twin-card', '.twin-list .btn');
+}
+
+// Seat DNA: no seat number needed. Two sliders describe the view; results re-rank live.
+const DNA = { fov: 58, skew: 0, preset: null };
+const fovWord = (f) => (f < 46 ? 'Relaxed' : f < 62 ? 'Balanced' : 'Big & close');
+const skewWord = (k) => (k < 5 ? 'Centre' : k < 16 ? 'Slightly off-centre' : 'Aisle side');
+function dnaResults() {
+  const list = DNA.preset === 'director' ? directorSeats(allLayouts()) : matchView(dnaProfile(DNA.fov, DNA.skew), allLayouts());
+  return list.slice(0, 8);
+}
+function openDna() {
+  const my = mySeat();
+  if (my && DNA.preset == null) { DNA.fov = Math.round(Math.min(80, Math.max(36, my.seat.m.fov))); DNA.skew = Math.round(Math.min(30, my.seat.m.skew)); }
+  openModal(`
+    <p class="eyebrow">${I.dna} Only on Seatify</p>
+    <h2 id="m-title">Seat DNA</h2>
+    <p>No seat number needed. Describe the view you like and we find it in all ${allLayouts().length} halls.</p>
+    <div class="dna-presets" role="group" aria-label="Presets">${Object.entries(DNA_PRESETS).map(([k, v]) => `<button class="chip" data-a="dna-preset" data-id="${k}" aria-pressed="${DNA.preset === k}">${esc(v.label)}</button>`).join('')}</div>
+    <div class="dna-slider"><label for="dna-fov">How big should the screen look? <b id="dna-fov-v">${DNA.fov}° · ${fovWord(DNA.fov)}</b></label>
+      <input id="dna-fov" type="range" min="36" max="80" step="1" value="${DNA.fov}" aria-describedby="dna-fov-v"><span class="dna-ends" aria-hidden="true"><span>Relaxed</span><span>Balanced</span><span>Big & close</span></span></div>
+    <div class="dna-slider"><label for="dna-skew">Where do you like to sit? <b id="dna-skew-v">${DNA.skew}° · ${skewWord(DNA.skew)}</b></label>
+      <input id="dna-skew" type="range" min="0" max="30" step="1" value="${DNA.skew}" aria-describedby="dna-skew-v"><span class="dna-ends" aria-hidden="true"><span>Centre</span><span>Slightly off</span><span>Aisle</span></span></div>
+    <p class="dna-sum" id="dna-sum" aria-live="polite"></p>
+    <ol class="twin-list" id="dna-list"></ol>`, 'twin-card dna-card', '#dna-fov');
+  updateDna();
+}
+function updateDna() {
+  const list = $('#dna-list');
+  if (!list) return;
+  list.innerHTML = twinRows(dnaResults());
+  $('#dna-fov-v').textContent = `${DNA.fov}° · ${fovWord(DNA.fov)}`;
+  $('#dna-skew-v').textContent = `${DNA.skew}° · ${skewWord(DNA.skew)}`;
+  $$('[data-a="dna-preset"]').forEach((b) => b.setAttribute('aria-pressed', DNA.preset === b.dataset.id));
+  $('#dna-sum').textContent = DNA.preset === 'director' ? "Every hall's director's seat: two-thirds back, centred, where films are mixed." : `Best matches for a ${fovWord(DNA.fov).toLowerCase()} screen (${DNA.fov}°), ${skewWord(DNA.skew).toLowerCase()}.`;
 }
 
 function openHow() {
   openModal(`
     <h2 id="m-title">How Seatify scores a seat</h2>
-    <p>Each hall is modelled in 3D from its seat map, screen size, row spacing, floor slope and balcony. For every seat we work out what your eyes actually see:</p>
+    <p>Each hall is modelled in 3D from its seat map, screen size, row spacing, floor slope and balcony. For every seat we work out what your eyes actually see, against cinema standards:</p>
     <dl>
-      <dt>Field of view</dt><dd>The angle the screen fills. Target about 50° for standard halls and 60° for IMAX, large-format and 70mm.</dd>
+      <dt>Director's seat</dt><dd>The reference seat on the centre line about two-thirds of the way back, where a film's picture and sound are mixed and checked. It scores highest in every hall, and seats lose points the further they are from it (in, out, sideways or up in a balcony).</dd>
+      <dt>Field of view</dt><dd>The angle the screen fills. SMPTE asks for at least 30°, THX about 36° from the back row and around 40° as ideal. Full marks from 36° up to about 62° (72° for IMAX, large-format and 70mm).</dd>
       <dt>Off-axis angle</dt><dd>Beyond about 8° to the side the picture starts to look skewed.</dd>
       <dt>Look-up angle</dt><dd>Elevation to the top edge. Above about 35° strains your neck.</dd>
       <dt>Sightline clearance</dt><dd>How far your line to the bottom of the screen clears the eyes of the person in front. Cinema designers aim for 100 mm or more; under 60 mm, heads block subtitles.</dd>
       <dt>Balcony overhang</dt><dd>In single screens, the share of the screen hidden by the balcony above the rear stalls.</dd>
-      <dt>Sound</dt><dd>Distance from the mixing position, about two-thirds back on the centre line.</dd>
     </dl>
     <button class="btn primary" data-a="closemodal">Got it</button>`);
 }
@@ -762,6 +841,12 @@ function closeModal() {
 
 // ───────────────────────── events ─────────────────────────
 document.addEventListener('input', (e) => {
+  if (e.target.id === 'dna-fov' || e.target.id === 'dna-skew') {
+    DNA[e.target.id === 'dna-fov' ? 'fov' : 'skew'] = +e.target.value;
+    DNA.preset = null;
+    updateDna();
+    return;
+  }
   if (e.target.id !== 'q') return;
   S.q = e.target.value;
   refreshResults();
@@ -794,9 +879,35 @@ function act(el) {
       break;
     }
     case 'motion': toggleMotion(); break;
+    case 'myseat': {
+      const v = { tid: S.tid, si: S.si, id: S.focus };
+      const was = isMySeat(v.tid, v.si, v.id);
+      setMySeat(was ? null : v);
+      updateViewUI();
+      if (isSplit()) renderSeats();
+      toast(was ? 'Removed as your seat' : `${v.id} is now your seat. Every hall shows your twin seat.`);
+      break;
+    }
+    case 'dna': DNA.preset = null; openDna(); break;
+    case 'dna-preset': {
+      const k = el.dataset.id, p = DNA_PRESETS[k];
+      DNA.preset = k;
+      if (p.fov != null) { DNA.fov = p.fov; DNA.skew = p.skew; const a = $('#dna-fov'), b = $('#dna-skew'); if (a) a.value = DNA.fov; if (b) b.value = DNA.skew; }
+      updateDna();
+      break;
+    }
+    case 'pickmine': {
+      const list = $('#tlist');
+      list?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+      toast("Open a theatre, tap your usual seat, then tap 'This is my seat'");
+      break;
+    }
+    case 'mytwins': { const my = mySeat(); if (my) openTwin(my.t.id, my.L.screenIdx, my.seat.id); break; }
+    case 'clearmine': setMySeat(null); render(); toast('Your seat was cleared'); break;
     case 'trymotion': {
-      const P = theatreById('prasads'), best = topSeats(getLayout(P, 0), 1)[0];
-      go(isSplit() ? 'seats' : 'view', { tid: P.id, si: 0, focus: best.id, open: false, zoom: null, aerial: false });
+      const my = mySeat();
+      if (!my) { $('#tlist')?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' }); toast('Pick a theatre and a seat, then tap the phone icon at the top'); break; }
+      go(isSplit() ? 'seats' : 'view', { tid: my.t.id, si: my.L.screenIdx, focus: my.seat.id, open: false, zoom: null, aerial: false });
       toast('Tap the phone icon at the top to look around by moving your phone');
       break;
     }
@@ -883,7 +994,7 @@ document.addEventListener('keydown', (e) => {
   if (modalEl.classList.contains('on')) {
     if (e.key === 'Escape') closeModal();
     if (e.key === 'Tab') { // keep focus inside the dialog
-      const f = $$('button', modalEl), first = f[0], last = f.at(-1);
+      const f = $$('button, input', modalEl), first = f[0], last = f.at(-1);
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
