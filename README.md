@@ -38,7 +38,7 @@ Seatify fixes that. Pick a theatre, pick a seat, and **fly into the hall** to lo
 | 🔖 **Saved seats** | Shortlist seats and compare them. Saved in your browser. |
 | 📱 **Responsive** | Phones from 360 px up to wide desktops. The desktop layout splits the seat map and the live 3D view. |
 | ♿ **Accessible** | Skip link, keyboard seat navigation with arrow keys, screen-reader announcements, focus management and reduced-motion support. |
-| 📴 **Fully offline** | No CDN links, web fonts or network calls. three.js and fonts are vendored. |
+| 📴 **Works offline** | No backend, CDN, web fonts or API calls: three.js and fonts are vendored. A service worker stores the whole site (~3 MB) on the first visit, so it then opens and runs with no internet. Installable as an app. |
 
 ## 🎬 Theatres
 
@@ -62,6 +62,8 @@ python3 serve.py 8080     # custom port
 ```
 seatify/
 ├── index.html      # app shell, import map, accessibility landmarks
+├── sw.js           # generated offline service worker (node tools/build-sw.mjs)
+├── manifest.webmanifest + icons/  # installable app
 ├── styles.css      # design system: light, coral accent
 ├── serve.py        # local dev server (no-cache)
 ├── js/
@@ -73,11 +75,26 @@ seatify/
 │   ├── app.js      # UI, routing and state
 │   └── scene.bundle.js  # generated single-file 3D fallback (node tools/bundle-3d.mjs)
 ├── tools/
-│   └── bundle-3d.mjs    # zero-dependency bundler for the fallback
+│   ├── bundle-3d.mjs    # zero-dependency bundler for the fallback
+│   └── build-sw.mjs     # generates sw.js with a content-hashed cache version
 └── vendor/         # three.js 0.160 and self-hosted fonts
 ```
 
 Data flows one way: `data.js` → `layout.js` → `app.js` (UI) and `scene.js` (3D). Adding or fixing a theatre is a change to `data.js` only.
+
+## 📴 How offline works
+
+There is **no backend**: every file is static, and all scoring and 3D rendering happen in the browser.
+
+1. **No network dependencies.** Fonts, three.js, theatre data and the films on the 3D screen all ship inside the project.
+2. **Local:** `python3 serve.py` serves it from your own machine, so it works with Wi-Fi off.
+3. **Live site:** on the first visit, `sw.js` downloads and stores every file. After that the site opens, reloads and renders halls in 3D with no connection, and it can be installed to a home screen or dock. Each deploy changes the cache version, so returning visitors get the update automatically.
+
+Before committing, rebuild the generated files:
+
+```bash
+node tools/bundle-3d.mjs && node tools/build-sw.mjs
+```
 
 ## 🌐 Deploy
 
