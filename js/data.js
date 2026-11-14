@@ -59,8 +59,8 @@ export const THEATRES = [
     screens: [
       {
         // Screen: 101.6 ft × 64 ft (31.0 × 19.5 m), ~630 seats — our transcription has 629.
-        name: 'PCX Screen', format: 'PCX', immersive: true, atmos: true, screenNote: 'Reported 101.6 × 64 ft',
-        screen: { w: 31.0, h: 19.5, bottom: 0.9, curve: 0 },
+        name: 'PCX Screen', format: 'PCX', immersive: true, atmos: true, screenNote: '98.6 ft wide (hyderabadtheatres.com); earlier reports said 101.6 × 64 ft',
+        screen: { w: 30.05, h: 18.93, bottom: 0.9, curve: 0 },
         firstRow: 11, riser: 0.5, rtl: true,
         sections: [{ name: 'Gold', grid: [
           { tier: 'prime', label: 'Gold', rows: [
@@ -74,8 +74,8 @@ export const THEATRES = [
       },
       {
         // Same layout seen on the "Barco 4K Laser" and "Barco 4K Smart Laser" shows.
-        name: 'Barco 4K Laser', format: 'LASER', screenNote: 'Screen size estimated from seating width',
-        screen: { w: 15.5, h: 6.5, bottom: 1.3, curve: 0 },
+        name: 'Barco 4K Laser', format: 'LASER', screenNote: '59.2 ft wide (hyderabadtheatres.com); height estimated',
+        screen: { w: 18.04, h: 7.57, bottom: 1.3, curve: 0 },
         firstRow: 5.6, riser: 0.36,
         sections: [{ name: 'Executive', grid: [
           { tier: 'classic', label: 'Executive', rows: [
@@ -94,8 +94,8 @@ export const THEATRES = [
     lat: 17.4575, lng: 78.3640, single: false, source: 'bms', tags: ['Barco HDR', 'Loungers', 'Luxe'],
     screens: [
       {
-        name: 'HDR by Barco', format: 'HDR', atmos: true, screenNote: 'Screen size estimated (≈1.9:1)',
-        screen: { w: 16.5, h: 8.7, bottom: 1.2, curve: 0 },
+        name: 'HDR by Barco', format: 'HDR', atmos: true, screenNote: '60.3 ft wide (hyderabadtheatres.com); height estimated',
+        screen: { w: 18.38, h: 9.69, bottom: 1.2, curve: 0 },
         firstRow: 4.6, riser: 0.36,
         sections: [{ name: 'Stalls', grid: [
           { tier: 'prime', label: 'Platinum', rows: [`A  ${_(7)}${o(14)}`] },
@@ -109,8 +109,8 @@ export const THEATRES = [
       },
       {
         // Header was cropped in the screenshot — one of AMB's Barco laser halls.
-        name: 'Barco Laser hall', format: 'LASER', atmos: true, screenNote: 'Screen size estimated',
-        screen: { w: 14.5, h: 7.6, bottom: 1.2, curve: 0 },
+        name: 'Barco Laser hall', format: 'LASER', atmos: true, screenNote: '40 ft wide (hyderabadtheatres.com); height estimated',
+        screen: { w: 12.19, h: 6.39, bottom: 1.2, curve: 0 },
         firstRow: 4.6, riser: 0.36,
         sections: [{ name: 'Stalls', grid: [
           { tier: 'prime', label: 'Platinum', rows: [`A  ${_(4)}${o(8)}.${o(4)}`] },
@@ -123,8 +123,8 @@ export const THEATRES = [
         ] }],
       },
       {
-        name: 'M B Luxe', format: 'LUXE', screenNote: 'Screen size estimated',
-        screen: { w: 8.5, h: 4.5, bottom: 1.1, curve: 0 }, starCeiling: true,
+        name: 'M B Luxe', format: 'LUXE', screenNote: '18 ft wide (hyderabadtheatres.com); height estimated',
+        screen: { w: 5.49, h: 2.91, bottom: 1.1, curve: 0 }, starCeiling: true,
         firstRow: 4.2, riser: 0.45, colW: 0.8,
         sections: [{ name: 'Luxe', grid: [
           { tier: 'semi', label: 'Semi recliner', pitch: 1.6, rows: rows('A B C D', o(8)) },
@@ -137,8 +137,8 @@ export const THEATRES = [
     lat: 17.4375, lng: 78.4482, single: false, source: 'bms', tags: ['Laser', 'Dolby 7.1', 'Semi recliners'],
     screens: [
       {
-        name: 'Laser Hall (larger)', format: 'LASER', screenNote: 'Screen size estimated',
-        screen: { w: 13, h: 6.8, bottom: 1.3, curve: 0 },
+        name: 'Laser Hall (larger)', format: 'LASER', screenNote: '67 ft wide, Screen 1 (hyderabadtheatres.com); height estimated',
+        screen: { w: 20.42, h: 10.68, bottom: 1.3, curve: 0 },
         firstRow: 5.0, riser: 0.34,
         sections: [{ name: 'Stalls', grid: [
           { tier: 'semi', label: 'Semi recliners', rows: [`A  ${o(16)}`] },
@@ -175,8 +175,8 @@ export const THEATRES = [
       {
         // The flagship Dolby Cinema hall (75 × 40.5 ft, ~644 seats) isn't in the screenshots;
         // this is the Laser 4K Atmos hall.
-        name: 'Laser 4K Atmos', format: 'LASER', atmos: true, screenNote: 'Screen size estimated',
-        screen: { w: 14, h: 7.4, bottom: 1.3, curve: 0 },
+        name: 'Laser 4K Atmos', format: 'LASER', atmos: true, screenNote: '46 ft wide (hyderabadtheatres.com); height estimated',
+        screen: { w: 14.02, h: 7.41, bottom: 1.3, curve: 0 },
         firstRow: 5.0, riser: 0.38,
         sections: [{ name: 'Stalls', grid: [
           { tier: 'prime', label: 'Platinum', rows: [`A  ${o(14)}`] },
@@ -195,8 +195,8 @@ export const THEATRES = [
     lat: 17.3305, lng: 78.5640, single: false, source: 'bms', tags: ['4K', 'Recliners'],
     screens: [
       {
-        name: 'Screen · 4K', format: '4K', screenNote: 'Screen size estimated (ART\'s 57 ft EPIQ screen may be a different hall)',
-        screen: { w: 12, h: 6.3, bottom: 1.2, curve: 0 },
+        name: 'Screen · 4K', format: '4K', screenNote: '38 ft wide, Screen 1 (hyderabadtheatres.com); height estimated. The 57 ft EPIQ screen is a different hall',
+        screen: { w: 11.58, h: 6.08, bottom: 1.2, curve: 0 },
         firstRow: 4.6, riser: 0.36,
         sections: [{ name: 'Stalls', grid: [
           { tier: 'recliner', label: 'Recliners', colW: 0.62, rows: [`R  ${_(3)}${o(10)}`] },
@@ -235,8 +235,8 @@ export const THEATRES = [
       {
         // Rows A–F of the upper section were scrolled off-screen in the screenshot;
         // they're filled with the same 14 + 14 pattern as G–I.
-        name: 'Main Screen', format: '2D', rtl: true, screenNote: 'Screen size estimated; top rows partly inferred',
-        screen: { w: 17, h: 7.2, bottom: 2.0, curve: 0 },
+        name: 'Main Screen', format: '2D', rtl: true, screenNote: '58.2 ft wide (hyderabadtheatres.com); height estimated; top rows partly inferred',
+        screen: { w: 17.74, h: 7.51, bottom: 2.0, curve: 0 },
         firstRow: 5.5, riser: 0.2,
         sections: [{ name: 'Hall', grid: [
           { tier: 'classic', label: 'Upper class', rows: [
@@ -274,9 +274,9 @@ export const THEATRES = [
     lat: 17.4062, lng: 78.4955, single: true, tags: ['Single screen', 'Balcony'],
     movies: ['deccan'],
     hall: {
-      name: 'Main Screen · 35mm', format: '35MM',
-      screen: { w: 14.5, h: 6.1, bottom: 2.2, curve: 0 },
-      firstRow: 5.5, riser: 0.14, aisle: 1.2, labels: 'front',
+      name: 'Main Screen · 35mm', format: '35MM', screenNote: '55 ft wide, Scope 2.39:1 (hyderabadtheatres.com)',
+      screen: { w: 16.76, h: 7.01, bottom: 2.2, curve: 0 },
+      firstRow: 7.0, riser: 0.14, aisle: 1.2, labels: 'front', // first row ≥ 0.42 × screen width
       sections: [
         { name: 'Stalls', rows: [
           { n: 4, tier: 'classic', blocks: [6, 16, 6], price: 110, label: 'Front Stalls' },
@@ -293,9 +293,9 @@ export const THEATRES = [
     lat: 17.4048, lng: 78.4972, single: true, tags: ['Single screen', 'Balcony', '70mm'],
     movies: ['jatara'],
     hall: {
-      name: 'Main Screen · 70mm', format: '70MM', immersive: true,
-      screen: { w: 18.5, h: 8, bottom: 2.0, curve: 30 },
-      firstRow: 6, riser: 0.16, aisle: 1.2, labels: 'front',
+      name: 'Main Screen · 70mm', format: '70MM', immersive: true, screenNote: '68 ft wide, ultra-wide 2.76:1 (hyderabadtheatres.com)',
+      screen: { w: 20.73, h: 7.51, bottom: 2.0, curve: 30 },
+      firstRow: 8.7, riser: 0.16, aisle: 1.2, labels: 'front', // first row ≥ 0.42 × screen width
       sections: [
         { name: 'Stalls', rows: [
           { n: 4, tier: 'classic', blocks: [7, 18, 7], price: 110, label: 'Front Stalls' },
@@ -312,15 +312,15 @@ export const THEATRES = [
     lat: 17.4078, lng: 78.4940, single: true, tags: ['Single screen', 'Balcony', '70mm', 'Dolby Atmos'],
     movies: ['sand'],
     hall: {
-      name: 'Main Screen · 70mm', format: '70MM', immersive: true, atmos: true,
-      screen: { w: 19.5, h: 8.4, bottom: 2.1, curve: 0 },
-      firstRow: 6.2, riser: 0.15, aisle: 1.2, labels: 'front',
+      name: 'Main Screen · 70mm', format: '70MM', immersive: true, atmos: true, screenNote: '83 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 25.3, h: 10.9, bottom: 2.1, curve: 0 },
+      firstRow: 10.6, riser: 0.15, aisle: 1.2, labels: 'front', // first row ≥ 0.42 × screen width
       sections: [
         { name: 'Stalls', rows: [
           { n: 3, tier: 'classic', blocks: [6, 20, 6], price: 110, label: 'Front Stalls' },
           { n: 10, tier: 'classic', blocks: [6, 22, 6], price: 175, label: 'Rear Stalls' },
         ] },
-        { name: 'Balcony', balcony: { lift: 3.0, overhang: 6 }, riser: 0.5, rows: [
+        { name: 'Balcony', balcony: { lift: 3.6, overhang: 6 }, riser: 0.5, rows: [ // raised for the taller 83 ft screen
           { n: 6, tier: 'balcony', blocks: [6, 22, 6], price: 250 },
         ] },
       ],
