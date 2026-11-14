@@ -661,3 +661,17 @@ svg { display: block; }
 .dna-slider input[type='range'] { width: 100%; height: 44px; margin: 0; accent-color: var(--accent); cursor: pointer; }
 .dna-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); margin-top: -8px; }
 .dna-sum { font-size: 14px !important; color: var(--muted); }
+
+/* ───────────────────────── director's seat maths + heat-map markers ───────────────────────── */
+.dir-panel { border-color: color-mix(in srgb, var(--good) 35%, var(--line)); }
+.dir-ico { background: color-mix(in srgb, var(--good) 14%, transparent); color: var(--good); }
+.dir-maths { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 4px; }
+.dir-maths summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); }
+.dir-maths summary:hover { color: var(--text); }
+.dir-maths ol { display: grid; gap: 10px; margin: 4px 0 12px; padding-left: 20px; list-style: decimal; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.dir-maths ol b { color: var(--text); }
+.dir-maths li::marker { color: var(--good); font-weight: 700; }
+/* on the coloured heat map the director's ring must not vanish into a green seat */
+.seat.dir { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--good); z-index: 3; }
+.sw.dir { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--good); }
+.heatbar + .legend { padding-top: 6px; }

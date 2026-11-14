@@ -101,7 +101,8 @@ const isSaved = (tid, si, id) => SAVED.some((s) => s.tid === tid && s.si === si 
 
 // ───────────────────────── state & layout ─────────────────────────
 const S = {
-  route: 'home', tid: null, si: 0, focus: null, heat: false, filter: 'all', q: '',
+  route: 'home', tid: null, si: 0, focus: null, heat: true, // seat maps open coloured by view quality
+  filter: 'all', q: '',
   zoom: null, top: -1, aerial: false, crowd: true, lights: true, open: false, content: 0,
   full: false, scenePrimed: false, sceneKey: '', motion: false,
 };
@@ -366,6 +367,33 @@ function knowBeforeYouGo(Lx) {
   return `<ul class="know">${tips.map(([k, t]) => `<li class="${k}">${mark[k]}<span>${t}</span></li>`).join('')}</ul>`;
 }
 
+// The director's seat, worked out step by step from this hall's geometry (layout.js L.refCalc).
+function directorMaths(Lx) {
+  const c = Lx.refCalc, D = Lx.director, m = D.m, f1 = (v) => v.toFixed(1);
+  const angleIn = Math.min(Math.max(c.dAngle, c.bandLo), c.bandHi);
+  const after = Math.max(c.blended, Math.min(c.neckZ, c.bandHi));
+  const neckNote = c.neckZ <= c.blended
+    ? `Looking up at most 30° needs at least ${f1(c.neckZ)} m. ${f1(c.blended)} m already meets it.`
+    : c.neckZ > c.bandHi
+      ? `Looking up at most 30° would need ${f1(c.neckZ)} m, past the director's band, so we go only as far back as the band allows: <b>${f1(after)} m</b>. Expect some look-up on a screen this tall.`
+      : `Looking up at most 30° needs at least ${f1(c.neckZ)} m, so the seat moves back to <b>${f1(after)} m</b>.`;
+  return `<section class="panel dir-panel" aria-labelledby="dir-h">
+    <h2 class="h-sm" id="dir-h">Director's seat</h2>
+    <div class="mine-row"><span class="mine-ico dir-ico" aria-hidden="true">${I.film}</span><span><b>${esc(D.id)}</b><small>${f1(m.dist)} m from the screen · fills ${Math.round(m.fov)}° · look-up ${Math.round(m.elevTop)}° · score ${m.score}</small></span>
+      <button class="btn primary sm" data-a="sit" data-id="${esc(D.id)}">Sit there</button></div>
+    <details class="dir-maths"><summary>How we worked it out</summary>
+      <ol>
+        <li><b>Ideal distance from the screen.</b> The screen is ${f1(c.w)} m wide and should fill ${c.theta}°${c.theta === 60 ? ' (immersive format)' : ''}. Trigonometry: D = W ÷ (2 × tan(θ/2)) = ${f1(c.w)} ÷ (2 × tan ${c.theta / 2}°) = <b>${f1(c.dAngle)} m</b>.</li>
+        <li><b>Keep it in the director's band.</b> Directors mix and check films about two-thirds back, so the seat stays between 60% and 72% of the ${f1(c.backZ)} m room: ${f1(c.bandLo)} to ${f1(c.bandHi)} m${Math.abs(angleIn - c.dAngle) > 0.05 ? `, which moves ${f1(c.dAngle)} m to <b>${f1(angleIn)} m</b>` : ''}.</li>
+        <li><b>Blend with the two-thirds rule.</b> Two-thirds of the room is ${f1(c.twoThirds)} m. Average of the two: (${f1(angleIn)} + ${f1(c.twoThirds)}) ÷ 2 = <b>${f1(c.blended)} m</b>.</li>
+        <li><b>Neck check.</b> ${neckNote}</li>
+        <li><b>Nearest real seat.</b> The row closest to ${f1(c.z)} m${Lx.balcony ? ' (in the stalls, clear of the balcony overhang)' : ''}, best seat nearest the centre line: <b>${esc(D.id)}</b>.</li>
+      </ol>
+      <p class="fine">Viewing-angle guidance: SMPTE asks for at least 30°, THX at least 36° from the back row. These set the floor; the director's seat sits further in, at the format's target angle.</p>
+    </details>
+  </section>`;
+}
+
 function renderTheatre() {
   const t = T(), hs = screensOf(t), Lx = getLayout(t, S.si), h = hs[S.si];
   const tops = topSeats(Lx, 3);
@@ -394,6 +422,7 @@ function renderTheatre() {
       ${(() => { const tw = myTwinIn(Lx); if (!tw) return ''; return `<section class="panel mine-panel" aria-labelledby="mine-h"><h2 class="h-sm" id="mine-h">${tw.own ? 'Your seat' : 'Your seat here'}</h2>
         <div class="mine-row"><span class="mine-ico">${tw.own ? I.heart : I.twin}</span><span><b>${esc(tw.seat.id)}</b><small>${tw.own ? 'The seat you marked as yours' : `${tw.pct}% match to your seat ${esc(mySeat().seat.id)} at ${esc(mySeat().t.short)}`}</small></span>
         <button class="btn primary sm" data-a="sit" data-id="${esc(tw.seat.id)}">Sit there</button></div></section>`; })()}
+      ${directorMaths(Lx)}
       <section class="panel" aria-labelledby="best-h"><h2 class="h-sm" id="best-h">Best seats in this hall</h2>
         <ol class="topseats">${tops.map((s, i) => `<li><button class="topseat" data-a="sit" data-id="${s.id}" aria-label="Number ${i + 1}: sit in ${s.id}, ${esc(s.tierLabel)}, score ${s.m.score}"><span class="rk" aria-hidden="true">#${i + 1}</span><b>${s.id}</b>${ring(s.m.score, 40)}<small>${s === Lx.director ? "Director's seat" : esc(s.tierLabel)}</small></button></li>`).join('')}</ol>
       </section>
@@ -460,7 +489,7 @@ function renderSeats() {
     <div class="mapcard">
       <div class="arc" aria-hidden="true"><svg viewBox="0 0 400 70" preserveAspectRatio="none"><defs><linearGradient id="sl" x1="0" x2="1"><stop offset="0" stop-color="#c8432e" stop-opacity="0"/><stop offset=".5" stop-color="#c8432e"/><stop offset="1" stop-color="#c8432e" stop-opacity="0"/></linearGradient><radialGradient id="sg" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#c8432e" stop-opacity=".10"/><stop offset="1" stop-color="#c8432e" stop-opacity="0"/></radialGradient></defs><path d="M20 26 Q200 -8 380 26 L380 70 L20 70 Z" fill="url(#sg)"/><path d="M20 26 Q200 -8 380 26" fill="none" stroke="url(#sl)" stroke-width="2.6"/></svg><span>SCREEN · ${h.screen.w} M</span></div>
       <div class="mapwrap" role="group" aria-label="Seat map, screen at the top"><div class="mapinner" style="width:${width + 48}px">${rowsHtml}</div></div>
-      ${S.heat ? '<div class="heatbar"><span>Weaker view</span><i></i><span>Better view</span></div>' : `<ul class="legend">${legend.map(([c, l]) => `<li><i class="sw ${c}"></i>${l}</li>`).join('')}</ul>`}
+      ${S.heat ? '<div class="heatbar"><span>Weaker view</span><i></i><span>Better view</span></div>' : ''}<ul class="legend">${legend.filter(([c]) => !S.heat || !['seat', 'rec', 'mot'].includes(c)).map(([c, l]) => `<li><i class="sw ${c}"></i>${l}</li>`).join('')}</ul>
     </div>
     <div class="tools" role="toolbar" aria-label="Seat map tools">
       <button class="tool" data-a="top">${I.spark}<span>Best seats</span></button>
@@ -865,10 +894,10 @@ function act(el) {
       go('theatre');
       break;
     case 'screen':
-      S.si = +id; S.focus = null; S.zoom = null; S.heat = false;
+      S.si = +id; S.focus = null; S.zoom = null;
       if (S.route === 'seats') { renderSeats(); if (isSplit()) { renderStage(); startScene(); } else warmHall(); } else render();
       break;
-    case 'seats': go('seats', { heat: false, zoom: null, top: -1, focus: null, open: false }); break;
+    case 'seats': go('seats', { zoom: null, top: -1, focus: null, open: false }); break;
     case 'how': openHow(); break;
     case 'twin': openTwin(el.dataset.tid || S.tid, el.dataset.si != null ? +el.dataset.si : S.si, el.dataset.id || S.focus); break;
     case 'twin-go': {
@@ -927,7 +956,7 @@ function act(el) {
       break;
     }
     case 'seat': chooseSeat(id); break;
-    case 'sit': if (id) { if (S.route === 'theatre') go(isSplit() ? 'seats' : 'view', { focus: id, heat: false, zoom: null, open: false }); else chooseSeat(id); } break;
+    case 'sit': if (id) { if (S.route === 'theatre') go(isSplit() ? 'seats' : 'view', { focus: id, zoom: null, open: false }); else chooseSeat(id); } break;
     case 'change': if (isSplit()) go('theatre'); else go('seats'); break;
     case 'reload3d': location.reload(); break;
     case 'retry3d': { const b = $('#st-fail button'); if (b) { b.disabled = true; b.textContent = 'Loading…'; } startScene(); break; }

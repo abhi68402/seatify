@@ -166,8 +166,25 @@ export function getLayout(theatre, screenIdx = 0) {
   const stalls = sections[0];
   const usable = stalls.rows.filter((r) => !L.balcony || r.z <= L.balcony.parapetZ);
   const pool = usable.length ? usable : stalls.rows;
-  const refZ = Math.min(Math.max(backZ * 2 / 3, pool[0].z), pool.at(-1).z);
+  // Where exactly? Worked out from the screen itself (shown step by step on the theatre page):
+  //  1. Ideal distance from the screen's width W: the screen should fill the format's target angle θ
+  //     (50°, or 60° for immersive formats such as IMAX, 70mm and PCX). Basic trigonometry gives
+  //     D = W / (2·tan(θ/2)). (SMPTE's 30° and THX's 36-40° are back-row minimums; the reference
+  //     seat sits further in.)
+  //  2. Blend it half and half with the two-thirds rule (where picture and sound are calibrated),
+  //     and keep the result inside the director's band, 60-72% of the room depth.
+  //  3. Neck limit: inside that band, never so close that looking up at the top edge passes 30°.
+  const theta = hall.immersive ? 60 : 50;
+  const dAngle = sc.w / (2 * Math.tan((theta * Math.PI) / 360));
+  const twoThirds = backZ * 2 / 3;
+  const bandLo = backZ * 0.6, bandHi = backZ * 0.72;
+  const neckOk = (r) => deg(Math.atan2(screen.top - (r.floorY + TIERS[r.tier].eye), r.z)) <= 30;
+  const neckZ = (pool.find(neckOk) || pool.at(-1)).z;
+  const blended = (Math.min(Math.max(dAngle, bandLo), bandHi) + twoThirds) / 2;
+  const geoZ = Math.max(blended, Math.min(neckZ, bandHi));
+  const refZ = Math.min(Math.max(geoZ, pool[0].z), pool.at(-1).z);
   const refRow = pool.reduce((a, r) => (Math.abs(r.z - refZ) < Math.abs(a.z - refZ) ? r : a));
+  L.refCalc = { w: sc.w, theta, dAngle, twoThirds, blended, bandLo, bandHi, neckZ, z: refZ, backZ, curved: !!sc.curve };
   L.ref = { x: 0, y: refRow.floorY + TIERS[refRow.tier].eye, z: refZ };
   L.sweet = L.ref; // sound is calibrated at the same spot
   L.depth = stallsEnd - hall.firstRow;

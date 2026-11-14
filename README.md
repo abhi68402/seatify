@@ -38,7 +38,7 @@ Seatify fixes that. Pick a theatre, pick a seat, and **fly into the hall** to lo
 | 🔖 **Saved seats** | Shortlist seats and compare them. Saved in your browser. |
 | 📱 **Responsive** | Phones from 360 px up to wide desktops. The desktop layout splits the seat map and the live 3D view. |
 | ♿ **Accessible** | Skip link, keyboard seat navigation with arrow keys, screen-reader announcements, focus management and reduced-motion support. |
-| 🎬 **Director's seat** | Every hall's top seat is the director's seat: centred, about two-thirds back, where films are mixed and checked. Scores follow SMPTE (30° minimum) and THX (36–40°) viewing guidance. |
+| 🎬 **Director's seat** | Every hall's top seat is the director's seat, placed by geometry: the distance where the screen fills its target angle (D = W ÷ 2·tan(θ/2)), blended with the two-thirds-back rule and checked against a 30° look-up limit. Each theatre page shows the working. Scores follow SMPTE (30° minimum) and THX (36–40°) viewing guidance. |
 | 🪞 **Seat Twin** (only on Seatify) | Mark your seat once, or describe the view you like with two sliders (Seat DNA). Seatify finds that same view in all 17 halls: same screen width in your eyes, same look-up, same side angle. Every theatre then shows "your seat here". |
 | 📱 **Motion Look** (only on Seatify) | On a phone, move the phone itself to look around the hall, like a window into the cinema. Uses the motion sensor; no headset or app. |
 | 📴 **Works offline** | No backend, CDN, web fonts or API calls: three.js and fonts are vendored. A service worker stores the whole site (~3 MB) on the first visit, so it then opens and runs with no internet. Installable as an app. |
