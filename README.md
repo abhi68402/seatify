@@ -2,7 +2,7 @@
 
 # 💺 Vyu
 
-### *See your seat before you sit.*
+### *View your seat before you sit.*
 
 Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view is really like before you go.
 

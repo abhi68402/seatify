@@ -131,7 +131,7 @@ function syncLayout() {
   return l;
 }
 
-const TITLES = { home: 'Vyu · See your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
+const TITLES = { home: 'Vyu · View your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
 function go(route, patch = {}) {
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
@@ -303,7 +303,7 @@ function renderHome() {
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
       <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>${WORDMARK}</h1>
-      <p class="tagline">See your seat <em>before you sit.</em></p>
+      <p class="tagline">View your seat <em>before you sit.</em></p>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
       <div class="hero-cta">
         <button class="btn primary lg-ish" data-a="scrollfind">${I.search} Find my seat</button>
