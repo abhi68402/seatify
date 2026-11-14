@@ -38,6 +38,8 @@ Seatify fixes that. Pick a theatre, pick a seat, and **fly into the hall** to lo
 | 🔖 **Saved seats** | Shortlist seats and compare them. Saved in your browser. |
 | 📱 **Responsive** | Phones from 360 px up to wide desktops. The desktop layout splits the seat map and the live 3D view. |
 | ♿ **Accessible** | Skip link, keyboard seat navigation with arrow keys, screen-reader announcements, focus management and reduced-motion support. |
+| 🪞 **Seat Twin** (only on Seatify) | Pick any seat and Seatify finds the seat in each of the other 16 halls that gives the same view: same screen width in your eyes, same look-up, same side angle, same sightline. Seats are matched by what you see, not by row letters. |
+| 📱 **Motion Look** (only on Seatify) | On a phone, move the phone itself to look around the hall, like a window into the cinema. Uses the motion sensor; no headset or app. |
 | 📴 **Works offline** | No backend, CDN, web fonts or API calls: three.js and fonts are vendored. A service worker stores the whole site (~3 MB) on the first visit, so it then opens and runs with no internet. Installable as an app. |
 
 ## 🎬 Theatres

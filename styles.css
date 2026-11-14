@@ -565,3 +565,53 @@ svg { display: block; }
   .seat.sel, .chip[aria-pressed='true'], .seg button[aria-pressed='true'], .tool[aria-pressed='true'], .tbtn[aria-pressed='true'] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
   .skip:focus, :focus-visible { outline-color: Highlight; }
 }
+
+/* ───────────────────────── Only on Seatify: Seat Twin + Motion Look ───────────────────────── */
+.btn.sm { height: 44px; padding: 0 16px; font-size: 14px; border-radius: 22px; }
+
+/* home section */
+.only { display: grid; gap: 14px; justify-items: center; text-align: center; }
+.only h2 { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.1; letter-spacing: -.035em; }
+.only-grid { width: 100%; display: grid; gap: 14px; grid-template-columns: 1fr; margin-top: 6px; text-align: left; }
+@media (min-width: 760px) { .only-grid { grid-template-columns: 1fr 1fr; } }
+.only-card { display: grid; gap: 10px; align-content: start; justify-items: start; padding: 24px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
+.only-card h3 { font-size: 21px; font-weight: 800; letter-spacing: -.02em; }
+.only-card p { color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 52ch; }
+.only-card .btn { margin-top: 6px; }
+.only-ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.only-ico svg { width: 26px; height: 26px; }
+.only-note { font-size: 14px !important; padding: 10px 14px; border-radius: 12px; background: var(--surface-2); color: var(--muted); }
+.only-note b { color: var(--text); font-weight: 600; }
+
+/* seat card: Seat Twin entry */
+.twin-btn { width: 100%; min-height: 48px; margin-top: 10px; display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 14px; background: var(--accent-soft); color: var(--text); border: 1px solid rgba(200, 67, 46, .22); text-align: left; transition: background .2s, border-color .2s; }
+.twin-btn:hover { border-color: var(--accent); }
+.twin-btn > svg:first-child { width: 22px; height: 22px; flex: none; color: var(--accent); }
+.twin-btn > span { flex: 1; min-width: 0; font-size: 14px; line-height: 1.3; }
+.twin-btn b { font-weight: 700; }
+.twin-btn small { font-size: 13px; color: var(--muted); }
+.twin-btn .go { width: 18px; height: 18px; flex: none; color: var(--accent); margin-left: auto; }
+
+/* Seat Twin dialog */
+.m-card .eyebrow svg { width: 16px; height: 16px; }
+.twin-card { width: min(640px, calc(100% - 32px)); }
+.twin-you { display: flex; flex-wrap: wrap; gap: 8px; }
+.twin-you li { padding: 8px 12px; border-radius: 12px; background: var(--surface-2); font-size: 13px; color: var(--muted); }
+.twin-you b { color: var(--text); font-size: 15px; margin-right: 2px; }
+.twin-list { display: grid; gap: 8px; margin: 4px 0; padding: 0; list-style: none; }
+.twin-list li { display: flex; align-items: center; gap: 14px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); }
+.twin-pct { width: 58px; flex: none; display: grid; justify-items: center; line-height: 1.1; }
+.twin-pct b { font-size: 19px; font-weight: 800; color: var(--accent); letter-spacing: -.02em; }
+.twin-pct small { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; }
+.twin-info { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.twin-info > b { font-size: 15px; }
+.twin-info > b span { font-weight: 500; color: var(--muted); }
+.twin-info > span { font-size: 13px; color: var(--muted); }
+.twin-info strong { color: var(--text); }
+.twin-list .btn { flex: none; }
+@media (max-width: 479px) {
+  .twin-list li { flex-wrap: wrap; gap: 8px 12px; }
+  .twin-info { flex-basis: calc(100% - 72px); }
+  .twin-list .btn { width: 100%; }
+}
+.m-card .eyebrow { color: var(--accent); font-size: 13px; }

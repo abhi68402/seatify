@@ -1,5 +1,5 @@
 import { THEATRES, MOVIES, TIERS, theatreById } from './data.js';
-import { getLayout, crowd, topSeats, neighbour, heatColor, labelTone, insightFor } from './layout.js';
+import { getLayout, crowd, topSeats, neighbour, heatColor, labelTone, insightFor, findTwins } from './layout.js';
 
 // ───────────────────────── helpers ─────────────────────────
 const $ = (s, r = document) => r.querySelector(s);
@@ -27,10 +27,15 @@ const I = {
   close: svg('<path d="M6 6l12 12M18 6L6 18"/>'),
   check: svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
   seat: svg('<path d="M6 11V6a2 2 0 012-2h8a2 2 0 012 2v5"/><path d="M4 11h16v5H4zM6 16v4M18 16v4"/>'),
+  twin: svg('<path d="M3 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0111 7v4"/><path d="M2 11h10v3.5H2zM3.5 14.5V18M10.5 14.5V18"/><path d="M13 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0121 7v4"/><path d="M12 11h10v3.5H12zM13.5 14.5V18M20.5 14.5V18"/>'),
+  motion: svg('<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/><path d="M3.5 8.5a6 6 0 000 7M20.5 8.5a6 6 0 010 7"/>'),
   eye: svg('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
   arrow: (deg) => svg('<path d="M6 15l6-6 6 6"/>', `style="transform:rotate(${deg}deg)"`),
 };
 const screensOf = (t) => t.screens || [t.hall];
+const allLayouts = () => THEATRES.flatMap((t) => screensOf(t).map((_, i) => getLayout(t, i)));
+// Motion Look needs a motion sensor and a touch screen (phones and tablets)
+const motionCapable = () => 'DeviceOrientationEvent' in window && window.matchMedia('(pointer: coarse)').matches;
 const hallName = (h) => h.name.split(' · ')[0];
 
 // ───────────────────────── storage ─────────────────────────
@@ -67,7 +72,7 @@ const isSaved = (tid, si, id) => SAVED.some((s) => s.tid === tid && s.si === si 
 const S = {
   route: 'home', tid: null, si: 0, focus: null, heat: false, filter: 'all', q: '',
   zoom: null, top: -1, aerial: false, crowd: true, lights: true, open: false, content: 0,
-  full: false, scenePrimed: false, sceneKey: '',
+  full: false, scenePrimed: false, sceneKey: '', motion: false,
 };
 const T = () => theatreById(S.tid);
 const L = () => getLayout(T(), S.si);
@@ -229,6 +234,24 @@ function renderHome() {
         <li><span class="step-ico">${I.seat}</span><span><b>Choose a seat</b><span>Every seat gets a 0–100 view score for distance, angle and sightline.</span></span></li>
         <li><span class="step-ico">${I.eye}</span><span><b>See the screen</b><span>Fly into a 3D model of the hall and look from that exact seat.</span></span></li>
       </ol>
+    </section>
+    <section class="only" aria-labelledby="only-h">
+      <p class="eyebrow">${I.spark} Only on Seatify</p>
+      <h2 id="only-h">Things no booking app can show you</h2>
+      <ul class="only-grid">
+        <li class="only-card">
+          <span class="only-ico">${I.twin}</span>
+          <h3>Seat Twin</h3>
+          <p>Loved a seat? We find the seat in every other hall that gives you the same view: same screen size in your eyes, same look-up, same angle. Seats are compared by what you see, not by row letters.</p>
+          <button class="btn primary" data-a="twin" data-tid="prasads" data-si="0" data-id="${esc(topSeats(getLayout(theatreById('prasads'), 0), 1)[0].id)}">${I.twin} See an example</button>
+        </li>
+        <li class="only-card">
+          <span class="only-ico">${I.motion}</span>
+          <h3>Motion Look</h3>
+          <p>Hold up your phone and move it: the hall moves with you, like a window into the cinema. No headset, no app to install.</p>
+          ${motionCapable() ? `<button class="btn primary" data-a="trymotion">${I.motion} Try it now</button>` : '<p class="only-note">Open <b>abhi68402.github.io/seatify</b> on your phone to try it.</p>'}
+        </li>
+      </ul>
     </section>
     <div class="home-grid">
       <section class="finder" aria-labelledby="find-h">
@@ -495,6 +518,7 @@ function clear3DFailure() { stageEl.classList.remove('no3d'); $('#st-fail', stag
 function warmHall() { const Lx = L(); getView().then((v) => v.loadHall(Lx, crowd(Lx), MOVIES[S.content].id)).catch(() => {}); }
 
 function stop3D() {
+  if (S.motion) { S.motion = false; view3d?.setMotionLook(false); }
   glEl.classList.remove('on');
   S.scenePrimed = false; S.sceneKey = '';
   stageEl.innerHTML = ''; stageEl.classList.remove('no3d');
@@ -508,7 +532,7 @@ function stageHtml() {
     <button class="icon-btn st-back" data-a="change" aria-label="Back to seat map" title="Back to seat map">${I.back}</button>
     <div class="seat-pill" id="seatpill"></div>
     <div class="st-tools" role="toolbar" aria-label="Scene controls">
-      ${tbtn('lights', I.bulb, 'House lights', S.lights)}${tbtn('crowd', I.people, 'Full house', S.crowd)}${tbtn('content', I.film, 'Screen', false)}<button class="tbtn" data-a="reset" aria-label="Reset view" title="Reset view" hidden>${svg('<path d="M4 4v6h6"/><path d="M20 12a8 8 0 10-2.3 5.7"/><path d="M4 10a8 8 0 012-3.3"/>')}<span>Reset view</span></button>
+      ${motionCapable() ? tbtn('motion', I.motion, 'Motion look', S.motion) : ''}${tbtn('lights', I.bulb, 'House lights', S.lights)}${tbtn('crowd', I.people, 'Full house', S.crowd)}${tbtn('content', I.film, 'Screen', false)}<button class="tbtn" data-a="reset" aria-label="Reset view" title="Reset view" hidden>${svg('<path d="M4 4v6h6"/><path d="M20 12a8 8 0 10-2.3 5.7"/><path d="M4 10a8 8 0 012-3.3"/>')}<span>Reset view</span></button>
     </div>
   </div>
   <div class="seg st-seg pe" role="group" aria-label="Camera view">
@@ -553,6 +577,7 @@ function cardHtml() {
       <div class="tile"><b>${Math.round(m.fov)}°</b><span>field of view</span></div>
       <div class="tile"><b>${Math.abs(seat.x) < 0.15 ? '0 m' : Math.abs(seat.x).toFixed(1) + ' m'}</b><span>${side}</span></div>
     </div>
+    <button class="twin-btn" data-a="twin">${I.twin}<span><b>Seat Twin</b> <small>this exact view in ${allLayouts().length - 1} other halls</small></span>${I.chevR}</button>
     <div class="more" ${S.open ? '' : 'inert'}>
       <div class="tiles">
         <div class="tile ${m.elevTop > 34 ? 'warn' : ''}"><b>${Math.round(m.elevTop)}°</b><span>look-up to top edge</span></div>
@@ -581,11 +606,12 @@ function updateViewUI() {
   if (pill) pill.innerHTML = seat ? `<i></i><span><em>View from </em>${esc(seat.id)}</span>` : '';
   $$('[data-a="lights"]', stageEl).forEach((b) => b.setAttribute('aria-pressed', S.lights));
   $$('[data-a="crowd"]', stageEl).forEach((b) => b.setAttribute('aria-pressed', S.crowd));
+  $$('[data-a="motion"]', stageEl).forEach((b) => { b.setAttribute('aria-pressed', S.motion); b.hidden = S.aerial || !seat; });
   $$('[data-a="mode"]', stageEl).forEach((b) => b.setAttribute('aria-pressed', (b.dataset.m === 'aerial') === S.aerial));
   const rb = $('[data-a="reset"]', stageEl); if (rb) rb.hidden = !S.aerial;
   const hint = $('#sthint');
   if (hint) hint.textContent = coarse.matches
-    ? (S.aerial ? 'Drag to orbit · pinch to zoom · tap for full screen' : 'Drag to look around · tap for full screen')
+    ? (S.aerial ? 'Drag to orbit · pinch to zoom · tap for full screen' : S.motion ? 'Move your phone to look around · drag still works' : 'Drag to look around · tap for full screen')
     : (S.aerial ? 'Drag to orbit · scroll to zoom · double-click to reset · V seat view' : 'Drag to look around · ← ↑ → ↓ move seats · V aerial view · Esc back');
   if (seat) ['up', 'down', 'left', 'right'].forEach((d) => { const b = $(`.st-move [data-d="${d}"]`); if (b) b.disabled = !neighbour(Lx, seat, d); });
   requestAnimationFrame(positionFloating);
@@ -661,11 +687,58 @@ function renderSaved() {
   }).join('')}</ul>` : `<div class="empty"><span class="empty-ico">${I.bookmark}</span><b>No saved seats yet.</b><span>Sit in a seat and tap “Save seat” to keep it for next time.</span><button class="btn ghost" data-a="home">Browse theatres</button></div>`}</main>`;
 }
 
+// ───────────────────────── Motion Look ─────────────────────────
+async function toggleMotion() {
+  if (S.motion) { S.motion = false; view3d?.setMotionLook(false); updateViewUI(); toast('Motion look off'); return; }
+  const DOE = window.DeviceOrientationEvent;
+  if (DOE && typeof DOE.requestPermission === 'function') { // iOS 13+: must be asked from a tap
+    let ok = 'denied';
+    try { ok = await DOE.requestPermission(); } catch {}
+    if (ok !== 'granted') { toast('Allow motion access to look around by moving your phone'); return; }
+  }
+  if (!view3d) return;
+  S.motion = true;
+  view3d.setMotionLook(true, () => { S.motion = false; updateViewUI(); toast('No motion sensor found on this device'); });
+  updateViewUI();
+  toast('Move your phone to look around. Tap again to stop.');
+}
+
 // ───────────────────────── modal ─────────────────────────
 let modalReturn = null;
-function openHow() {
+function openModal(html, cls = '', focusSel = '.m-card .btn') {
   modalReturn = document.activeElement;
-  modalEl.innerHTML = `<div class="m-back" data-a="closemodal"></div><div class="m-card" role="dialog" aria-modal="true" aria-labelledby="m-title"><button class="icon-btn m-x" data-a="closemodal" aria-label="Close">${I.close}</button>
+  modalEl.innerHTML = `<div class="m-back" data-a="closemodal"></div><div class="m-card ${cls}" role="dialog" aria-modal="true" aria-labelledby="m-title"><button class="icon-btn m-x" data-a="closemodal" aria-label="Close">${I.close}</button>${html}</div>`;
+  modalEl.classList.add('on');
+  modalEl.removeAttribute('aria-hidden');
+  screenEl.inert = stageEl.inert = true;
+  requestAnimationFrame(() => $(focusSel, modalEl)?.focus());
+}
+
+// Seat Twin: the seat in every other hall whose VIEW matches this one (layout.js findTwins).
+const sideText = (m) => (m.skew < 3 ? 'centre' : `${Math.round(m.skew)}° to the side`);
+function openTwin(tid, si, id) {
+  const t = theatreById(tid), Lx = getLayout(t, si), seat = Lx.byId.get(id);
+  if (!seat) return;
+  const twins = findTwins(seat, Lx, allLayouts()).slice(0, 8);
+  const m = seat.m, hallTitle = (L2) => `${esc(L2.theatre.short)} <span>· ${esc(hallName(L2.hall))}</span>`;
+  openModal(`
+    <p class="eyebrow">${I.twin} Only on Seatify</p>
+    <h2 id="m-title">Seat Twin</h2>
+    <p>Your view from <b>${esc(t.short)} · ${esc(hallName(Lx.hall))} · ${esc(seat.id)}</b>, found again in the other ${allLayouts().length - 1} halls.</p>
+    <ul class="twin-you" aria-label="Your view">
+      <li><b>${Math.round(m.fov)}°</b> screen width</li><li><b>${Math.round(m.elevTop)}°</b> look-up</li><li><b>${m.skew < 3 ? 'Centre' : Math.round(m.skew) + '°'}</b> ${m.skew < 3 ? 'seat' : 'to the side'}</li>
+      <li><b>${m.clearance == null || m.clearance >= 0.06 ? 'Clear' : 'Partly blocked'}</b> sightline</li>
+    </ul>
+    <ol class="twin-list">${twins.map((x) => `<li>
+      <span class="twin-pct" aria-hidden="true"><b>${x.pct}%</b><small>match</small></span>
+      <span class="twin-info"><b>${hallTitle(x.L)}</b><span>Seat <strong>${esc(x.seat.id)}</strong> · ${Math.round(x.seat.m.fov)}° wide · ${Math.round(x.seat.m.elevTop)}° up · ${sideText(x.seat.m)}</span></span>
+      <button class="btn ghost sm" data-a="twin-go" data-tid="${x.L.theatre.id}" data-si="${x.L.screenIdx}" data-id="${esc(x.seat.id)}" data-pct="${x.pct}" aria-label="Sit in ${esc(x.L.theatre.short)} seat ${esc(x.seat.id)}, ${x.pct}% match">Sit here</button>
+    </li>`).join('')}</ol>
+    <p class="fine">We compare what your eyes get, not row letters: how wide the screen looks, how far you look up, how far off-centre you sit, whether heads in front block the picture and whether a balcony cuts it off.</p>`, 'twin-card', '.twin-list .btn');
+}
+
+function openHow() {
+  openModal(`
     <h2 id="m-title">How Seatify scores a seat</h2>
     <p>Each hall is modelled in 3D from its seat map, screen size, row spacing, floor slope and balcony. For every seat we work out what your eyes actually see:</p>
     <dl>
@@ -676,11 +749,7 @@ function openHow() {
       <dt>Balcony overhang</dt><dd>In single screens, the share of the screen hidden by the balcony above the rear stalls.</dd>
       <dt>Sound</dt><dd>Distance from the mixing position, about two-thirds back on the centre line.</dd>
     </dl>
-    <button class="btn primary" data-a="closemodal">Got it</button></div>`;
-  modalEl.classList.add('on');
-  modalEl.removeAttribute('aria-hidden');
-  screenEl.inert = stageEl.inert = true;
-  requestAnimationFrame(() => $('.m-card .btn', modalEl)?.focus());
+    <button class="btn primary" data-a="closemodal">Got it</button>`);
 }
 function closeModal() {
   if (!modalEl.classList.contains('on')) return;
@@ -716,6 +785,21 @@ function act(el) {
       break;
     case 'seats': go('seats', { heat: false, zoom: null, top: -1, focus: null, open: false }); break;
     case 'how': openHow(); break;
+    case 'twin': openTwin(el.dataset.tid || S.tid, el.dataset.si != null ? +el.dataset.si : S.si, el.dataset.id || S.focus); break;
+    case 'twin-go': {
+      const d = el.dataset;
+      closeModal();
+      go(isSplit() ? 'seats' : 'view', { tid: d.tid, si: +d.si, focus: d.id, open: false, zoom: null, aerial: false });
+      toast(`Seat Twin: ${theatreById(d.tid).short} ${d.id}, ${d.pct}% match`);
+      break;
+    }
+    case 'motion': toggleMotion(); break;
+    case 'trymotion': {
+      const P = theatreById('prasads'), best = topSeats(getLayout(P, 0), 1)[0];
+      go(isSplit() ? 'seats' : 'view', { tid: P.id, si: 0, focus: best.id, open: false, zoom: null, aerial: false });
+      toast('Tap the phone icon at the top to look around by moving your phone');
+      break;
+    }
     case 'theme': setTheme(isDark() ? 'light' : 'dark'); render(); break;
     case 'closemodal': closeModal(); break;
     case 'heat': S.heat = !S.heat; S.keepScroll = $('.mapwrap')?.scrollLeft; renderSeats(); break;
@@ -739,7 +823,7 @@ function act(el) {
     case 'crowd': S.crowd = !S.crowd; view3d?.setAudience(S.crowd); updateViewUI(); toast(S.crowd ? 'Full house: see whose head is in front of you' : 'Empty hall'); break;
     case 'lights': S.lights = !S.lights; view3d?.setHouseLights(S.lights); updateViewUI(); toast(S.lights ? 'House lights up' : 'Lights down. Showtime.'); break;
     case 'content': S.content = (S.content + 1) % MOVIES.length; view3d?.setContent(MOVIES[S.content].id); toast(`On screen: ${MOVIES[S.content].title}`); break;
-    case 'mode': S.aerial = el.dataset.m === 'aerial'; view3d?.setMode(S.aerial ? 'aerial' : 'seat', S.focus && L().byId.get(S.focus)); updateViewUI(); break;
+    case 'mode': S.aerial = el.dataset.m === 'aerial'; if (S.aerial && S.motion) { S.motion = false; view3d?.setMotionLook(false); } view3d?.setMode(S.aerial ? 'aerial' : 'seat', S.focus && L().byId.get(S.focus)); updateViewUI(); break;
     case 'reset': view3d?.resetOrbit(); break;
     case 'move': moveFocus(el.dataset.d); break;
     case 'sheet': case 'grip': S.open = !S.open; updateViewUI(); break;

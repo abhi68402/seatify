@@ -34,6 +34,18 @@ function disposeTree(obj) {
     });
   });
 }
+// Phone motion sensor -> camera orientation (same maths as three's old DeviceOrientationControls):
+// alpha/beta/gamma are the phone's compass, front-back tilt and left-right tilt; the extra turns map
+// "phone screen facing you" onto "camera looking forward" and undo the screen's rotation.
+const ZEE = new V3(0, 0, 1), EUL = new THREE.Euler(), Q0 = new THREE.Quaternion(), Q1 = new THREE.Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5));
+function deviceQuat(q, a, b, g, orient) {
+  EUL.set(b * DEG, a * DEG, -g * DEG, 'YXZ');
+  q.setFromEuler(EUL).multiply(Q1).multiply(Q0.setFromAxisAngle(ZEE, -orient * DEG));
+  return q;
+}
+const screenAngle = () => (screen.orientation && typeof screen.orientation.angle === 'number' ? screen.orientation.angle : +window.orientation || 0);
+const wrapPi = (r) => Math.atan2(Math.sin(r), Math.cos(r));
+
 const lookQuat = (from, to, up = UP) => new THREE.Quaternion().setFromRotationMatrix(M4.lookAt(from, to, up));
 
 // Device tier: phones, tablets and low-memory machines get the light path.
@@ -605,8 +617,35 @@ export class TheatreView {
 
   poseOf(seat) { return this.mode === 'aerial' ? this.orbitPose(seat, this.orbit, true) : this.eyeOf(seat); }
 
+  // Motion Look: move the phone to look around (seat view). "Straight ahead" is wherever the phone
+  // points when it starts, and again after every new seat. Calls onFail if no sensor data arrives.
+  setMotionLook(on, onFail) {
+    if (!!on === !!this.motion) return;
+    clearTimeout(this.motionTimer);
+    if (on) {
+      const M = (this.motion = { q: new THREE.Quaternion(), e: new THREE.Euler(), base: null, yaw: 0, pitch: 0, ty: 0, tp: 0, got: false });
+      this.onOrient = (ev) => {
+        if (ev.alpha == null || ev.beta == null || ev.gamma == null) return;
+        deviceQuat(M.q, ev.alpha, ev.beta, ev.gamma, screenAngle());
+        M.e.setFromQuaternion(M.q, 'YXZ'); // yaw (y) and pitch (x) against the real horizon, no roll
+        if (!M.base) M.base = { yaw: M.e.y, pitch: M.e.x };
+        M.ty = wrapPi(M.e.y - M.base.yaw);
+        M.tp = clamp(M.e.x - M.base.pitch, -1.4, 1.4);
+        M.got = true;
+      };
+      window.addEventListener('deviceorientation', this.onOrient);
+      this.motionTimer = setTimeout(() => { if (this.motion && !this.motion.got) { this.setMotionLook(false); onFail?.(); } }, 1500);
+    } else {
+      window.removeEventListener('deviceorientation', this.onOrient);
+      this.motion = null;
+    }
+    this.interact = performance.now();
+  }
+  recentreMotion() { if (this.motion) { this.motion.base = null; this.motion.yaw = this.motion.pitch = this.motion.ty = this.motion.tp = 0; } }
+
   setMode(mode, seat) {
     this.mode = mode;
+    this.recentreMotion();
     this.look.ty = this.look.tp = 0;
     if (seat) this.flyTo(seat, false);
   }
@@ -630,6 +669,7 @@ export class TheatreView {
     this.clampCam(mid, seat);
     this.tween = { start, end, mid, t0: performance.now() + (intro && !this.reduce ? 350 : 0), dur: this.reduce ? 1 : intro ? 2100 : 900, intro };
     this.look.ty = this.look.tp = 0;
+    this.recentreMotion();
   }
 
   // ---------- frame loop ----------
@@ -642,7 +682,7 @@ export class TheatreView {
     this.last = now;
     this.frame++;
 
-    const busy = !!this.tween || this.look.drag || this.previewing || now - (this.interact || 0) < 1200 || Math.abs(this.house - this.houseTarget) > 0.01
+    const busy = !!this.tween || this.look.drag || this.previewing || !!this.motion || now - (this.interact || 0) < 1200 || Math.abs(this.house - this.houseTarget) > 0.01
       || (this.mode === 'aerial' && Math.abs(this.orbit.tDist - this.orbit.dist) + Math.abs(this.orbit.tYaw - this.orbit.yaw) + Math.abs(this.orbit.tPitch - this.orbit.pitch) > 0.01)
       || Math.abs(this.look.ty - this.look.yaw) + Math.abs(this.look.tp - this.look.pitch) > 0.05;
     // The film plays at 30 fps whatever the display rate (it was tied to every other frame, i.e.
@@ -734,6 +774,11 @@ export class TheatreView {
     }
     this.camera.quaternion.copy(this.camQuat);
     if (this.mode === 'seat') {
+      const M = this.motion;
+      if (M && !this.tween) { // phone motion first (smoothed), then any finger drag on top
+        M.yaw += wrapPi(M.ty - M.yaw) * 0.3; M.pitch += (M.tp - M.pitch) * 0.3;
+        this.camera.rotateY(M.yaw); this.camera.rotateX(M.pitch);
+      }
       this.camera.rotateY(L.yaw * DEG);
       this.camera.rotateX(L.pitch * DEG);
     }

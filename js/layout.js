@@ -334,3 +334,36 @@ export const heatColor = (score) => {
   const k = clamp01((score - 45) / 50);
   return `hsl(${Math.round(k * 145)} 58% ${38 + k * 8}%)`;
 };
+
+// ───────── Seat Twin: the same VIEW in a different hall ─────────
+// A seat's experience is described by what your eyes get, not by its row letter:
+// how wide the screen looks (fov), how far you look up (elevTop), how far off to the side you sit
+// (skew), whether heads in front block the picture (clearance) and whether a balcony cuts it off.
+// Each difference is divided by "how much of a change you'd notice" so they can be added up.
+const blocked = (m) => (m.clearance == null ? 0 : clamp01((0.10 - m.clearance) / 0.10));
+export function viewDistance(a, b) {
+  const t = [
+    (a.fov - b.fov) / 5,              // 5° wider/narrower screen is a clear difference
+    (a.elevTop - b.elevTop) / 5,      // 5° more look-up is noticeable on the neck
+    (a.skew - b.skew) / 6,            // side angle: left and right count the same
+    (blocked(a) - blocked(b)) / 0.5,  // sightline: clear vs blocked
+    (a.overhangCut - b.overhangCut) / 0.1,
+  ];
+  return Math.hypot(...t);
+}
+export const matchPct = (d) => Math.round(100 * Math.exp((-d * d) / 6));
+
+// For one seat, the closest-view seat in every OTHER hall, best match first.
+export function findTwins(seat, L, layouts) {
+  const out = [];
+  for (const L2 of layouts) {
+    if (L2 === L) continue;
+    let best = null, bd = Infinity;
+    for (const s of L2.seats) {
+      const d = viewDistance(seat.m, s.m);
+      if (d < bd - 1e-9 || (Math.abs(d - bd) < 1e-9 && s.m.score > best.m.score)) { bd = d; best = s; }
+    }
+    if (best) out.push({ L: L2, seat: best, d: bd, pct: matchPct(bd) });
+  }
+  return out.sort((a, b) => a.d - b.d);
+}
