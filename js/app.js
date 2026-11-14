@@ -104,7 +104,7 @@ const S = {
   route: 'home', tid: null, si: 0, focus: null, heat: true, // seat maps open coloured by view quality
   filter: 'all', q: '',
   zoom: null, top: -1, aerial: false, crowd: true, lights: true, open: false, content: 0,
-  full: false, scenePrimed: false, sceneKey: '', motion: false,
+  full: false, scenePrimed: false, sceneKey: '', motion: false, homeView: 'list',
 };
 const T = () => theatreById(S.tid);
 const L = () => getLayout(T(), S.si);
@@ -241,6 +241,35 @@ function theatreCards() {
   }).join('');
 }
 
+// Hero hook: a live, colour-coded seat map of a real hall (AMB HDR by Barco), built from the same
+// scores as the app. Rows fade in from the screen outward; the director's seat pulses.
+function heroPreview() {
+  const t = theatreById('amb'), Lx = getLayout(t, 0), D = Lx.director;
+  const rows = Lx.rows.slice().sort((a, b) => a.z - b.z); // screen at the top, nearest row first
+  const W = 560, pad = 18, top = 54, rowH = 15, H = top + rows.length * rowH + 14;
+  const sx = (W - pad * 2) / (Lx.maxHalf * 2);
+  let dxy = null;
+  const seats = rows.map((r, i) => r.seats.map((st) => {
+    const x = pad + (st.x - st.sw / 2 + Lx.maxHalf) * sx + 0.7, w = Math.max(3, st.sw * sx - 1.4), y = top + i * rowH;
+    if (st === D) dxy = { x: x + w / 2, y: y + 5, w };
+    return `<rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="10" rx="2.5" fill="${heatColor(st.m.score)}" style="--d:${i * 55}ms"/>`;
+  }).join('')).join('');
+  const lblW = 150, lx = Math.min(Math.max(dxy.x - lblW / 2, 6), W - lblW - 6), ly = dxy.y + 16;
+  return `<figure class="hero-preview">
+    <svg viewBox="0 0 ${W} ${H + 30}" role="img" aria-label="Seat map of ${esc(t.name)}, ${esc(hallName(Lx.hall))}, coloured by view quality. The director's seat ${esc(D.id)} scores ${D.m.score}.">
+      <defs><linearGradient id="hp-scr" x1="0" x2="1"><stop offset="0" stop-color="currentColor" stop-opacity="0"/><stop offset=".5" stop-color="currentColor"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
+      <path class="hp-screen" d="M${pad + 30} 30 Q${W / 2} 8 ${W - pad - 30} 30" stroke="url(#hp-scr)"/>
+      <text class="hp-screen-t" x="${W / 2}" y="44" text-anchor="middle">SCREEN</text>
+      <g class="hp-seats">${seats}</g>
+      <circle class="hp-pulse" cx="${dxy.x.toFixed(1)}" cy="${dxy.y}" r="${Math.max(9, dxy.w)}"/>
+      <circle class="hp-ring" cx="${dxy.x.toFixed(1)}" cy="${dxy.y}" r="${Math.max(7, dxy.w * 0.8)}"/>
+      <g class="hp-label" transform="translate(${lx.toFixed(1)} ${ly})"><rect width="${lblW}" height="24" rx="12"/><text x="${lblW / 2}" y="16" text-anchor="middle">Director's seat · ${esc(D.id)} · ${D.m.score}</text></g>
+    </svg>
+    <figcaption><span class="hp-scale" aria-hidden="true"><i></i></span>Real scores for all ${Lx.seats.length} seats of ${esc(t.short)} · ${esc(hallName(Lx.hall))}. Green is the best view.
+      <button class="linkbtn" data-a="theatre" data-id="${t.id}">Open this hall ${I.chevR}</button></figcaption>
+  </figure>`;
+}
+
 function renderHome() {
   const list = filtered();
   const totalSeats = THEATRES.reduce((n, t) => n + screensOf(t).reduce((a, _, i) => a + getLayout(t, i).seats.length, 0), 0);
@@ -258,6 +287,11 @@ function renderHome() {
       <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>Seatify</h1>
       <p class="tagline">See your seat <em>before you sit.</em></p>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
+      <div class="hero-cta">
+        <button class="btn primary lg-ish" data-a="scrollfind">${I.search} Find my seat</button>
+        <button class="btn ghost lg-ish" data-a="dna">${I.dna} Describe my seat</button>
+      </div>
+      ${heroPreview()}
       <ul class="facts" aria-label="At a glance"><li><b>${THEATRES.length}</b> theatres</li><li><b>${totalSeats.toLocaleString('en-IN')}</b> seats scored</li><li><b>${verifiedN}</b> matched to BookMyShow</li></ul>
     </section>
     <section class="steps-wrap" aria-labelledby="steps-h">
@@ -290,24 +324,28 @@ function renderHome() {
       </ul>
     </section>
     <div class="home-grid">
-      <section class="finder" aria-labelledby="find-h">
-        <h2 id="find-h" class="h-sm">Find a theatre</h2>
+      <section class="finder" id="finder" aria-labelledby="find-h">
+        <p class="eyebrow">${I.pin} Hyderabad</p>
+        <h2 id="find-h">Find your theatre</h2>
         <form class="search" role="search" data-search>
           <label for="q" class="sr">Search theatres or areas</label>${I.search}<input id="q" type="search" placeholder="Search theatres or areas" value="${esc(S.q)}" autocomplete="off" enterkeyhint="search">
         </form>
         <div class="chips" role="group" aria-label="Filter theatres">${FILTERS.map(([k, l]) => `<button class="chip" data-a="filter" data-id="${k}" aria-pressed="${S.filter === k}">${l}</button>`).join('')}</div>
-        <figure class="mapblock">
-          <div class="citymap" id="citymap">${cityMap(list)}</div>
-          <figcaption class="map-key"><i class="dot v" aria-hidden="true"></i>Matched to BookMyShow <i class="dot" aria-hidden="true"></i>Approximate layout</figcaption>
-        </figure>
+        <div class="finder-foot">
+          <div class="seg view-switch" role="group" aria-label="Show theatres as"><button data-a="homeview" data-id="list" aria-pressed="${S.homeView === 'list'}">List</button><button data-a="homeview" data-id="map" aria-pressed="${S.homeView === 'map'}">Map</button></div>
+          <p class="count" id="count" aria-live="polite">${countText(list.length)}</p>
+        </div>
       </section>
       <section class="results" aria-labelledby="th-h">
-        <div class="results-head"><h2 id="th-h" class="h-sm">Theatres</h2><p class="count" id="count" aria-live="polite">${countText(list.length)}</p></div>
-        <ul class="tlist" id="tlist">${theatreCards()}</ul>
+        <h2 id="th-h" class="sr">Theatres</h2>
+        ${S.homeView === 'map' ? `<figure class="mapblock">
+          <div class="citymap" id="citymap">${cityMap(list)}</div>
+          <figcaption class="map-key"><i class="dot v" aria-hidden="true"></i>Matched to BookMyShow <i class="dot" aria-hidden="true"></i>Approximate layout</figcaption>
+        </figure>` : `<ul class="tlist" id="tlist">${theatreCards()}</ul>`}
       </section>
     </div>
   </main>
-  <footer class="site-foot"><div class="foot-in">
+  <footer class="site-foot"><div class="foot-in foot-centre">
     <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span><span>Seatify</span></p>
     <p class="fine">“Approximate layout” halls are reconstructions from public descriptions. “Matched” halls follow the BookMyShow seat map row for row. Screen sizes and floor slope are estimates unless noted.</p>
     <p class="fine">Seatify is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
@@ -316,8 +354,8 @@ function renderHome() {
 const countText = (n) => (n === THEATRES.length ? `All ${n} theatres` : `${n} of ${THEATRES.length} theatres`);
 function refreshResults() {
   const list = filtered();
-  $('#tlist').innerHTML = theatreCards();
-  $('#citymap').innerHTML = cityMap(list);
+  const tl = $('#tlist'); if (tl) tl.innerHTML = theatreCards();
+  const cm = $('#citymap'); if (cm) cm.innerHTML = cityMap(list);
   const c = $('#count'); if (c) c.textContent = countText(list.length);
   $$('.chip').forEach((b) => b.setAttribute('aria-pressed', b.dataset.id === S.filter));
 }
@@ -341,7 +379,8 @@ function sectionSvg(Lx) {
     balc = `<path d="${p}" fill="rgba(181,79,11,.08)" style="stroke:var(--warn)" stroke-width="1"/>`;
   }
   const heads = Lx.rows.map((r) => `<circle cx="${X(r.z + 0.15)}" cy="${Y(r.floorY + 1.15)}" r="1.7" style="fill:var(--accent)" opacity=".85"/>`).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Side section of the hall: screen on the left, rows rising to the right">
+  // tight viewBox: the drawing is centred in its card instead of hugging the left edge
+  return `<svg viewBox="0 0 ${Math.ceil(X(maxZ) + 10)} ${H}" role="img" aria-label="Side section of the hall: screen on the left, rows rising to the right">
     <line x1="${X(0.05)}" y1="${Y(sc.bottom)}" x2="${X(0.05)}" y2="${Y(sc.top)}" style="stroke:var(--text)" stroke-width="3" stroke-linecap="round"/>
     <path d="${floor}" fill="none" stroke="#8f8477" stroke-width="1.5"/>${balc}${heads}</svg>`;
 }
@@ -408,6 +447,7 @@ function renderTheatre() {
       <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1><div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div></div>
       ${hs.length > 1 ? `<div class="seg wide" role="group" aria-label="Choose a screen">${hs.map((x, i) => `<button data-a="screen" data-id="${i}" aria-pressed="${i === S.si}">${esc(hallName(x))}</button>`).join('')}</div>` : ''}
       <div class="t-grid">
+      <div class="t-main">
       <section class="panel t-hall" aria-labelledby="hall-h">
         <h2 class="h-sm" id="hall-h">${esc(h.name)}</h2>
         <div class="stats">
@@ -417,12 +457,13 @@ function renderTheatre() {
         </div>
         <figure class="section-svg">${sectionSvg(Lx)}<figcaption>Side section, to scale. Screen on the left.${h.screenNote ? ` <em>${esc(h.screenNote)}.</em>` : ''}</figcaption></figure>
       </section>
+      ${directorMaths(Lx)}
+      </div>
       <div class="t-side">
       <section aria-labelledby="know-h"><h2 class="h-sm" id="know-h">Know before you go</h2>${knowBeforeYouGo(Lx)}</section>
       ${(() => { const tw = myTwinIn(Lx); if (!tw) return ''; return `<section class="panel mine-panel" aria-labelledby="mine-h"><h2 class="h-sm" id="mine-h">${tw.own ? 'Your seat' : 'Your seat here'}</h2>
         <div class="mine-row"><span class="mine-ico">${tw.own ? I.heart : I.twin}</span><span><b>${esc(tw.seat.id)}</b><small>${tw.own ? 'The seat you marked as yours' : `${tw.pct}% match to your seat ${esc(mySeat().seat.id)} at ${esc(mySeat().t.short)}`}</small></span>
         <button class="btn primary sm" data-a="sit" data-id="${esc(tw.seat.id)}">Sit there</button></div></section>`; })()}
-      ${directorMaths(Lx)}
       <section class="panel" aria-labelledby="best-h"><h2 class="h-sm" id="best-h">Best seats in this hall</h2>
         <ol class="topseats">${tops.map((s, i) => `<li><button class="topseat" data-a="sit" data-id="${s.id}" aria-label="Number ${i + 1}: sit in ${s.id}, ${esc(s.tierLabel)}, score ${s.m.score}"><span class="rk" aria-hidden="true">#${i + 1}</span><b>${s.id}</b>${ring(s.m.score, 40)}<small>${s === Lx.director ? "Director's seat" : esc(s.tierLabel)}</small></button></li>`).join('')}</ol>
       </section>
@@ -908,6 +949,12 @@ function act(el) {
       break;
     }
     case 'motion': toggleMotion(); break;
+    case 'scrollfind': {
+      $('#finder')?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(() => $('#q')?.focus({ preventScroll: true }), reduceMotion.matches ? 0 : 450);
+      break;
+    }
+    case 'homeview': S.homeView = el.dataset.id; S.keepHome = $('#screen').scrollTop; render(); $('#screen').scrollTop = S.keepHome; $(`[data-a="homeview"][data-id="${S.homeView}"]`)?.focus(); break;
     case 'myseat': {
       const v = { tid: S.tid, si: S.si, id: S.focus };
       const was = isMySeat(v.tid, v.si, v.id);

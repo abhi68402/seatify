@@ -675,3 +675,84 @@ svg { display: block; }
 .seat.dir { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--good); z-index: 3; }
 .sw.dir { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--good); }
 .heatbar + .legend { padding-top: 6px; }
+
+/* ───────────────────────── symmetry pass + hero hook ───────────────────────── */
+/* hero: centred stack with two equal call-to-action buttons and the live seat-map preview */
+.hero { gap: 18px; padding-bottom: 8px; }
+.hero-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 6px; }
+.hero-cta .btn { min-width: 210px; height: 54px; font-size: 16px; }
+@media (max-width: 479px) { .hero-cta { width: 100%; } .hero-cta .btn { flex: 1 1 100%; min-width: 0; } }
+.hero-preview { width: min(100%, 680px); margin: 10px auto 0; padding: clamp(14px, 3vw, 22px) clamp(12px, 3vw, 22px) 14px; border-radius: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-md); }
+.hero-preview svg { width: 100%; height: auto; display: block; color: var(--accent); overflow: visible; }
+.hp-screen { fill: none; stroke-width: 3; stroke-linecap: round; }
+.hp-screen-t { font: 700 10px var(--font); letter-spacing: .4em; fill: var(--faint); }
+.hp-seats rect { opacity: 0; animation: hp-in .5s ease forwards; animation-delay: calc(200ms + var(--d)); }
+@keyframes hp-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.hp-ring { fill: none; stroke: var(--text); stroke-width: 2.4; opacity: 0; animation: hp-in .4s ease 1.3s forwards; }
+.hp-pulse { fill: none; stroke: var(--good); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; animation: hp-pulse 2.2s ease-out 1.6s infinite; }
+@keyframes hp-pulse { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(2.4); } }
+.hp-label { opacity: 0; animation: hp-fade .4s ease 1.5s forwards; } /* opacity only: the g keeps its translate() */
+@keyframes hp-fade { to { opacity: 1; } }
+.hp-label rect { fill: var(--text); }
+.hp-label text { font: 700 11.5px var(--font); fill: var(--on-text); }
+.hero-preview figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 10px; margin-top: 12px; font-size: 13.5px; color: var(--muted); text-align: center; text-wrap: balance; }
+.hero-preview figcaption .linkbtn { margin: 0; min-height: 36px; color: var(--accent); }
+.hero-preview figcaption .linkbtn .go { width: 16px; height: 16px; }
+.hp-scale { display: inline-block; width: 64px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, hsl(0 58% 38%), hsl(60 58% 42%), hsl(145 58% 46%)); vertical-align: middle; }
+@media (prefers-reduced-motion: reduce) { .hp-seats rect, .hp-ring, .hp-label { opacity: 1; animation: none; } .hp-pulse { display: none; } }
+
+/* how-it-works: three equal centred cards from tablet up */
+@media (min-width: 640px) {
+  .steps { grid-template-columns: repeat(3, 1fr); }
+  .steps > li { flex-direction: column; align-items: center; text-align: center; }
+  .steps > li > span:last-child { justify-items: center; }
+}
+
+/* Only on Seatify: equal cards, actions pinned to the bottom so both cards line up */
+.only-grid { align-items: stretch; }
+.only-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.only-card p { margin-left: auto; margin-right: auto; }
+.only-card > .btn, .only-card > .only-actions, .only-card > .only-note { margin-top: auto; }
+.only-actions { justify-content: center; }
+
+/* finder: one centred column; results full width below */
+.home-grid { display: grid !important; grid-template-columns: 1fr !important; gap: 26px !important; }
+.finder { position: static !important; justify-items: center; text-align: center; gap: 14px; }
+.finder h2 { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.4vw, 38px); line-height: 1.1; letter-spacing: -.035em; }
+.finder .search { width: min(100%, 600px); }
+.finder .chips { justify-content: center !important; }
+.finder-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px; }
+.view-switch button { min-width: 88px; }
+.results { justify-items: center; }
+.results .mapblock { width: min(100%, 760px); max-width: none; justify-self: center; }
+.results .map-key { justify-content: center !important; }
+/* theatre cards: flex rows so an odd last card sits centred, never stranded on one side */
+.tlist { display: flex !important; flex-wrap: wrap; justify-content: center; gap: 14px; width: 100%; }
+.tlist > li { flex: 0 1 100%; min-width: 0; }
+@media (min-width: 640px) { .tlist > li { flex-basis: calc((100% - 14px) / 2); } }
+@media (min-width: 1100px) { .tlist > li { flex-basis: calc((100% - 28px) / 3); } }
+.tlist > .empty { flex-basis: 100% !important; }
+
+/* footer: centred */
+.foot-centre { display: grid !important; grid-template-columns: 1fr !important; justify-items: center; text-align: center; gap: 10px; }
+.foot-centre .brand { grid-row: auto !important; }
+.foot-centre .fine { margin: 0 auto; }
+
+/* theatre page: two balanced columns (hall + director | know + yours + best) */
+.t-main { display: grid; gap: 28px; align-content: start; min-width: 0; }
+@media (min-width: 1024px) { .t-hall { position: static; } .t-grid { align-items: start; } }
+.section-svg svg { width: 100%; height: clamp(110px, 16vw, 150px); }
+.section-svg figcaption { text-align: center; }
+
+/* seat map: tools centred in one row; heat legend never wraps mid-phrase */
+.tools { justify-content: center; }
+.zoom { margin-left: 0; }
+.heatbar span { white-space: nowrap; }
+.heatbar i { width: clamp(64px, 26vw, 150px); }
+
+/* seat card: both actions the same width */
+.actions { grid-template-columns: 1fr 1fr; }
+/* stats: three equal columns, number above label, so they never wrap 2 + 1 */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: min(100%, 560px); margin: 6px auto 0; }
+.facts li { display: grid; justify-items: center; gap: 2px; font-size: 13px; line-height: 1.3; text-align: center; }
+.facts b { font-size: clamp(20px, 3vw, 26px); margin: 0; letter-spacing: -.02em; }
