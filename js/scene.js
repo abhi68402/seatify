@@ -261,6 +261,17 @@ export class TheatreView {
     this.coveMat = glow(0xffb070);
     [-1, 1].forEach((d) => box(this.coveMat, [0.05, 0.05, backZ], [d * (halfW - 0.1), H - 0.25, backZ / 2]));
 
+    // floor heights, used by fans, EXIT signs, sconces and the aerial camera's collision (levelAt: the tier you stand on at z)
+    this.floorAt = (z, balconyLevel = false) => {
+      let y = 0;
+      L.rows.forEach((r) => {
+        const inSec = balconyLevel ? r.section !== 0 : r.section === 0;
+        if (inSec && z >= r.z - r.pitch / 2) y = r.floorY;
+      });
+      return y;
+    };
+    this.levelAt = (z) => this.floorAt(z, !!(L.balcony && z >= L.balcony.parapetZ));
+
     // ceiling: fans in older halls, recessed downlights in multiplexes
     this.fans = [];
     if (single) {
@@ -269,10 +280,12 @@ export class TheatreView {
       const hubG = new THREE.CylinderGeometry(0.12, 0.14, 0.12, 20);
       const rodG = new THREE.CylinderGeometry(0.018, 0.018, 0.6, 8);
       for (let z = 3.5; z < backZ - 1.5; z += 4.8) {
+        // hang each fan 3.6 m above the floor of the tier below it (higher over a balcony), on a down-rod
+        const fy = Math.min(H - 0.9, this.levelAt(z) + 3.6);
         [-0.5, 0.5].forEach((fx) => {
           const grp = new THREE.Group();
-          grp.position.set(fx * halfW, H - 0.9, z);
-          const rod = new THREE.Mesh(rodG, hubM); rod.position.y = 0.36; grp.add(rod);
+          grp.position.set(fx * halfW, fy, z);
+          const rl = H - fy - 0.1, rod = new THREE.Mesh(rodG, hubM); rod.scale.y = rl / 0.6; rod.position.y = 0.06 + rl / 2; grp.add(rod);
           grp.add(new THREE.Mesh(hubG, hubM));
           for (let k = 0; k < 3; k++) {
             const a = (k * Math.PI * 2) / 3;
@@ -298,7 +311,8 @@ export class TheatreView {
     box(darkM, [halfW * 2 - 1, 0.55, 2.2], [0, 0.275, 1.1]); // stage
     const rowFloorM = floorM(halfW * 2, 1.1);
     L.rows.forEach((row) => {
-      const bottom = row.section === 0 ? -0.2 : L.balcony.undersideY;
+      const rs = L.sections[row.section];
+      const bottom = rs.balcony && !rs.stacked ? rs.undersideY : -0.2; // a stacked tier is solid from the ground
       const hgt = row.floorY - bottom;
       box(rowFloorM, [halfW * 2, hgt, row.pitch + 0.002], [0, bottom + hgt / 2, row.z]);
       box(this.coveMat, [halfW * 2, 0.012, 0.012], [0, row.floorY + 0.006, row.z - row.pitch / 2 - 0.004]);
@@ -310,13 +324,21 @@ export class TheatreView {
     }
     if (L.balcony) {
       const b = L.balcony;
-      const bs = L.sections.find((s) => s.balcony);
+      const bs = L.balconies.at(-1); // the last balcony fills the space behind its last row
       const tailD = backZ - bs.endZ;
       if (tailD > 0) { const hgt = bs.rows.at(-1).floorY - b.undersideY; box(rowFloorM, [halfW * 2, hgt, tailD], [0, b.undersideY + hgt / 2, bs.endZ + tailD / 2]); }
-      box(rowFloorM, [halfW * 2, 0.35, bs.startZ - b.parapetZ + 0.2], [0, b.floorY - 0.175, (b.parapetZ + bs.startZ) / 2]);
+      box(rowFloorM, [halfW * 2, 0.35, L.balconies[0].startZ - b.parapetZ + 0.2], [0, b.floorY - 0.175, (b.parapetZ + L.balconies[0].startZ) / 2]);
+      // stacked tiers: a landing (cross-aisle) at the level of the tier below, then a step up to the tier
+      L.balconies.filter((t) => t.stacked).forEach((t) => {
+        const prev = L.sections[L.sections.indexOf(t) - 1];
+        const gd = t.startZ - prev.endZ, hh = prev.lastFloor + 0.2;
+        box(rowFloorM, [halfW * 2, hh, gd + 0.004], [0, hh / 2 - 0.2, prev.endZ + gd / 2]);
+        box(this.coveMat, [halfW * 2, 0.012, 0.012], [0, t.floorY + 0.006, t.startZ - 0.004]);
+        add(new RoundedBoxGeometry(halfW * 2, 0.9, 0.12, 2, 0.04), std(0x4a3236, 0.7), [0, prev.lastFloor + 0.45, prev.endZ + 0.06]);
+      });
       add(new RoundedBoxGeometry(halfW * 2, 1.0, 0.24, 2, 0.05), std(0x4a3236, 0.7), [0, b.floorY + 0.4, b.parapetZ]);
       box(glow(0xffa55a), [halfW * 2, 0.03, 0.02], [0, b.floorY + 0.25, b.parapetZ - 0.13]);
-      for (let x = -halfW + 2; x < halfW - 1; x += 3) add(new THREE.CylinderGeometry(0.12, 0.12, 0.02, 20), glow(0xffe3c0), [x, b.undersideY - 0.01, (b.parapetZ + backZ) / 2]);
+      for (let x = -halfW + 2; x < halfW - 1; x += 3) add(new THREE.CylinderGeometry(0.12, 0.12, 0.02, 20), glow(0xffe3c0), [x, b.undersideY - 0.01, (b.parapetZ + L.balconies[0].endZ) / 2]);
     }
 
     // screen (bent for curved screens), masking and gold frame
@@ -353,23 +375,14 @@ export class TheatreView {
     for (let i = 0; i < tn; i++) { o4.position.set(-halfW + 0.22 + i * 0.45, H - 1.46, 0.34); o4.updateMatrix(); tass.setMatrixAt(i, o4.matrix); }
     g.add(tass);
 
-    // floor heights, used by EXIT signs, sconces and the aerial camera's collision
-    this.floorAt = (z, balconyLevel = false) => {
-      let y = 0;
-      L.rows.forEach((r) => {
-        const inSec = balconyLevel ? r.section !== 0 : r.section === 0;
-        if (inSec && z >= r.z - r.pitch / 2) y = r.floorY;
-      });
-      return y;
-    };
     const exitM = new THREE.MeshBasicMaterial({ map: A.exit, toneMapped: false });
     const signG = new THREE.PlaneGeometry(0.9, 0.34);
     [-1, 1].forEach((d) => {
       add(signG, exitM, [d * (halfW - 0.03), 2.7, 1.8], [0, (-d * Math.PI) / 2, 0]);
-      add(signG, exitM, [d * (halfW - 0.03), this.floorAt(backZ - 1.6) + 2.6, backZ - 1.6], [0, (-d * Math.PI) / 2, 0]);
+      add(signG, exitM, [d * (halfW - 0.03), this.levelAt(backZ - 1.6) + 2.6, backZ - 1.6], [0, (-d * Math.PI) / 2, 0]);
     });
     const sconceG = new RoundedBoxGeometry(0.06, 0.12, 0.6, 2, 0.02);
-    for (let z = 3; z < backZ - 1; z += 3.6) [-1, 1].forEach((d) => add(sconceG, glow(0xffb070), [d * (halfW - 0.06), this.floorAt(z) + 2.3, z]));
+    for (let z = 3; z < backZ - 1; z += 3.6) [-1, 1].forEach((d) => add(sconceG, glow(0xffb070), [d * (halfW - 0.06), this.levelAt(z) + 2.3, z]));
 
     // aisle step lights
     const lights = [];
@@ -588,7 +601,10 @@ export class TheatreView {
     const { halfW, backZ, height } = this.L.room;
     const B = this.L.balcony;
     p.x = clamp(p.x, -halfW + 0.4, halfW - 0.4);
-    p.z = clamp(p.z, 0.6, backZ - 0.35);
+    // a seat below a stacked tier (the upper balcony) can't have a camera inside that tier's solid mass
+    const above = this.L.balconies?.find((t) => t.stacked && this.L.sections.indexOf(t) > seat.row.section);
+    const zMax = !above ? backZ - 0.35 : this.L.sections[seat.row.section].balcony ? above.startZ - 0.3 : this.L.sections[this.L.sections.indexOf(above) - 1].endZ - 0.4;
+    p.z = clamp(p.z, 0.6, zMax);
     const onBalcony = !!(B && seat.row.section !== 0);
     let floor = this.floorAt(p.z, onBalcony && p.z > B.parapetZ);
     if (!onBalcony && B && p.z > B.parapetZ - 0.3) floor = Math.max(floor, this.floorAt(p.z));

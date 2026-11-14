@@ -53,15 +53,24 @@ export function getLayout(theatre, screenIdx = 0) {
   const firstEdge = zCursor;
   let stallsEnd = 0;
   let stallsLastFloor = 0;
+  let prevEnd = 0, prevLastFloor = 0;
 
   hall.sections.forEach((sec, si) => {
     let baseY = 0;
-    if (sec.balcony) {
+    // A balcony hangs over the back of the stalls (lift above the last stalls row, overhang = how far
+    // it reaches over them). `stack: true` puts a further tier straight behind the previous section,
+    // `lift` higher than its last row after a cross-aisle of `gap` metres (the upper balcony).
+    const stacked = !!(sec.balcony && sec.balcony.stack);
+    if (sec.balcony && stacked) {
+      baseY = prevLastFloor + sec.balcony.lift;
+      zCursor = prevEnd + (sec.balcony.gap ?? 1);
+    } else if (sec.balcony) {
       baseY = stallsLastFloor + sec.balcony.lift;
       zCursor = stallsEnd - sec.balcony.overhang;
     }
     const riser = sec.riser ?? hall.riser;
-    const info = { name: sec.name, balcony: !!sec.balcony, startZ: zCursor, baseY, rows: [] };
+    const info = { name: sec.name, balcony: !!sec.balcony, stacked, startZ: zCursor, baseY, rows: [] };
+    if (sec.balcony) Object.assign(info, { parapetZ: zCursor - 0.15, floorY: baseY, undersideY: baseY - 0.35 });
     let idx = 0;
     let lastFloor = baseY;
     specsBySec[si].forEach((spec) => {
@@ -114,6 +123,8 @@ export function getLayout(theatre, screenIdx = 0) {
       idx++;
     });
     info.endZ = zCursor;
+    info.lastFloor = lastFloor;
+    prevEnd = zCursor; prevLastFloor = lastFloor;
     if (!sec.balcony) {
       stallsEnd = zCursor;
       stallsLastFloor = lastFloor;
@@ -140,8 +151,12 @@ export function getLayout(theatre, screenIdx = 0) {
 
   const sc = hall.screen;
   const screen = { ...sc, top: sc.bottom + sc.h, midY: sc.bottom + sc.h / 2 };
-  const balconySec = sections.find((s) => s.balcony);
+  const balconies = sections.filter((s) => s.balcony);
+  const balconySec = balconies.find((s) => !s.stacked);
   const backZ = Math.max(...sections.map((s) => s.endZ)) + 1.6;
+  // the depth the director's seat is measured against: the stalls and the first balcony, not a further
+  // stacked tier (the upper balcony), which sits behind and above the reference position
+  const backZ0 = Math.max(...sections.filter((s) => !s.stacked).map((s) => s.endZ)) + 1.6;
   const maxHalf = Math.max(...rows.map((r) => r.halfW));
   const halfW = Math.max(maxHalf + 1.7, sc.w / 2 + 1.6);
   const topFloor = Math.max(...rows.map((r) => r.floorY));
@@ -156,7 +171,7 @@ export function getLayout(theatre, screenIdx = 0) {
       undersideY: balconySec.baseY - 0.35,
       endZ: balconySec.endZ,
     } : null,
-    maxHalf,
+    balconies, maxHalf,
     byId: new Map(seats.map((s) => [s.id, s])),
   };
 
@@ -176,15 +191,15 @@ export function getLayout(theatre, screenIdx = 0) {
   //  3. Neck limit: inside that band, never so close that looking up at the top edge passes 30°.
   const theta = hall.immersive ? 60 : 50;
   const dAngle = sc.w / (2 * Math.tan((theta * Math.PI) / 360));
-  const twoThirds = backZ * 2 / 3;
-  const bandLo = backZ * 0.6, bandHi = backZ * 0.72;
+  const twoThirds = backZ0 * 2 / 3;
+  const bandLo = backZ0 * 0.6, bandHi = backZ0 * 0.72;
   const neckOk = (r) => deg(Math.atan2(screen.top - (r.floorY + TIERS[r.tier].eye), r.z)) <= 30;
   const neckZ = (pool.find(neckOk) || pool.at(-1)).z;
   const blended = (Math.min(Math.max(dAngle, bandLo), bandHi) + twoThirds) / 2;
   const geoZ = Math.max(blended, Math.min(neckZ, bandHi));
   const refZ = Math.min(Math.max(geoZ, pool[0].z), pool.at(-1).z);
   const refRow = pool.reduce((a, r) => (Math.abs(r.z - refZ) < Math.abs(a.z - refZ) ? r : a));
-  L.refCalc = { w: sc.w, theta, dAngle, twoThirds, blended, bandLo, bandHi, neckZ, z: refZ, backZ, curved: !!sc.curve };
+  L.refCalc = { w: sc.w, theta, dAngle, twoThirds, blended, bandLo, bandHi, neckZ, z: refZ, backZ: backZ0, curved: !!sc.curve };
   L.ref = { x: 0, y: refRow.floorY + TIERS[refRow.tier].eye, z: refZ };
   L.sweet = L.ref; // sound is calibrated at the same spot
   L.depth = stallsEnd - hall.firstRow;
@@ -196,7 +211,7 @@ export function getLayout(theatre, screenIdx = 0) {
   // zone: within ±6% of the room depth of the two-thirds mark, and as central as that row allows
   // (some halls have a centre aisle, so 'central' is relative to the row's most central seat)
   const rowMinX = (r) => Math.min(...r.seats.map((x) => Math.abs(x.x)));
-  const zone = pool.filter((r) => Math.abs(r.z - refZ) <= backZ * 0.06)
+  const zone = pool.filter((r) => Math.abs(r.z - refZ) <= backZ0 * 0.06)
     .flatMap((r) => r.seats.filter((s) => Math.abs(s.x) <= rowMinX(r) + 0.6 && s.m.overhangCut === 0));
   const pick = (list) => list.reduce((a, s) => (!a || s.m.raw > a.m.raw || (s.m.raw === a.m.raw && Math.abs(s.x) < Math.abs(a.x)) ? s : a), null);
   L.director = pick(zone) || pick(pool.flatMap((r) => r.seats));
@@ -236,6 +251,10 @@ function computeMetrics(seat, L) {
   const secRows = L.sections[seat.row.section].rows;
   if (seat.row.idx > 0) {
     const front = secRows[seat.row.idx - 1];
+    clearance = yLine(front.z) - (front.floorY + TIERS[front.tier].eye);
+  } else if (L.sections[seat.row.section].stacked) {
+    // first row of a stacked tier: looks over the heads in the last row of the tier below
+    const front = L.sections[seat.row.section - 1].rows.at(-1);
     clearance = yLine(front.z) - (front.floorY + TIERS[front.tier].eye);
   } else if (L.sections[seat.row.section].balcony) {
     clearance = yLine(L.balcony.parapetZ) - (L.balcony.floorY + 0.9) + 0.12;

@@ -387,13 +387,17 @@ function sectionSvg(Lx) {
   Lx.sections[0].rows.forEach((r) => { floor += ` L${X(r.z - r.pitch / 2)},${Y(r.floorY)} L${X(r.z + r.pitch / 2)},${Y(r.floorY)}`; });
   floor += ` L${X(maxZ)},${Y(Lx.sections[0].rows.at(-1).floorY)}`;
   let balc = '';
-  if (Lx.balcony) {
-    const bs = Lx.sections.find((s) => s.balcony);
-    let p = `M${X(Lx.balcony.parapetZ)},${Y(Lx.balcony.undersideY)} L${X(Lx.balcony.parapetZ)},${Y(Lx.balcony.floorY + 0.9)}`;
+  Lx.balconies.forEach((bs) => {
+    let p;
+    if (bs.stacked) { // solid tier behind the one below: from the ground up to its first row
+      p = `M${X(bs.startZ)},${Y(0)} L${X(bs.startZ)},${Y(bs.floorY)}`;
+    } else {
+      p = `M${X(bs.parapetZ)},${Y(bs.undersideY)} L${X(bs.parapetZ)},${Y(bs.floorY + 0.9)}`;
+    }
     bs.rows.forEach((r) => { p += ` L${X(r.z - r.pitch / 2)},${Y(r.floorY)} L${X(r.z + r.pitch / 2)},${Y(r.floorY)}`; });
-    p += ` L${X(maxZ)},${Y(bs.rows.at(-1).floorY)} L${X(maxZ)},${Y(Lx.balcony.undersideY)} Z`;
-    balc = `<path d="${p}" fill="rgba(181,79,11,.08)" style="stroke:var(--warn)" stroke-width="1"/>`;
-  }
+    p += bs.stacked || bs === Lx.balconies.at(-1) ? ` L${X(maxZ)},${Y(bs.rows.at(-1).floorY)} L${X(maxZ)},${Y(bs.stacked ? 0 : bs.undersideY)} Z` : ` L${X(bs.endZ)},${Y(bs.undersideY)} Z`;
+    balc += `<path d="${p}" fill="rgba(181,79,11,.08)" style="stroke:var(--warn)" stroke-width="1"/>`;
+  });
   const heads = Lx.rows.map((r) => `<circle cx="${X(r.z + 0.15)}" cy="${Y(r.floorY + 1.15)}" r="1.7" style="fill:var(--accent)" opacity=".85"/>`).join('');
   // tight viewBox: the drawing is centred in its card instead of hugging the left edge
   return `<svg viewBox="0 0 ${Math.ceil(X(maxZ) + 10)} ${H}" role="img" aria-label="Side section of the hall: screen on the left, rows rising to the right">
@@ -408,11 +412,12 @@ function knowBeforeYouGo(Lx) {
     const arr = mid.length ? mid : r.seats;
     return { r, avg: arr.reduce((a, s) => a + s.m.score, 0) / arr.length };
   });
-  const best = rowAvg.slice().sort((a, b) => b.avg - a.avg).slice(0, 3).map((x) => x.r.label);
+  const nm = (r) => (r.prefix ? `${r.prefix} ${r.label}` : r.label); // rows repeat their letters in each class
+  const best = rowAvg.slice().sort((a, b) => b.avg - a.avg).slice(0, 3).map((x) => nm(x.r));
   tips.push(['good', `Best rows: <b>${best.join(', ')}</b>, centre block.`]);
-  const neck = Lx.rows.filter((r) => r.seats.some((s) => s.m.elevTop > 38)).map((r) => r.label);
+  const neck = Lx.rows.filter((r) => r.seats.some((s) => s.m.elevTop > 38)).map(nm);
   if (neck.length) tips.push(['warn', `Rows <b>${neck.slice(0, 4).join(', ')}${neck.length > 4 ? '…' : ''}</b> are close to the screen, so you'll be looking up.`]);
-  const under = Lx.rows.filter((r) => r.seats.some((s) => s.m.overhangCut > 0.05)).map((r) => r.label);
+  const under = Lx.rows.filter((r) => r.seats.some((s) => s.m.overhangCut > 0.05)).map(nm);
   if (under.length) tips.push(['warn', `Rows <b>${under[0]}–${under.at(-1)}</b> sit under the balcony; the top of the screen gets cut off.`]);
   const blocked = Lx.seats.filter((s) => s.m.clearance != null && s.m.clearance < 0.06).length;
   if (blocked / Lx.seats.length > 0.2) tips.push(['warn', `Shallow floor slope: in ${Math.round((blocked / Lx.seats.length) * 100)}% of seats a tall person in front can block the subtitles.`]);
@@ -485,7 +490,7 @@ function renderTheatre() {
         <div class="stats">
           <div class="stat"><b>${h.screen.w} × ${h.screen.h} m</b><span>screen · about ${autos} autos wide</span></div>
           <div class="stat"><b>${Lx.seats.length}</b><span>seats in ${Lx.rows.length} rows</span></div>
-          <div class="stat"><b>${Lx.balcony ? 'Balcony' : h.riser < 0.2 ? 'Gentle' : 'Stadium'}</b><span>${Lx.balcony ? 'stalls + balcony' : 'floor slope'}</span></div>
+          <div class="stat"><b>${Lx.balcony ? 'Balcony' : h.riser < 0.2 ? 'Gentle' : 'Stadium'}</b><span>${Lx.balconies.length > 1 ? 'stalls + 2 balconies' : Lx.balcony ? 'stalls + balcony' : 'floor slope'}</span></div>
         </div>
         ${hallSpecs(t, S.si)}
         <figure class="section-svg">${sectionSvg(Lx)}<figcaption>Side section, to scale. Screen on the left.${h.screenNote ? ` <em>${esc(h.screenNote)}.</em>` : ''}</figcaption></figure>

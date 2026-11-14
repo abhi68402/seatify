@@ -54610,6 +54610,8 @@ const TIERS = {
 // helpers for transcribing BookMyShow maps: same pattern for several row letters
 const o = (n) => 'o'.repeat(n);
 const _ = (n) => '.'.repeat(n);
+// S([start, count], ...): a row of seat runs on the column grid (S([1, 3], [6, 2]) = '.ooo..oo')
+const S = (...runs) => { let out = '', at = 0; runs.forEach(([st, n]) => { out += _(st - at) + o(n); at = st + n; }); return out; };
 const rows = (letters, pattern) => letters.split(' ').map((l) => `${l}  ${pattern}`);
 
 const MOVIES = [
@@ -54837,26 +54839,63 @@ const THEATRES = [
     ],
   },
 
-  // ───────────── Approximate reconstructions (no seat map yet) ─────────────
   {
     id: 'sudarshan', name: 'Sudarshan 35mm', short: 'Sudarshan 35mm', area: 'RTC X Roads',
-    lat: 17.4062, lng: 78.4955, single: true, tags: ['Single screen', 'Balcony'],
+    lat: 17.4062, lng: 78.4955, single: true, source: 'bms', tags: ['Single screen', 'Two balconies'],
     movies: ['deccan'],
     hall: {
+      // Seat map matched to BookMyShow (14 Nov 2026): 1,211 seats in four classes, each with its own
+      // row letters starting at A nearest the screen. Seats shown as sold on BookMyShow are kept as
+      // seats. Columns are 0.5 m apart and shared by every row (like the BookMyShow canvas), so the
+      // aisles line up: the upper balcony's middle blocks have a void in rows F-H and E (a 5-seat gap,
+      // the projection-box cut-out); in the second class the right block steps in behind row B.
       name: 'Main Screen · 35mm', format: '35MM', screenNote: '55 ft wide, Scope 2.39:1 (hyderabadtheatres.com)',
       screen: { w: 16.76, h: 7.01, bottom: 2.2, curve: 0 },
-      firstRow: 7.0, riser: 0.14, aisle: 1.2, labels: 'front', // first row ≥ 0.42 × screen width
+      firstRow: 7.0, riser: 0.14, colW: 0.5, // first row ≥ 0.42 × screen width
       sections: [
-        { name: 'Stalls', rows: [
-          { n: 4, tier: 'classic', blocks: [6, 16, 6], price: 110, label: 'Front Stalls' },
-          { n: 10, tier: 'classic', blocks: [6, 18, 6], price: 150, label: 'Rear Stalls' },
+        // Stalls: ₹100 second class at the front, ₹150 first class behind it (under the lower balcony)
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'First Class', prefix: 'First', price: 150, rows: [
+            `C  ${S([1, 40])}`,
+            `B  ${S([1, 40])}`,
+            `A  ${S([0, 44])}`,
+          ] },
+          { tier: 'classic', label: 'Second Class', prefix: 'Second', price: 100, rows: [
+            `G  ${S([0, 16], [20, 16])}`,
+            `F  ${S([0, 16], [20, 17])}`,
+            `E  ${S([0, 17], [21, 17])}`,
+            `D  ${S([0, 17], [21, 17])}`,
+            `C  ${S([0, 18], [22, 18])}`,
+            `B  ${S([0, 20], [24, 19])}`,
+            `A  ${S([1, 42])}`,
+          ] },
         ] },
-        { name: 'Balcony', balcony: { lift: 2.9, overhang: 6 }, riser: 0.45, rows: [
-          { n: 7, tier: 'balcony', blocks: [6, 18, 6], price: 175 },
+        // Lower balcony, ₹200: over the first class
+        { name: 'Lower Balcony', balcony: { lift: 2.6, overhang: 3 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Lower Balcony', prefix: 'Lower', price: 200, rows: [
+            `H  ${S([0, 13], [14, 14], [29, 13])}`,
+            ...rows('G F', S([0, 12], [14, 14], [32, 12])),
+            ...rows('E D C', S([0, 12], [14, 15], [32, 12])),
+            `B  ${S([0, 12], [14, 16], [33, 11])}`,
+            `A  ${S([1, 40])}`,
+          ] },
+        ] },
+        // Upper balcony, ₹200: the raised tier at the very back, seen stacked behind the lower balcony
+        { name: 'Upper Balcony', balcony: { stack: true, lift: 0.8, gap: 1 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Upper Balcony', prefix: 'Upper', price: 200, pitch: 0.9, rows: [
+            `Q  ${S([7, 6], [15, 4], [28, 3], [34, 6])}`,
+            `P  ${S([6, 6], [14, 3], [27, 3], [33, 6])}`,
+            ...rows('O N M L K J I', S([4, 8], [14, 16], [33, 8])),
+            ...rows('H G F', S([4, 8], [14, 6], [25, 6], [33, 8])),
+            `E  ${S([1, 11], [14, 6], [25, 6], [33, 9])}`,
+            ...rows('D C B A', S([1, 11], [14, 15], [31, 11])),
+          ] },
         ] },
       ],
     },
   },
+
+  // ───────────── Approximate reconstructions (no seat map yet) ─────────────
   {
     id: 'sandhya', name: 'Sandhya 70mm', short: 'Sandhya 70mm', area: 'RTC X Roads',
     lat: 17.4048, lng: 78.4972, single: true, tags: ['Single screen', 'Balcony', '70mm'],
@@ -55006,15 +55045,24 @@ function getLayout(theatre, screenIdx = 0) {
   const firstEdge = zCursor;
   let stallsEnd = 0;
   let stallsLastFloor = 0;
+  let prevEnd = 0, prevLastFloor = 0;
 
   hall.sections.forEach((sec, si) => {
     let baseY = 0;
-    if (sec.balcony) {
+    // A balcony hangs over the back of the stalls (lift above the last stalls row, overhang = how far
+    // it reaches over them). `stack: true` puts a further tier straight behind the previous section,
+    // `lift` higher than its last row after a cross-aisle of `gap` metres (the upper balcony).
+    const stacked = !!(sec.balcony && sec.balcony.stack);
+    if (sec.balcony && stacked) {
+      baseY = prevLastFloor + sec.balcony.lift;
+      zCursor = prevEnd + (sec.balcony.gap ?? 1);
+    } else if (sec.balcony) {
       baseY = stallsLastFloor + sec.balcony.lift;
       zCursor = stallsEnd - sec.balcony.overhang;
     }
     const riser = sec.riser ?? hall.riser;
-    const info = { name: sec.name, balcony: !!sec.balcony, startZ: zCursor, baseY, rows: [] };
+    const info = { name: sec.name, balcony: !!sec.balcony, stacked, startZ: zCursor, baseY, rows: [] };
+    if (sec.balcony) Object.assign(info, { parapetZ: zCursor - 0.15, floorY: baseY, undersideY: baseY - 0.35 });
     let idx = 0;
     let lastFloor = baseY;
     specsBySec[si].forEach((spec) => {
@@ -55067,6 +55115,8 @@ function getLayout(theatre, screenIdx = 0) {
       idx++;
     });
     info.endZ = zCursor;
+    info.lastFloor = lastFloor;
+    prevEnd = zCursor; prevLastFloor = lastFloor;
     if (!sec.balcony) {
       stallsEnd = zCursor;
       stallsLastFloor = lastFloor;
@@ -55093,8 +55143,12 @@ function getLayout(theatre, screenIdx = 0) {
 
   const sc = hall.screen;
   const screen = { ...sc, top: sc.bottom + sc.h, midY: sc.bottom + sc.h / 2 };
-  const balconySec = sections.find((s) => s.balcony);
+  const balconies = sections.filter((s) => s.balcony);
+  const balconySec = balconies.find((s) => !s.stacked);
   const backZ = Math.max(...sections.map((s) => s.endZ)) + 1.6;
+  // the depth the director's seat is measured against: the stalls and the first balcony, not a further
+  // stacked tier (the upper balcony), which sits behind and above the reference position
+  const backZ0 = Math.max(...sections.filter((s) => !s.stacked).map((s) => s.endZ)) + 1.6;
   const maxHalf = Math.max(...rows.map((r) => r.halfW));
   const halfW = Math.max(maxHalf + 1.7, sc.w / 2 + 1.6);
   const topFloor = Math.max(...rows.map((r) => r.floorY));
@@ -55109,7 +55163,7 @@ function getLayout(theatre, screenIdx = 0) {
       undersideY: balconySec.baseY - 0.35,
       endZ: balconySec.endZ,
     } : null,
-    maxHalf,
+    balconies, maxHalf,
     byId: new Map(seats.map((s) => [s.id, s])),
   };
 
@@ -55129,15 +55183,15 @@ function getLayout(theatre, screenIdx = 0) {
   //  3. Neck limit: inside that band, never so close that looking up at the top edge passes 30°.
   const theta = hall.immersive ? 60 : 50;
   const dAngle = sc.w / (2 * Math.tan((theta * Math.PI) / 360));
-  const twoThirds = backZ * 2 / 3;
-  const bandLo = backZ * 0.6, bandHi = backZ * 0.72;
+  const twoThirds = backZ0 * 2 / 3;
+  const bandLo = backZ0 * 0.6, bandHi = backZ0 * 0.72;
   const neckOk = (r) => deg(Math.atan2(screen.top - (r.floorY + TIERS[r.tier].eye), r.z)) <= 30;
   const neckZ = (pool.find(neckOk) || pool.at(-1)).z;
   const blended = (Math.min(Math.max(dAngle, bandLo), bandHi) + twoThirds) / 2;
   const geoZ = Math.max(blended, Math.min(neckZ, bandHi));
   const refZ = Math.min(Math.max(geoZ, pool[0].z), pool.at(-1).z);
   const refRow = pool.reduce((a, r) => (Math.abs(r.z - refZ) < Math.abs(a.z - refZ) ? r : a));
-  L.refCalc = { w: sc.w, theta, dAngle, twoThirds, blended, bandLo, bandHi, neckZ, z: refZ, backZ, curved: !!sc.curve };
+  L.refCalc = { w: sc.w, theta, dAngle, twoThirds, blended, bandLo, bandHi, neckZ, z: refZ, backZ: backZ0, curved: !!sc.curve };
   L.ref = { x: 0, y: refRow.floorY + TIERS[refRow.tier].eye, z: refZ };
   L.sweet = L.ref; // sound is calibrated at the same spot
   L.depth = stallsEnd - hall.firstRow;
@@ -55149,7 +55203,7 @@ function getLayout(theatre, screenIdx = 0) {
   // zone: within ±6% of the room depth of the two-thirds mark, and as central as that row allows
   // (some halls have a centre aisle, so 'central' is relative to the row's most central seat)
   const rowMinX = (r) => Math.min(...r.seats.map((x) => Math.abs(x.x)));
-  const zone = pool.filter((r) => Math.abs(r.z - refZ) <= backZ * 0.06)
+  const zone = pool.filter((r) => Math.abs(r.z - refZ) <= backZ0 * 0.06)
     .flatMap((r) => r.seats.filter((s) => Math.abs(s.x) <= rowMinX(r) + 0.6 && s.m.overhangCut === 0));
   const pick = (list) => list.reduce((a, s) => (!a || s.m.raw > a.m.raw || (s.m.raw === a.m.raw && Math.abs(s.x) < Math.abs(a.x)) ? s : a), null);
   L.director = pick(zone) || pick(pool.flatMap((r) => r.seats));
@@ -55189,6 +55243,10 @@ function computeMetrics(seat, L) {
   const secRows = L.sections[seat.row.section].rows;
   if (seat.row.idx > 0) {
     const front = secRows[seat.row.idx - 1];
+    clearance = yLine(front.z) - (front.floorY + TIERS[front.tier].eye);
+  } else if (L.sections[seat.row.section].stacked) {
+    // first row of a stacked tier: looks over the heads in the last row of the tier below
+    const front = L.sections[seat.row.section - 1].rows.at(-1);
     clearance = yLine(front.z) - (front.floorY + TIERS[front.tier].eye);
   } else if (L.sections[seat.row.section].balcony) {
     clearance = yLine(L.balcony.parapetZ) - (L.balcony.floorY + 0.9) + 0.12;
@@ -56032,6 +56090,17 @@ class TheatreView {
     this.coveMat = glow(0xffb070);
     [-1, 1].forEach((d) => box(this.coveMat, [0.05, 0.05, backZ], [d * (halfW - 0.1), H - 0.25, backZ / 2]));
 
+    // floor heights, used by fans, EXIT signs, sconces and the aerial camera's collision (levelAt: the tier you stand on at z)
+    this.floorAt = (z, balconyLevel = false) => {
+      let y = 0;
+      L.rows.forEach((r) => {
+        const inSec = balconyLevel ? r.section !== 0 : r.section === 0;
+        if (inSec && z >= r.z - r.pitch / 2) y = r.floorY;
+      });
+      return y;
+    };
+    this.levelAt = (z) => this.floorAt(z, !!(L.balcony && z >= L.balcony.parapetZ));
+
     // ceiling: fans in older halls, recessed downlights in multiplexes
     this.fans = [];
     if (single) {
@@ -56040,10 +56109,12 @@ class TheatreView {
       const hubG = new THREE.CylinderGeometry(0.12, 0.14, 0.12, 20);
       const rodG = new THREE.CylinderGeometry(0.018, 0.018, 0.6, 8);
       for (let z = 3.5; z < backZ - 1.5; z += 4.8) {
+        // hang each fan 3.6 m above the floor of the tier below it (higher over a balcony), on a down-rod
+        const fy = Math.min(H - 0.9, this.levelAt(z) + 3.6);
         [-0.5, 0.5].forEach((fx) => {
           const grp = new THREE.Group();
-          grp.position.set(fx * halfW, H - 0.9, z);
-          const rod = new THREE.Mesh(rodG, hubM); rod.position.y = 0.36; grp.add(rod);
+          grp.position.set(fx * halfW, fy, z);
+          const rl = H - fy - 0.1, rod = new THREE.Mesh(rodG, hubM); rod.scale.y = rl / 0.6; rod.position.y = 0.06 + rl / 2; grp.add(rod);
           grp.add(new THREE.Mesh(hubG, hubM));
           for (let k = 0; k < 3; k++) {
             const a = (k * Math.PI * 2) / 3;
@@ -56069,7 +56140,8 @@ class TheatreView {
     box(darkM, [halfW * 2 - 1, 0.55, 2.2], [0, 0.275, 1.1]); // stage
     const rowFloorM = floorM(halfW * 2, 1.1);
     L.rows.forEach((row) => {
-      const bottom = row.section === 0 ? -0.2 : L.balcony.undersideY;
+      const rs = L.sections[row.section];
+      const bottom = rs.balcony && !rs.stacked ? rs.undersideY : -0.2; // a stacked tier is solid from the ground
       const hgt = row.floorY - bottom;
       box(rowFloorM, [halfW * 2, hgt, row.pitch + 0.002], [0, bottom + hgt / 2, row.z]);
       box(this.coveMat, [halfW * 2, 0.012, 0.012], [0, row.floorY + 0.006, row.z - row.pitch / 2 - 0.004]);
@@ -56081,13 +56153,21 @@ class TheatreView {
     }
     if (L.balcony) {
       const b = L.balcony;
-      const bs = L.sections.find((s) => s.balcony);
+      const bs = L.balconies.at(-1); // the last balcony fills the space behind its last row
       const tailD = backZ - bs.endZ;
       if (tailD > 0) { const hgt = bs.rows.at(-1).floorY - b.undersideY; box(rowFloorM, [halfW * 2, hgt, tailD], [0, b.undersideY + hgt / 2, bs.endZ + tailD / 2]); }
-      box(rowFloorM, [halfW * 2, 0.35, bs.startZ - b.parapetZ + 0.2], [0, b.floorY - 0.175, (b.parapetZ + bs.startZ) / 2]);
+      box(rowFloorM, [halfW * 2, 0.35, L.balconies[0].startZ - b.parapetZ + 0.2], [0, b.floorY - 0.175, (b.parapetZ + L.balconies[0].startZ) / 2]);
+      // stacked tiers: a landing (cross-aisle) at the level of the tier below, then a step up to the tier
+      L.balconies.filter((t) => t.stacked).forEach((t) => {
+        const prev = L.sections[L.sections.indexOf(t) - 1];
+        const gd = t.startZ - prev.endZ, hh = prev.lastFloor + 0.2;
+        box(rowFloorM, [halfW * 2, hh, gd + 0.004], [0, hh / 2 - 0.2, prev.endZ + gd / 2]);
+        box(this.coveMat, [halfW * 2, 0.012, 0.012], [0, t.floorY + 0.006, t.startZ - 0.004]);
+        add(new RoundedBoxGeometry(halfW * 2, 0.9, 0.12, 2, 0.04), std(0x4a3236, 0.7), [0, prev.lastFloor + 0.45, prev.endZ + 0.06]);
+      });
       add(new RoundedBoxGeometry(halfW * 2, 1.0, 0.24, 2, 0.05), std(0x4a3236, 0.7), [0, b.floorY + 0.4, b.parapetZ]);
       box(glow(0xffa55a), [halfW * 2, 0.03, 0.02], [0, b.floorY + 0.25, b.parapetZ - 0.13]);
-      for (let x = -halfW + 2; x < halfW - 1; x += 3) add(new THREE.CylinderGeometry(0.12, 0.12, 0.02, 20), glow(0xffe3c0), [x, b.undersideY - 0.01, (b.parapetZ + backZ) / 2]);
+      for (let x = -halfW + 2; x < halfW - 1; x += 3) add(new THREE.CylinderGeometry(0.12, 0.12, 0.02, 20), glow(0xffe3c0), [x, b.undersideY - 0.01, (b.parapetZ + L.balconies[0].endZ) / 2]);
     }
 
     // screen (bent for curved screens), masking and gold frame
@@ -56124,23 +56204,14 @@ class TheatreView {
     for (let i = 0; i < tn; i++) { o4.position.set(-halfW + 0.22 + i * 0.45, H - 1.46, 0.34); o4.updateMatrix(); tass.setMatrixAt(i, o4.matrix); }
     g.add(tass);
 
-    // floor heights, used by EXIT signs, sconces and the aerial camera's collision
-    this.floorAt = (z, balconyLevel = false) => {
-      let y = 0;
-      L.rows.forEach((r) => {
-        const inSec = balconyLevel ? r.section !== 0 : r.section === 0;
-        if (inSec && z >= r.z - r.pitch / 2) y = r.floorY;
-      });
-      return y;
-    };
     const exitM = new THREE.MeshBasicMaterial({ map: A.exit, toneMapped: false });
     const signG = new THREE.PlaneGeometry(0.9, 0.34);
     [-1, 1].forEach((d) => {
       add(signG, exitM, [d * (halfW - 0.03), 2.7, 1.8], [0, (-d * Math.PI) / 2, 0]);
-      add(signG, exitM, [d * (halfW - 0.03), this.floorAt(backZ - 1.6) + 2.6, backZ - 1.6], [0, (-d * Math.PI) / 2, 0]);
+      add(signG, exitM, [d * (halfW - 0.03), this.levelAt(backZ - 1.6) + 2.6, backZ - 1.6], [0, (-d * Math.PI) / 2, 0]);
     });
     const sconceG = new RoundedBoxGeometry(0.06, 0.12, 0.6, 2, 0.02);
-    for (let z = 3; z < backZ - 1; z += 3.6) [-1, 1].forEach((d) => add(sconceG, glow(0xffb070), [d * (halfW - 0.06), this.floorAt(z) + 2.3, z]));
+    for (let z = 3; z < backZ - 1; z += 3.6) [-1, 1].forEach((d) => add(sconceG, glow(0xffb070), [d * (halfW - 0.06), this.levelAt(z) + 2.3, z]));
 
     // aisle step lights
     const lights = [];
@@ -56359,7 +56430,10 @@ class TheatreView {
     const { halfW, backZ, height } = this.L.room;
     const B = this.L.balcony;
     p.x = clamp(p.x, -halfW + 0.4, halfW - 0.4);
-    p.z = clamp(p.z, 0.6, backZ - 0.35);
+    // a seat below a stacked tier (the upper balcony) can't have a camera inside that tier's solid mass
+    const above = this.L.balconies?.find((t) => t.stacked && this.L.sections.indexOf(t) > seat.row.section);
+    const zMax = !above ? backZ - 0.35 : this.L.sections[seat.row.section].balcony ? above.startZ - 0.3 : this.L.sections[this.L.sections.indexOf(above) - 1].endZ - 0.4;
+    p.z = clamp(p.z, 0.6, zMax);
     const onBalcony = !!(B && seat.row.section !== 0);
     let floor = this.floorAt(p.z, onBalcony && p.z > B.parapetZ);
     if (!onBalcony && B && p.z > B.parapetZ - 0.3) floor = Math.max(floor, this.floorAt(p.z));

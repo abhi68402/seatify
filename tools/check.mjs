@@ -19,7 +19,7 @@ for (const t of THEATRES) {
     const L = getLayout(t, i), best = topSeats(L, 1)[0], D = L.director, n = L.rows.length, ri = L.rows.indexOf(best.row);
     const centre = (r) => r.seats.reduce((a, s) => (Math.abs(s.x) < Math.abs(a.x) ? s : a));
     const front = centre(L.sections[0].rows[0]), back = centre(L.sections[0].rows.at(-1));
-    const minX = Math.min(...D.row.seats.map((s) => Math.abs(s.x))), depth = D.z / L.room.backZ;
+    const minX = Math.min(...D.row.seats.map((s) => Math.abs(s.x))), depth = D.z / L.refCalc.backZ;
     const ok = best === D && depth >= 0.55 && depth <= 0.78 && Math.abs(D.x) <= minX + 0.6 && (n <= 5 || ri < n - 2);
     if (!ok) fail++;
     seats += L.seats.length;
