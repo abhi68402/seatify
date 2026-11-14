@@ -46,8 +46,8 @@ const hallName = (h) => h.name.split(' · ')[0];
 
 // ───────────────────────── storage ─────────────────────────
 const store = {
-  get() { try { return JSON.parse(localStorage.getItem('seatify.saved') || localStorage.getItem('darshan.saved') || '[]'); } catch { return []; } },
-  set(v) { try { localStorage.setItem('seatify.saved', JSON.stringify(v)); localStorage.removeItem('darshan.saved'); } catch {} },
+  get() { try { return JSON.parse(localStorage.getItem('vyu.saved') || localStorage.getItem('seatify.saved') || localStorage.getItem('darshan.saved') || '[]'); } catch { return []; } },
+  set(v) { try { localStorage.setItem('vyu.saved', JSON.stringify(v)); localStorage.removeItem('seatify.saved'); localStorage.removeItem('darshan.saved'); } catch {} },
 };
 let SAVED = store.get();
 
@@ -55,7 +55,7 @@ let SAVED = store.get();
 // Stored as {tid, si, id}; dropped if that seat no longer exists in the data.
 let MYSEAT = (() => {
   try {
-    const v = JSON.parse(localStorage.getItem('seatify.myseat') || 'null');
+    const v = JSON.parse(localStorage.getItem('vyu.myseat') || localStorage.getItem('seatify.myseat') || 'null');
     const t = v && theatreById(v.tid);
     return t && (t.screens || [t.hall])[v.si] && getLayout(t, v.si).byId.has(v.id) ? v : null;
   } catch { return null; }
@@ -67,7 +67,7 @@ function mySeat() {
 }
 function setMySeat(v) {
   MYSEAT = v;
-  try { v ? localStorage.setItem('seatify.myseat', JSON.stringify(v)) : localStorage.removeItem('seatify.myseat'); } catch {}
+  try { v ? localStorage.setItem('vyu.myseat', JSON.stringify(v)) : localStorage.removeItem('vyu.myseat'); localStorage.removeItem('seatify.myseat'); } catch {}
 }
 const isMySeat = (tid, si, id) => !!MYSEAT && MYSEAT.tid === tid && MYSEAT.si === si && MYSEAT.id === id;
 // The seat in hall Lx that matches My Seat's view (or My Seat itself in its own hall).
@@ -88,7 +88,7 @@ function setTheme(t, save = true) {
   root.classList.add('theme-anim');
   root.dataset.theme = t;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', t === 'dark' ? '#100e0c' : '#f7f6f3');
-  if (save) try { localStorage.setItem('seatify.theme', t); } catch {}
+  if (save) try { localStorage.setItem('vyu.theme', t); localStorage.removeItem('seatify.theme'); } catch {}
   setTimeout(() => root.classList.remove('theme-anim'), 350);
   const live = document.getElementById('announce');
   if (live && save) live.textContent = t === 'dark' ? 'Dark mode on' : 'Light mode on';
@@ -96,7 +96,7 @@ function setTheme(t, save = true) {
 try {
   const mq = matchMedia('(prefers-color-scheme: dark)');
   mq.addEventListener('change', (e) => {
-    let saved = null; try { saved = localStorage.getItem('seatify.theme'); } catch {}
+    let saved = null; try { saved = localStorage.getItem('vyu.theme') || localStorage.getItem('seatify.theme'); } catch {}
     if (!saved) { setTheme(e.matches ? 'dark' : 'light', false); if (S.route === 'home') render(); }
   });
 } catch {}
@@ -129,7 +129,7 @@ function syncLayout() {
   return l;
 }
 
-const TITLES = { home: 'Seatify · See your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Seatify' };
+const TITLES = { home: 'Vyu · See your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
 function go(route, patch = {}) {
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
@@ -157,7 +157,7 @@ function render() {
   if (r === 'view') { stageEl.setAttribute('role', 'main'); stageEl.removeAttribute('aria-label'); }
   else if (r === 'seats' && isSplit()) { stageEl.setAttribute('role', 'region'); stageEl.setAttribute('aria-label', '3D seat view'); }
   else { stageEl.removeAttribute('role'); stageEl.removeAttribute('aria-label'); }
-  document.title = TITLES[r] || `${T()?.name ?? 'Seatify'} · Seatify`;
+  document.title = TITLES[r] || `${T()?.name ?? 'Vyu'} · Vyu`;
   if (r === 'home') renderHome();
   else if (r === 'theatre') renderTheatre();
   else if (r === 'saved') renderSaved();
@@ -300,7 +300,7 @@ function renderHome() {
     </nav></div></header>
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
-      <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>Seatify</h1>
+      <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>Vyu</h1>
       <p class="tagline">See your seat <em>before you sit.</em></p>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
       <div class="hero-cta">
@@ -319,7 +319,7 @@ function renderHome() {
       </ol>
     </section>
     <section class="only" aria-labelledby="only-h">
-      <p class="eyebrow">${I.spark} Only on Seatify</p>
+      <p class="eyebrow">${I.spark} Only on Vyu</p>
       <h2 id="only-h">Things no booking app can show you</h2>
       <ul class="only-grid">
         <li class="only-card">
@@ -335,7 +335,7 @@ function renderHome() {
           <span class="only-ico">${I.motion}</span>
           <h3>Motion Look</h3>
           <p>Hold up your phone and move it: the hall moves with you, like a window into the cinema. No headset, no app to install.</p>
-          ${motionCapable() ? `<button class="btn primary" data-a="trymotion">${I.motion} Try it now</button>` : '<p class="only-note">Open <b>abhi68402.github.io/seatify</b> on your phone to try it.</p>'}
+          ${motionCapable() ? `<button class="btn primary" data-a="trymotion">${I.motion} Try it now</button>` : '<p class="only-note">Open <b>abhi68402.github.io/vyu</b> on your phone to try it.</p>'}
         </li>
       </ul>
     </section>
@@ -362,9 +362,9 @@ function renderHome() {
     </div>
   </main>
   <footer class="site-foot"><div class="foot-in foot-centre">
-    <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span><span>Seatify</span></p>
+    <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span><span>Vyu</span></p>
     <p class="fine">“Approximate layout” halls are reconstructions from public descriptions. “Matched” halls follow the BookMyShow seat map row for row. Screen sizes and floor slope are estimates unless noted.</p>
-    <p class="fine">Seatify is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
+    <p class="fine">Vyu is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
   </div></footer>`;
 }
 const countText = (n) => (n === THEATRES.length ? `All ${n} theatres` : `${n} of ${THEATRES.length} theatres`);
@@ -611,11 +611,11 @@ function webglAvailable() {
 // are blocked or unsupported (ad/script blockers, older browsers).
 let sceneMod = null;
 function loadBundle() {
-  if (window.SeatifyScene) return Promise.resolve(window.SeatifyScene);
+  if (window.VyuScene) return Promise.resolve(window.VyuScene);
   return new Promise((res, rej) => {
     const s = document.createElement('script');
     s.src = new URL('./scene.bundle.js?v=' + Date.now(), import.meta.url).href;
-    s.onload = () => (window.SeatifyScene ? res(window.SeatifyScene) : rej(new Error('scene.bundle.js loaded but did not start')));
+    s.onload = () => (window.VyuScene ? res(window.VyuScene) : rej(new Error('scene.bundle.js loaded but did not start')));
     s.onerror = () => { s.remove(); rej(new Error('Could not download js/scene.bundle.js')); };
     document.head.append(s);
   });
@@ -645,7 +645,7 @@ function getView() {
   return viewLoading;
 }
 function failCopy(kind) {
-  if (kind === 'browser') return ['This browser is too old for 3D', 'Update it, or open Seatify in a current Chrome, Edge, Firefox or Safari (16.4 or later). Seat scores still work below.'];
+  if (kind === 'browser') return ['This browser is too old for 3D', 'Update it, or open Vyu in a current Chrome, Edge, Firefox or Safari (16.4 or later). Seat scores still work below.'];
   if (kind === 'webgl') return ['3D graphics are turned off', 'This browser or device has WebGL disabled or unavailable. Turn on hardware acceleration in the browser settings, or try another browser. Seat scores still work below.'];
   if (kind === 'load') return navigator.onLine === false
     ? ['3D view didn’t finish loading', 'You went offline before the 3D files downloaded. Reconnect and tap Try again: once loaded, the 3D view keeps working offline.']
@@ -897,7 +897,7 @@ function openTwin(tid, si, id) {
   const twins = matchView(profileOf(seat), allLayouts(), { exclude: Lx }).slice(0, 8);
   const m = seat.m;
   openModal(`
-    <p class="eyebrow">${I.twin} Only on Seatify</p>
+    <p class="eyebrow">${I.twin} Only on Vyu</p>
     <h2 id="m-title">Seat Twin</h2>
     <p>${isMySeat(tid, si, id) ? 'Your seat' : 'The view from'} <b>${esc(t.short)} · ${esc(hallName(Lx.hall))} · ${esc(seat.id)}</b>, found again in the other ${allLayouts().length - 1} halls.</p>
     <ul class="twin-you" aria-label="Your view">
@@ -920,7 +920,7 @@ function openDna() {
   const my = mySeat();
   if (my && DNA.preset == null) { DNA.fov = Math.round(Math.min(80, Math.max(36, my.seat.m.fov))); DNA.skew = Math.round(Math.min(30, my.seat.m.skew)); }
   openModal(`
-    <p class="eyebrow">${I.dna} Only on Seatify</p>
+    <p class="eyebrow">${I.dna} Only on Vyu</p>
     <h2 id="m-title">Seat DNA</h2>
     <p>No seat number needed. Describe the view you like and we find it in all ${allLayouts().length} halls.</p>
     <div class="dna-presets" role="group" aria-label="Presets">${Object.entries(DNA_PRESETS).map(([k, v]) => `<button class="chip" data-a="dna-preset" data-id="${k}" aria-pressed="${DNA.preset === k}">${esc(v.label)}</button>`).join('')}</div>
@@ -944,7 +944,7 @@ function updateDna() {
 
 function openHow() {
   openModal(`
-    <h2 id="m-title">How Seatify scores a seat</h2>
+    <h2 id="m-title">How Vyu scores a seat</h2>
     <p>Each hall is modelled in 3D from its seat map, screen size, row spacing, floor slope and balcony. For every seat we work out what your eyes actually see, against cinema standards:</p>
     <dl>
       <dt>Director's seat</dt><dd>The reference seat on the centre line about two-thirds of the way back, where a film's picture and sound are mixed and checked. It scores highest in every hall, and seats lose points the further they are from it (in, out, sideways or up in a balcony).</dd>
@@ -1200,7 +1200,7 @@ if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').then((reg) => {
         const w = reg.installing || reg.waiting;
         if (!firstInstall || !w) return;
-        w.addEventListener('statechange', () => { if (w.state === 'activated') toast('Seatify is saved for offline use'); });
+        w.addEventListener('statechange', () => { if (w.state === 'activated') toast('Vyu is saved for offline use'); });
       }).catch((e) => console.warn('Offline mode unavailable', e));
     });
   } else {

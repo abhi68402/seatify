@@ -1,12 +1,12 @@
 <div align="center">
 
-# 💺 Seatify
+# 💺 Vyu
 
 ### *See your seat before you sit.*
 
 Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view is really like before you go.
 
-**[▶ Try it live](https://abhi68402.github.io/seatify/)**
+**[▶ Try it live](https://abhi68402.github.io/vyu/)**
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
@@ -19,13 +19,13 @@ Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view
 
 ---
 
-## ✨ Why Seatify?
+## ✨ Why Vyu?
 
 Seat maps on booking sites are grids of squares. They hide neck strain, blocked sightlines and balcony overhangs, so you only find out once you're sitting there.
 
-Seatify fixes that. Pick a theatre, pick a seat, and **fly into the hall** to look around from exactly where you would sit.
+Vyu fixes that. Pick a theatre, pick a seat, and **fly into the hall** to look around from exactly where you would sit.
 
-> Seatify is a view guide, not a booking app. It has no showtimes, no payments and no tickets.
+> Vyu is a view guide, not a booking app. It has no showtimes, no payments and no tickets.
 
 ## 🚀 Features
 
@@ -40,8 +40,8 @@ Seatify fixes that. Pick a theatre, pick a seat, and **fly into the hall** to lo
 | ♿ **Accessible** | Skip link, keyboard seat navigation with arrow keys, screen-reader announcements, focus management and reduced-motion support. |
 | 🎬 **Director's seat** | Every hall's top seat is the director's seat, placed by geometry: the distance where the screen fills its target angle (D = W ÷ 2·tan(θ/2)), blended with the two-thirds-back rule and checked against a 30° look-up limit. Each theatre page shows the working. Scores follow SMPTE (30° minimum) and THX (36–40°) viewing guidance. |
 | ⭐ **Ratings, specs & highlights** | Each theatre shows an audience rating (with its source and review count), what's special about it, and published specs (screen width, projector, sound) for every hall, all linked to their sources. |
-| 🪞 **Seat Twin** (only on Seatify) | Mark your seat once, or describe the view you like with two sliders (Seat DNA). Seatify finds that same view in all 17 halls: same screen width in your eyes, same look-up, same side angle. Every theatre then shows "your seat here". |
-| 📱 **Motion Look** (only on Seatify) | On a phone, move the phone itself to look around the hall, like a window into the cinema. Uses the motion sensor; no headset or app. |
+| 🪞 **Seat Twin** (only on Vyu) | Mark your seat once, or describe the view you like with two sliders (Seat DNA). Vyu finds that same view in all 17 halls: same screen width in your eyes, same look-up, same side angle. Every theatre then shows "your seat here". |
+| 📱 **Motion Look** (only on Vyu) | On a phone, move the phone itself to look around the hall, like a window into the cinema. Uses the motion sensor; no headset or app. |
 | 📴 **Works offline** | No backend, CDN, web fonts or API calls: three.js and fonts are vendored. A service worker stores the whole site (~3 MB) on the first visit, so it then opens and runs with no internet. Installable as an app. |
 
 ## 🎬 Theatres
@@ -64,7 +64,7 @@ python3 serve.py 8080     # custom port
 ## 🧱 Project structure
 
 ```
-seatify/
+vyu/
 ├── index.html      # app shell, import map, accessibility landmarks
 ├── sw.js           # generated offline service worker (node tools/build-sw.mjs)
 ├── manifest.webmanifest + icons/  # installable app
@@ -102,7 +102,7 @@ node tools/bundle-3d.mjs && node tools/build-sw.mjs
 
 ## 🌐 Deploy
 
-Seatify is a static site, so it works on **GitHub Pages**. In the repo, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
+Vyu is a static site, so it works on **GitHub Pages**. In the repo, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`.
 
 ## 🤝 Contributing
 
@@ -110,4 +110,4 @@ Ideas and fixes are welcome. Please keep it offline (no CDN links) and accessibl
 
 ## 📄 Notes
 
-Seatify is a hackathon project. Theatre names belong to their owners and are used only to describe halls. Approximate halls are labelled as such in the app.
+Vyu is a hackathon project. Theatre names belong to their owners and are used only to describe halls. Approximate halls are labelled as such in the app.

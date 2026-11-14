@@ -1,6 +1,6 @@
 {
-  "name": "Seatify · See your seat before you sit",
-  "short_name": "Seatify",
+  "name": "Vyu · See your seat before you sit",
+  "short_name": "Vyu",
   "description": "Sit in any seat of 13 Hyderabad theatres in 3D before you go. Works offline.",
   "start_url": "./",
   "scope": "./",

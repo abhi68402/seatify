@@ -1,4 +1,4 @@
-/* ───────────────────────── Seatify design system ─────────────────────────
+/* ───────────────────────── Vyu design system ─────────────────────────
    Light, product-style: warm white, near-black type, one coral accent. The 3D hall stays dark,
    so controls floating over it are white glass. Layouts: phone <640 · tablet 640–1023 ·
    split ≥1024 (set by JS as #app[data-layout]); seat card mode in #app[data-sheet] =
@@ -214,7 +214,7 @@ svg { display: block; }
 .nav-btn .count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--gold); color: var(--ink); font-size: 12px; font-weight: 800; display: grid; place-items: center; }
 @media (max-width: 639px) { .nav-btn .count { position: absolute; top: -4px; right: -4px; } .nav-btn { padding: 0; width: 44px; } }
 @media (min-width: 640px) { .nav-btn > span:not(.count) { display: inline; } .nav-btn { padding: 0 16px; } }
-/* Seatify mark: a white seat on a coral rounded square */
+/* Vyu mark: a white seat on a coral rounded square */
 .logo { width: 30px; height: 30px; flex: none; border-radius: 9px; display: grid; place-items: center; background: var(--brand); color: #fff; box-shadow: 0 4px 12px rgba(200, 67, 46, .3); }
 .logo svg { width: 18px; height: 18px; stroke-width: 2.2; }
 
@@ -566,7 +566,7 @@ svg { display: block; }
   .skip:focus, :focus-visible { outline-color: Highlight; }
 }
 
-/* ───────────────────────── Only on Seatify: Seat Twin + Motion Look ───────────────────────── */
+/* ───────────────────────── Only on Vyu: Seat Twin + Motion Look ───────────────────────── */
 .btn.sm { height: 44px; padding: 0 16px; font-size: 14px; border-radius: 22px; }
 
 /* home section */
@@ -708,7 +708,7 @@ svg { display: block; }
   .steps > li > span:last-child { justify-items: center; }
 }
 
-/* Only on Seatify: equal cards, actions pinned to the bottom so both cards line up */
+/* Only on Vyu: equal cards, actions pinned to the bottom so both cards line up */
 .only-grid { align-items: stretch; }
 .only-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .only-card p { margin-left: auto; margin-right: auto; }

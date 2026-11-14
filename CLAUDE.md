@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-**Seatify** (formerly "Darshan") lets you sit in any seat of a Hyderabad cinema hall in 3D before you go, and scores every seat 0–100 with plain-language reasons. A hackathon project: booking-site seat grids hide neck strain, blocked sightlines and balcony overhangs.
+**Vyu** (said "view"; formerly "Seatify", before that "Darshan") lets you sit in any seat of a Hyderabad cinema hall in 3D before you go, and scores every seat 0–100 with plain-language reasons. A hackathon project: booking-site seat grids hide neck strain, blocked sightlines and balcony overhangs.
 
 - **Theatre-first, not a booking app.** No showtimes, tickets or payments. Flow: theatre → screen → seat → fly into the hall. Films on the 3D screen are procedural placeholders.
 - **13 theatres, 17 halls, 6,779 seats.** 8 theatres are transcribed row-for-row from BookMyShow screenshots the user supplied (`source: 'bms'`); the other 5 are approximate reconstructions. Keep that distinction honest in the UI.
-- **No backend.** Static files only; all scoring and 3D run in the browser. Live at https://abhi68402.github.io/seatify/ (GitHub Pages, repo `abhi68402/seatify`, branch `main`, served from the repo root).
+- **No backend.** Static files only; all scoring and 3D run in the browser. Live at https://abhi68402.github.io/vyu/ (GitHub Pages, repo `abhi68402/vyu`, branch `main`, served from the repo root).
 
 ## What the user cares about
 
@@ -33,7 +33,7 @@ node --check js/*.js           # syntax (there is no build, npm, linter or test 
   ```bash
   node tools/bundle-3d.mjs && node tools/build-sw.mjs
   ```
-  Then `git push`; Pages rebuilds in about a minute (`gh api repos/abhi68402/seatify/pages/builds/latest`). `gh` is at `/opt/homebrew/bin/gh`. If git has no identity in a session, reuse the existing author with `git -c user.name=… -c user.email=…` from `git log`, never change git config.
+  Then `git push`; Pages rebuilds in about a minute (`gh api repos/abhi68402/vyu/pages/builds/latest`). `gh` is at `/opt/homebrew/bin/gh`. If git has no identity in a session, reuse the existing author with `git -c user.name=… -c user.email=…` from `git log`, never change git config.
 - A git pre-commit hook would automate the regeneration, but installing hooks was blocked by permissions; the user may add one.
 
 ## Architecture
@@ -57,14 +57,14 @@ data.js ──► layout.js ──► app.js (pages, UI state)      info.js (pub
 - **`js/assets.js` / `js/movies.js`**: procedural textures (built in idle time, `getAssets()` fills gaps) and procedural canvas films.
 - **`js/app.js`**: the whole UI. State in `S`; routes `home | theatre | seats | view | saved`; pages are string templates rendered into `#screen`, 3D overlay controls into `#stage`; one delegated click handler `act()` keyed on `data-a="…"`. `syncLayout()` sets `#app[data-layout]` (`phone <640 | tablet | split ≥1024`) and `[data-sheet]` (`bottom | side | float`). On split, `seats` is the explorer (440 px seat map + live 3D); on phone/tablet `seats` and `view` are separate pages. `scene.js` is imported lazily by `getView()`, which falls back to `js/scene.bundle.js` if module loading fails.
 - **`styles.css`**: one token-based design system, light by default with `:root[data-theme="dark"]` overrides; an inline script in `index.html` sets the theme before first paint. Never hard-code colours in components or SVG templates: add a token to both palettes (SVG uses `style="fill:var(--x)"`). Inter for UI and display. Later sections of the file override earlier ones (symmetry pass, HUD, ratings): read to the end before changing a component.
-- **Generated, never hand-edited:** `js/scene.bundle.js` (`tools/bundle-3d.mjs`: three.js, add-ons and the 3D modules incl. `data.js` in one classic script setting `window.SeatifyScene`; it was needed when module loading failed on the user's Firefox) and `sw.js` (`tools/build-sw.mjs`: precaches everything under `SERVED` with a content-hashed cache name; registered everywhere except localhost, add `?sw` to test it locally). A new served top-level file or folder must be added to `SERVED`.
+- **Generated, never hand-edited:** `js/scene.bundle.js` (`tools/bundle-3d.mjs`: three.js, add-ons and the 3D modules incl. `data.js` in one classic script setting `window.VyuScene`; it was needed when module loading failed on the user's Firefox) and `sw.js` (`tools/build-sw.mjs`: precaches everything under `SERVED` with a content-hashed cache name; registered everywhere except localhost, add `?sw` to test it locally). A new served top-level file or folder must be added to `SERVED`.
 - **`vendor/`**: three.js 0.160.0 core plus only the add-ons used (import map in `index.html`) and self-hosted fonts. Vendoring an add-on means vendoring its relative imports too.
 
 ## UI conventions that are easy to break
 
 - **Seat details are a flat HUD, never a card over the screen** (review feedback). `cardHtml()` renders `.hud-main` docked along the bottom of the stage in every layout plus the `.more` "Why this score?" drawer (`S.open`); `positionFloating()` sets `--sheet-h` and insets the 3D picture above the bar; narrow bars adapt with `@container hud` queries; `#stage.looking` fades the HUD while the viewer looks around.
 - **The ring on theatre cards is the best-seat view score** (labelled "best seat"), not an audience rating; ratings are separate and always show their source.
-- **No default seat for Seat Twin.** The home card asks (Pick my seat / Describe my seat). My Seat lives in `localStorage['seatify.myseat']`; saved seats in `seatify.saved`; theme in `seatify.theme`.
+- **No default seat for Seat Twin.** The home card asks (Pick my seat / Describe my seat). My Seat lives in `localStorage['vyu.myseat']`; saved seats in `vyu.saved`; theme in `vyu.theme` (the older `seatify.*` keys are still read once, then removed, so renaming kept everyone's seats).
 - **Symmetry:** the home page is one centred column; theatre cards use a centred flex grid so an odd last card sits centred; the theatre page has two balanced columns (`.t-main` / `.t-side`). Check 375/768/1024/1440/1920.
 - **Accessibility floor:** every route renders its own `<header class="appbar">`, `<main id="main" tabindex="-1">` and exactly one `h1`; `go()` moves focus to it and `restoreFocus` keeps focus on a re-rendered control. Text ≥ 12 px at ≥ 4.5:1, targets ≥ 44 px (dense seat maps excepted), icon buttons have `aria-label`, seats use a roving tabindex with arrow keys, `prefers-reduced-motion` disables glides. Cards are `<li class="tcard">` with a real heading whose `.stretch` button covers the card.
 - Never animate `transform` on an SVG `<g>` positioned with a `transform` attribute (CSS replaces it); fade with opacity.

@@ -1,4 +1,4 @@
-// Seatify — published facts about each theatre: audience rating, what's special, and per-hall specs.
+// Vyu — published facts about each theatre: audience rating, what's special, and per-hall specs.
 // Researched from public pages on 2026-11-14. Every fact carries its source; the UI shows and links it.
 // Ratings: the source with the MOST reviews we could find for that theatre (BookMyShow does not
 // rate venues, and Google ratings can't be scraped), so sources differ between theatres on purpose.

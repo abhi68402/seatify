@@ -1,4 +1,4 @@
-// Seatify — data for the Hyderabad theatres.
+// Vyu — data for the Hyderabad theatres.
 // All distances are in metres.
 //
 // Each theatre has `screens: [hall, ...]` (or a single `hall`). A hall's seats can be

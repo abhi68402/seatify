@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Seatify · See your seat before you sit</title>
-  <meta name="description" content="Seatify: sit in any seat of 13 Hyderabad theatres in 3D before you go. Screen distance, viewing angle, sightlines and sound, scored for every seat." />
+  <title>Vyu · See your seat before you sit</title>
+  <meta name="description" content="Vyu: sit in any seat of 13 Hyderabad theatres in 3D before you go. Screen distance, viewing angle, sightlines and sound, scored for every seat." />
   <meta name="theme-color" content="#f7f6f3" />
   <!-- Theme before first paint (no light flash in dark mode): saved choice, else the system setting. -->
   <script>
     (function () {
-      var t = null; try { t = localStorage.getItem('seatify.theme'); } catch (e) {}
+      var t = null; try { t = localStorage.getItem('vyu.theme') || localStorage.getItem('seatify.theme'); } catch (e) {}
       if (t !== 'dark' && t !== 'light') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       document.documentElement.dataset.theme = t;
       if (t === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#100e0c');
@@ -17,13 +17,13 @@
   </script>
   <meta name="color-scheme" content="light dark" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="Seatify" />
-  <meta name="apple-mobile-web-app-title" content="Seatify" />
+  <meta name="application-name" content="Vyu" />
+  <meta name="apple-mobile-web-app-title" content="Vyu" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-  <meta property="og:site_name" content="Seatify" />
-  <meta property="og:title" content="Seatify · See your seat before you sit" />
+  <meta property="og:site_name" content="Vyu" />
+  <meta property="og:title" content="Vyu · See your seat before you sit" />
   <meta property="og:description" content="A 3D, seat-by-seat view guide to Hyderabad cinema halls." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23c8432e'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' transform='translate(4 4)'%3E%3Cpath d='M6 11V6a2 2 0 012-2h8a2 2 0 012 2v5'/%3E%3Cpath d='M4 11h16v5H4zM6 16v4M18 16v4'/%3E%3C/g%3E%3C/svg%3E" />
@@ -51,7 +51,7 @@
     <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
     <p id="announce" class="sr" aria-live="polite" aria-atomic="true"></p>
   </div>
-  <noscript><p style="padding:24px;color:#17140f;font-family:system-ui,sans-serif">Seatify needs JavaScript to draw the 3D halls.</p></noscript>
+  <noscript><p style="padding:24px;color:#17140f;font-family:system-ui,sans-serif">Vyu needs JavaScript to draw the 3D halls.</p></noscript>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
