@@ -2,117 +2,80 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## What this is and why
+## What this is
 
-**Seatify** (formerly "Darshan") lets you sit in any seat of a Hyderabad cinema hall in 3D before you go. It is a hackathon project solving a real problem: seat maps on booking sites are grids of squares that hide neck strain, blocked sightlines and balcony overhangs.
+**Seatify** (formerly "Darshan") lets you sit in any seat of a Hyderabad cinema hall in 3D before you go, and scores every seat 0–100 with plain-language reasons. A hackathon project: booking-site seat grids hide neck strain, blocked sightlines and balcony overhangs.
 
-- **Theatre-first, not a booking app.** No showtimes, movie listings, prices to pay or tickets. Flow: pick a theatre → pick a screen → tap a seat → fly into the hall and look around. Every seat gets a 0–100 view score with plain-language reasons. Movies on the 3D screen are procedural placeholders.
-- **13 theatres.** 7 are **matched row-for-row to BookMyShow seat maps** that the user supplied as screenshots: Prasads, AMB, AAA, ALLU, ART, PVR Nexus, Lakshmikala. 6 are **approximate reconstructions**: Sudarshan, Sandhya, Devi, INOX GVK, PVR Inorbit, Cinépolis. Keep that distinction honest in the UI.
-- **Look (3D hall):** a typical Indian cinema. Maroon pleated curtains with gold fringe, velvet walls with damask (multiplexes), whitewashed walls with ceiling fans (old single screens), red-and-gold carpet, green EXIT/निकास signs.
-- **Human point of view:** about 105° horizontal lens, anatomically sized audience, realistic seated eye heights, breathing sway. The aerial view orbits around *your* seat. It is never a ceiling bird's-eye shot.
+- **Theatre-first, not a booking app.** No showtimes, tickets or payments. Flow: theatre → screen → seat → fly into the hall. Films on the 3D screen are procedural placeholders.
+- **13 theatres, 17 halls, 6,190 seats.** 7 theatres are transcribed row-for-row from BookMyShow screenshots the user supplied (`source: 'bms'`); the other 6 are approximate reconstructions. Keep that distinction honest in the UI.
+- **No backend.** Static files only; all scoring and 3D run in the browser. Live at https://abhi68402.github.io/seatify/ (GitHub Pages, repo `abhi68402/seatify`, branch `main`, served from the repo root).
 
 ## What the user cares about
 
-- Ambitious, polished, "near perfect" work. Verify visually before calling something done.
-- **Everything runs offline.** Never add CDN links, web fonts or network calls. Vendor any new dependency into `vendor/`, after asking: downloads need the user's OK, with filename, source and size.
-- Symmetric, centred, stacked layouts on content pages; responsive from 360 px phones to wide desktops; readable and accessible (see Conventions).
-- Real data over invented data. Screen sizes, seat counts and so on must be sourced or labelled as estimates (`screenNote` in `data.js`).
+- Ambitious, polished, verified work. Check visually before calling something done.
+- **Fully offline:** no CDN links, web fonts or network calls in the app. New dependencies are vendored into `vendor/`, and only after the user approves the download (name, source, size).
+- **Real data over invented data.** Screen sizes, seat counts, ratings and specs are sourced or labelled as estimates (`screenNote`, `js/info.js`).
+- **Symmetric, centred layouts** that work from 360 px phones to 1920 px desktops, in light and dark themes, at WCAG AA.
+- **Push every finished change** to `origin/main` (see Deploy).
 
-## Run and check
-
-```bash
-python3 serve.py [port]   # default 5317, serves this folder with Cache-Control: no-store
-```
-
-- **Use `serve.py`, not `python3 -m http.server`.** The plain server lets browsers keep stale ES modules after edits.
-- **It must be served.** Opening `index.html` from disk won't work, because browsers block ES modules over `file://`.
-- **The desktop app's preview launcher can't start it.** That launcher can't read `~/Documents` (macOS privacy block), so start the server from a shell or Bash. `.claude/launch.json` in the parent `Html/` folder only points the preview pane at `http://localhost:5317`.
-
-There is no build, npm, test suite or linter. Checks that work:
+## Run, check, deploy
 
 ```bash
-node --check js/app.js js/scene.js js/assets.js js/layout.js js/data.js
-# data/geometry sanity: seat counts per hall (compare with the BookMyShow screenshot)
-node -e "import('./js/data.js').then(async d=>{const l=await import('./js/layout.js'); for(const t of d.THEATRES)(t.screens||[t.hall]).forEach((h,i)=>{const L=l.getLayout(t,i);console.log(t.id,h.name,L.seats.length)})})"
+python3 serve.py [port]        # http://localhost:5317, Cache-Control: no-store
+node tools/check.mjs [id]      # seat counts + director's-seat invariant, all halls or one theatre id; exit 1 on failure
+node --check js/*.js           # syntax (there is no build, npm, linter or test suite)
 ```
 
-**Visual verification** in the browser pane:
-- Check at 1440×900 (split explorer), 820×1100 (tablet), 390×844 (phone, low tier) and 844×390 (sideways phone).
-- Screenshots taken right after navigating can show a black canvas while shaders compile. Wait 1–3 s and re-check before assuming a bug.
-- The user often clicks around in the same pane. Do scripted tests in a separate tab (`tabs_create`) so you don't fight over state.
+- Use `serve.py`, not `python3 -m http.server` (browsers keep stale ES modules). `index.html` from `file://` does not work (ES modules).
+- The desktop app's preview launcher cannot start the server (macOS blocks it from `~/Documents`); start it from Bash. `../.claude/launch.json` only points the preview pane at `http://localhost:5317`.
+- Visual checks: 1440×900 (split explorer), 820×1100 (tablet), 390×844 (phone) and 844×390 (sideways phone), light and dark. The 3D canvas can be black for 1–3 s while shaders compile. If the app's browser pane is hidden it throttles rAF and freezes CSS animations: judge timing and animated states with headless Chrome (CDP) instead.
+- **Before every commit, regenerate the two generated files** and commit them with the change:
+  ```bash
+  node tools/bundle-3d.mjs && node tools/build-sw.mjs
+  ```
+  Then `git push`; Pages rebuilds in about a minute (`gh api repos/abhi68402/seatify/pages/builds/latest`). `gh` is at `/opt/homebrew/bin/gh`. If git has no identity in a session, reuse the existing author with `git -c user.name=… -c user.email=…` from `git log`, never change git config.
+- A git pre-commit hook would automate the regeneration, but installing hooks was blocked by permissions; the user may add one.
 
 ## Architecture
 
-Data flows one way: `data.js` → `layout.js` → (`app.js` UI, `scene.js` 3D). Everything is a plain ES module.
+One-way data flow, plain ES modules, no framework:
 
-- **`js/data.js`**
-  - `TIERS`: seat types with width, row pitch, eye height, colour and 3D style (`std` | `recliner` | `motion`).
-  - `MOVIES`: screen-content ids.
-  - `THEATRES`: a theatre has `screens: [hall, …]` (or one `hall`). A hall has `screen {w,h,bottom,curve}`, `firstRow` (distance to the first row), `riser` (floor rise per row) and `sections`.
-  - Two seat formats, documented in the header comment:
-    - **`grid`:** copied row-for-row from a BookMyShow map, listed top-to-bottom as on screen (back → front). `o` is a seat, `.` a gap, a lone `-` row is a walkway, `F:4  …` starts numbering at 4. Optional `rtl`, `prefix` (for sections that restart at row A, giving ids like `Silver A1`) and a per-group `colW`/`pitch`. Helpers `o(n)`, `_(n)` and `rows('A B C', pattern)` keep these readable.
-    - **`rows`:** generated blocks `{n, tier, blocks:[6,18,6]}`, front-to-back, for approximate halls.
-  - `source: 'bms'` / `partial: true` / `screenNote` drive the accuracy badges and the screen-size source note.
-- **`js/layout.js`**
-  - `getLayout(theatre, screenIdx)` (cached) turns a hall into metric geometry: rows, seats, sections, room, balcony slab, `byId`. Coordinates: screen at z = 0, audience toward +z, x right, y up, metres. All grid rows share one column grid centred on the screen. A gap is an aisle if it is ≥2 columns wide, or sits between two runs of ≥2 seats.
-  - `computeMetrics` scores each seat (`m`) on field of view, off-axis skew, look-up angle, sightline clearance (C-value), balcony-overhang cut and distance to the audio sweet spot. It produces the weighted `score` and `label`.
-  - Also exports `crowd()` (deterministic audience), `topSeats`, `neighbour` (arrow-key moves), `heatColor`, `insightFor` and a seeded `rng`.
-- **`js/scene.js`:** `TheatreView` (three.js).
-  - **Device tiers** (`detectTier`):
-    - **high:** pixel ratio ≤2, bloom through an EffectComposer whose render target has **4× MSAA** (without it the composer drops anti-aliasing and the scene goes soft), 2K film canvas.
-    - **low** (touch, ≤4 GB memory or ≤2 cores): pixel ratio ≤1.5, direct `renderer.render`, 1K film, about 30 fps when idle.
-    - Adaptive pixel ratio never drops below 1 and recovers when frames are fast.
-  - **`loadHall(L, crowdSet, contentId)`** builds the room once per layout: pleated curtain geometry, rounded instanced seats grouped by style and width (`seatRef`: id → meshes and index), and the audience. `setFocus` recolours the chosen seat gold and hides its occupant.
-  - **Cameras:**
-    - **Seat view:** eye pose with drag-to-look.
-    - **Aerial:** orbits a point 1.5 m in front of your head (`orbitPose`, drag/wheel/pinch, `resetOrbit`). Every free camera passes through **`clampCam`**: inside the walls, above heads, below the ceiling or balcony slab.
-    - `flyTo(seat, intro)` tweens between poses; `preview()` drifts behind the back row until a seat is picked.
-- **`js/assets.js`:** procedural textures with normal maps, 1K (512 on the low tier): curtain, velvet + damask, carpet, teak, plaster, upholstery, EXIT, YOU tag.
-  - Noise is computed at half resolution, then upsampled.
-  - `prepareAssets()` builds one texture per idle slot after page load, and `getAssets()` fills any gaps synchronously.
-  - `surface()` / `fabric()` tile a texture at world scale. Clones carry `userData.tiled`, so `disposeTree` frees only those.
-- **`js/movies.js`:** procedural canvas "films" via `drawMovie(ctx, w, h, t, id)`.
-- **`js/app.js`:** single-file UI.
-  - String templates go into `#screen` (pages) and `#stage` (3D overlay controls + seat card). One delegated click handler, `act()`, is keyed on `data-a="…"`. State lives in `S`.
-  - Routes: `home | theatre | seats | view | saved`.
-  - `syncLayout()` sets two attributes on `#app`: `data-layout` = `phone <640 | tablet 640–1023 | split ≥1024`, and `data-sheet` = `bottom | side | float` (how the seat card docks).
-  - **Split (desktop):** the `seats` route is the explorer, with the seat map in a 440 px left panel and live 3D on the right. `chooseSeat()` flies the camera without changing page.
-  - **Phone/tablet:** `seats` and `view` are separate pages.
-  - `startScene()` loads the hall and flies to the focused seat, or previews the hall when no seat is chosen.
-  - Saved seats live in `localStorage` (`seatify.saved`; the old `darshan.saved` key is read once and migrated). `scene.js` is imported lazily; three.js and the textures are warmed up in idle time after load.
-- **`styles.css`:** one design system, light "product" look (warm white #f7f6f3, near-black text, coral accent `--accent` #c8432e; `--gold` is a legacy alias of the accent), tokens in `:root`, Inter for display and UI (Fraunces is vendored but unused). Controls floating over the dark 3D hall are white glass. Home app bar: location on the left (user asked for that swap); the hero headline is the brand (logo + "Seatify"), with the tagline as a smaller second line. **Two themes:** `:root` is light, `:root[data-theme="dark"]` overrides the tokens (warm charcoal, lighter coral `#f07a62` with dark `--ink` text on it). An inline script in `index.html` sets `data-theme` before first paint (saved `seatify.theme`, else the system setting); the sun/moon button in the home app bar calls `setTheme()`. Never hard-code a colour in components or SVG templates: add a token to both palettes (SVG uses `style="fill:var(--x)"`). Modes are driven by `#app[data-layout|data-sheet|data-route]`. Content pages are one centred column, max 760 px. On `(pointer: coarse)`, backdrop blur over the canvas is swapped for solid panels.
-- **`vendor/`:** three.js 0.160.0 core plus only the add-ons used, under `vendor/three/examples/jsm/...` (mapped by the import map in `index.html`), and self-hosted fonts in `vendor/fonts/`. To use another add-on, vendor it **and** any relative imports it pulls in.
+```
+data.js ──► layout.js ──► app.js (pages, UI state)      info.js (published facts) ──► app.js
+                     └──► scene.js (three.js hall)      twin.js (view matching)   ──► app.js
+```
 
-## Conventions and gotchas
+- **`js/data.js`**: `TIERS` (seat types: width, pitch, eye height, 3D style), `MOVIES`, `THEATRES`. A theatre has `screens: [hall…]` or one `hall`; a hall has `screen {w,h,bottom,curve}` in metres, `firstRow`, `riser`, `sections`, optional `screenNote`. Two seat formats (see the header comment): **`grid`**, transcribed from BookMyShow top-to-bottom (`o` seat, `.` gap, lone `-` row = walkway, `F:4 …` numbering offset, optional `rtl`/`prefix`/`colW`/`pitch`, helpers `o(n)`, `_(n)`, `rows()`), and **`rows`** blocks `{n, tier, blocks:[…]}` front-to-back for approximate halls.
+- **`js/layout.js`**: `getLayout(theatre, screenIdx)` (cached) converts a hall to metric geometry (screen at z = 0, audience toward +z, metres) and scores every seat in `computeMetrics` → `seat.m` (`fov`, `skew`, `elevTop`, `clearance`, `overhangCut`, `score`, `raw` unrounded, `label`, `parts`).
+  - **Score** = 0.32 director's position + 0.22 screen size + 0.14 side angle + 0.14 neck + 0.18 sightline, times a balcony-cut factor. Screen size gets full marks from 36° (THX) to the format target + 12° (50°, or 60° immersive), falling steeply below SMPTE's 30°.
+  - **Director's seat** (`L.director`, label DIRECTOR'S SEAT): the reference point `L.ref` is placed from geometry (`L.refCalc`): D = W / (2·tan(θ/2)), held in the 60–72% depth band, averaged with two-thirds of the room, pushed back within the band if the top edge needs > 30° of look-up, kept in the stalls clear of any balcony. The director is the best seat in that zone and must be #1 in every hall (`tools/check.mjs` enforces it). The theatre page shows this working via `directorMaths()`.
+  - Also: `topSeats` (ranks by `raw`), `neighbour`, `crowd`, `heatColor`, `insightFor`.
+- **`js/twin.js`**: Seat Twin. One matching module over a *view profile* `{fov, elevTop, skew, blocked, overhang}` (fields optional): `profileOf(seat)`, `matchView(profile, layouts, {exclude})` (best seat per hall + match %), `bestInTheatre`, `directorSeats`, `DNA_PRESETS`, `dnaProfile`. Seats, My Seat and the Seat DNA sliders are its adapters.
+- **`js/info.js`**: researched facts (as of `INFO_AS_OF`): per theatre an audience `rating {value, count, src, url}` (the source with the most reviews found; BookMyShow does not rate venues and Google cannot be scraped), 2–3 `highlights`, and per-hall published `halls[i]` specs. Every fact is shown with its source link. Modelled screen widths in `data.js` match these published widths.
+- **`js/scene.js`**: `TheatreView` (three.js r160). Device tiers (`detectTier`): high = bloom through an EffectComposer whose render target keeps **4× MSAA**; low (touch / ≤4 GB / ≤2 cores) = direct render, 1K film. Idle frames render only when the 30 fps film changes; drags, glides and fades render every frame. `loadHall` builds the room once per layout (instanced seats, audience); cameras: seat view with drag-to-look, aerial orbit around your seat, all clamped by `clampCam`; `flyTo` tweens. `setMotionLook` drives the seat view from `deviceorientation` (recentred per seat). `onLook` is called while the viewer drags or moves the phone.
+- **`js/assets.js` / `js/movies.js`**: procedural textures (built in idle time, `getAssets()` fills gaps) and procedural canvas films.
+- **`js/app.js`**: the whole UI. State in `S`; routes `home | theatre | seats | view | saved`; pages are string templates rendered into `#screen`, 3D overlay controls into `#stage`; one delegated click handler `act()` keyed on `data-a="…"`. `syncLayout()` sets `#app[data-layout]` (`phone <640 | tablet | split ≥1024`) and `[data-sheet]` (`bottom | side | float`). On split, `seats` is the explorer (440 px seat map + live 3D); on phone/tablet `seats` and `view` are separate pages. `scene.js` is imported lazily by `getView()`, which falls back to `js/scene.bundle.js` if module loading fails.
+- **`styles.css`**: one token-based design system, light by default with `:root[data-theme="dark"]` overrides; an inline script in `index.html` sets the theme before first paint. Never hard-code colours in components or SVG templates: add a token to both palettes (SVG uses `style="fill:var(--x)"`). Inter for UI and display. Later sections of the file override earlier ones (symmetry pass, HUD, ratings): read to the end before changing a component.
+- **Generated, never hand-edited:** `js/scene.bundle.js` (`tools/bundle-3d.mjs`: three.js, add-ons and the 3D modules incl. `data.js` in one classic script setting `window.SeatifyScene`; it was needed when module loading failed on the user's Firefox) and `sw.js` (`tools/build-sw.mjs`: precaches everything under `SERVED` with a content-hashed cache name; registered everywhere except localhost, add `?sw` to test it locally). A new served top-level file or folder must be added to `SERVED`.
+- **`vendor/`**: three.js 0.160.0 core plus only the add-ons used (import map in `index.html`) and self-hosted fonts. Vendoring an add-on means vendoring its relative imports too.
 
-- **Director's seat = best seat.** `computeMetrics` (layout.js) scores 0.32 position (Gaussian distance from `L.ref`: centre line, two-thirds of the room depth back, in the stalls clear of any balcony overhang; height above it counts too) + 0.22 screen size (full marks from 36° (THX) to target+12°, steep below SMPTE's 30°) + 0.14 side angle + 0.14 neck + 0.18 sightline, times the balcony-cut factor. `m.raw` is the unrounded score used for ranking. `L.ref.z` is computed from the screen (`L.refCalc`, shown step by step on the theatre page by `directorMaths()`): D = W / (2·tan(θ/2)) with θ = 50° (60° immersive), clamped to the director's band 60-72% of room depth, averaged with two-thirds of the room, then pushed back (within the band) if the top edge would need more than 30° of look-up. `L.director` = best seat in the director zone (±6% of room depth from the two-thirds mark, as central as the row allows) and gets the label DIRECTOR'S SEAT; it is #1 in all 17 halls (check script in the session history: topSeats(L,1)[0] === L.director). Seat map marks it (`.seat.dir`). Seat maps open with the view-quality heat map on (`S.heat` defaults to true; the toggle stays).
-- **Seat Twin** (`js/twin.js`, the one place matching lives): a *view profile* `{fov, elevTop, skew, blocked, overhang}` (fields optional) → `matchView(profile, layouts, {exclude})` best seat per hall with match %, `bestInTheatre`, `directorSeats`, `profileOf(seat)`, `DNA_PRESETS`, `dnaProfile(fov, skew)`. Adapters that make profiles: a seat (seat card), My Seat, and the Seat DNA sliders. **No default seat anywhere**: the home card asks (Pick my seat / Describe my seat). My Seat = `localStorage['seatify.myseat']` {tid, si, id}; when set, theatre cards show "Your seat here", the theatre page has a "Your seat here" panel, and seat maps mark the twin (`.seat.twin`) or the seat itself (`.seat.mine`).
-- **Motion Look** (`setMotionLook(on, onFail)` in `scene.js`): `deviceorientation` → device quaternion → yaw/pitch relative to where the phone pointed when it started (recentred on every `flyTo`/`setMode`), applied before finger drag in seat mode, marks the loop busy. `toggleMotion()` in `app.js` asks iOS permission inside the tap; the button shows only on touch devices with the API and hides in aerial view. Test without a phone: stub `DeviceOrientationEvent.requestPermission` to return 'granted', click the button for real, dispatch `new DeviceOrientationEvent('deviceorientation', {alpha, beta, gamma})`.
-- **Symmetry rules (user asked for it, check at 375/768/1024/1440/1920):** home is one centred column: hero (brand, tagline, lede, two equal CTAs, live seat-map preview `heroPreview()` of AMB HDR, three equal stat columns), three equal step cards, two equal "Only on Seatify" cards with actions pinned to the bottom, centred finder with a List/Map switch (`S.homeView`), theatre cards in a centred flex grid (1/2/3 columns) so an odd last card sits centred, centred footer. Theatre page: two balanced columns (`.t-main` = hall + director's seat; `.t-side` = notes + your seat + best seats). Never animate `transform` on an SVG `<g>` that is positioned with a transform attribute (CSS replaces it); fade with opacity.
-- **Published facts live in `js/info.js`** (not `data.js`): per theatre an audience `rating` {value, count, src, url} (the source with the most reviews we found: BookMyShow doesn't rate venues and Google can't be scraped), 2-3 `highlights` {text, src, url}, and per-hall `halls[i]` specs {width, projector, sound, which, url}, mostly from hyderabadtheatres.com. Researched 14 Nov 2026 (`INFO_AS_OF`); every fact shows its source link in the UI. The ring on theatre cards is Seatify's *best-seat view score*, labelled "best seat"; never present it as an audience rating. Research also corrected `data.js`: PVR Inorbit's premium hall is PXL (no IMAX), INOX GVK One's Insignia screen is unconfirmed (now "Screen 6"). Modelled screen widths match the published widths (each `screenNote` names the source; height keeps the hall's aspect unless a published aspect exists). The three big single screens (Sudarshan, Sandhya, Devi) have their first row at ≥ 0.42 × screen width, and Devi's balcony is raised to 3.6 m so the rear stalls keep a realistic ~15% overhang cut; all 17 halls still pass the director-seat check.
-- **Seat details are a flat HUD, never a card over the screen** (review feedback: the old card blocked the view). `cardHtml()` renders `.hud-main` (ring, label + seat, three stats, actions: Seat Twin, My seat, Save, Details) docked along the bottom of the stage in every layout, plus `.more` (the "Why this score?" drawer: from the right on desktop/landscape, upwards on phones; `S.open`). `positionFloating()` sets `--sheet-h` to the bar height and insets the 3D picture above it; the move pad and hint dock above the bar. Narrow bars adapt through `@container hud` queries (labels drop, numbers move to `.hud-sub`, actions become four equal buttons). While the viewer drags or moves the phone, `TheatreView.onLook` → `markLooking()` adds `#stage.looking` and the HUD fades to 10% until ~0.7 s after the movement (not while focus is inside it).
-- **Offline service worker: rebuild before EVERY commit.** `sw.js` is GENERATED by `node tools/build-sw.mjs`: it precaches every served file (`index.html`, `styles.css`, `manifest.webmanifest`, `js/`, `vendor/`, `icons/`) under a cache named from a content hash, serves them cache-first (page: network first with 3 s timeout, then cache), and deletes old caches on activate. Forgetting to rebuild means returning visitors keep the old files. Run `node tools/bundle-3d.mjs && node tools/build-sw.mjs` before each commit (a git pre-commit hook would automate it; installing one was blocked by permissions, so the user can add it). `app.js` registers the worker except on localhost (add `?sw` to test it there). Adding a new served top-level file or folder: add it to `SERVED` in `build-sw.mjs`.
-- **3D fallback bundle: rebuild after any 3D change.** `js/scene.bundle.js` is GENERATED by `node tools/bundle-3d.mjs`: three.js, the add-ons and `scene/assets/movies/layout/data.js` packed into one classic script that sets `window.SeatifyScene`. `getView()` in `app.js` tries `import('./scene.js')` first and falls back to this bundle when module loading fails, which happened on the user's Firefox on GitHub Pages. **After editing any of those modules (including `data.js` theatres), rerun the bundler and commit the bundle too,** or the fallback serves stale halls. Never hand-edit the bundle.
+## UI conventions that are easy to break
 
-- Accessibility structure: `#screen` is a plain `div`; every route template renders its own `<header class="appbar">`, `<main id="main" tabindex="-1">` (target of the skip link) and exactly one `h1` (on the seat-map and saved pages it lives in the app bar). In `view`, `#stage` gets `role="main"` and a visually hidden `h1`; in split `seats` it is a labelled region. `go()` moves focus to the new page's `h1` (`focusPage`), and the click handler's `restoreFocus` re-focuses a control that its own action re-rendered. Cards are `<li class="tcard">` with a real heading whose `.stretch` button covers the card; keep that pattern instead of putting headings inside buttons.
+- **Seat details are a flat HUD, never a card over the screen** (review feedback). `cardHtml()` renders `.hud-main` docked along the bottom of the stage in every layout plus the `.more` "Why this score?" drawer (`S.open`); `positionFloating()` sets `--sheet-h` and insets the 3D picture above the bar; narrow bars adapt with `@container hud` queries; `#stage.looking` fades the HUD while the viewer looks around.
+- **The ring on theatre cards is the best-seat view score** (labelled "best seat"), not an audience rating; ratings are separate and always show their source.
+- **No default seat for Seat Twin.** The home card asks (Pick my seat / Describe my seat). My Seat lives in `localStorage['seatify.myseat']`; saved seats in `seatify.saved`; theme in `seatify.theme`.
+- **Symmetry:** the home page is one centred column; theatre cards use a centred flex grid so an odd last card sits centred; the theatre page has two balanced columns (`.t-main` / `.t-side`). Check 375/768/1024/1440/1920.
+- **Accessibility floor:** every route renders its own `<header class="appbar">`, `<main id="main" tabindex="-1">` and exactly one `h1`; `go()` moves focus to it and `restoreFocus` keeps focus on a re-rendered control. Text ≥ 12 px at ≥ 4.5:1, targets ≥ 44 px (dense seat maps excepted), icon buttons have `aria-label`, seats use a roving tabindex with arrow keys, `prefers-reduced-motion` disables glides. Cards are `<li class="tcard">` with a real heading whose `.stretch` button covers the card.
+- Never animate `transform` on an SVG `<g>` positioned with a `transform` attribute (CSS replaces it); fade with opacity.
 
-- **Adding or fixing a theatre is a `data.js`-only change.** Geometry, scoring, the 2D map and the 3D hall all derive from it. When the user sends a BookMyShow screenshot:
-  - transcribe it as a `grid`, with columns aligned to the screenshot's grid;
-  - recheck the seat count with the node snippet;
-  - mark the theatre `source: 'bms'`.
-- **Tune halls with data, not special cases.** Row `pitch` and floor `riser` drive the neck-strain and sightline labels, so adjust `firstRow`, `riser` and `screen` in `data.js` rather than special-casing `layout.js`.
-- **Page structure** (`index.html`):
-  - a skip link to `#main`;
-  - each route renders its own `<header>`, `<main id="main">` and `<footer>` into `#screen`;
-  - `#announce` is a polite live region for screen-reader messages;
-  - `#toast` is for visible confirmations.
-- **Accessibility floor:**
-  - text at least 12 px, and at least 4.5:1 contrast;
-  - UI colours at least 3:1;
-  - targets at least 44 px (dense seat-map seats excepted);
-  - every icon button has an `aria-label`;
-  - seats use a roving tabindex with arrow keys;
-  - `prefers-reduced-motion` turns off camera glides.
-- **Shell editing in this environment:** large inline `python3 - <<'EOF'` heredocs sometimes trip a Claude Code safety check. Write the script to the session scratchpad and run it from there instead.
-- **Missing file:** `js/layout.js` once vanished from disk. If the app fails with a missing-export error, check that file exists before debugging anything else.
-- **Delegating changes:** a global subagent, `project-craftsman` (`~/.claude/agents/`), exists for scoped changes and new UI ideas. It returns a report of under 150 words.
+## Data changes
+
+- **Adding or fixing a theatre is a `data.js` change** (plus `info.js` for its facts). From a BookMyShow screenshot: transcribe as a `grid` with columns aligned to the screenshot, mark `source: 'bms'`, then run `node tools/check.mjs <id>` and compare the seat count.
+- **Tune halls with data, not special cases** in `layout.js`: `firstRow`, `riser`, `screen` and balcony `lift` drive the scores. Big single screens keep the first row ≥ 0.42 × screen width.
+
+## Environment notes
+
+- Large inline `python3 - <<'EOF'` heredocs sometimes trip a Claude Code safety check: write scripts to the session scratchpad and run them from there.
+- `js/layout.js` once vanished from disk: on a missing-export error, check the file exists first.
+- Another session sometimes leaves uncommitted edits in `styles.css`; commit only your own hunks (e.g. stage `HEAD` + your block) unless the user says otherwise.
+- A global subagent, `project-craftsman` (`~/.claude/agents/`), exists for scoped changes and UI ideas when the user asks for it.
