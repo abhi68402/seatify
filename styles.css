@@ -868,3 +868,7 @@ svg { display: block; }
 /* drawer sits above the move pad; the pad steps aside while details are open */
 #app[data-sheet] .seat-card { z-index: 3; }
 #stage:has(.seat-card.open) .st-move, #stage:has(.seat-card.open) .st-hint { opacity: 0; pointer-events: none; }
+
+/* Wordmark: "Vyu" with a forward-leaning y (skewed, so it matches at every size and weight) */
+.wm { display: inline-flex; align-items: baseline; }
+.wm-y { display: inline-block; transform: skewX(-14deg); margin: 0 .03em 0 .01em; }

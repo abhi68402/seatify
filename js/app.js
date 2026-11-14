@@ -42,6 +42,8 @@ const screensOf = (t) => t.screens || [t.hall];
 const allLayouts = () => THEATRES.flatMap((t) => screensOf(t).map((_, i) => getLayout(t, i)));
 // Motion Look needs a motion sensor and a touch screen (phones and tablets)
 const motionCapable = () => 'DeviceOrientationEvent' in window && window.matchMedia('(pointer: coarse)').matches;
+// The wordmark: the y leans forward. Screen readers hear one word, "Vyu".
+const WORDMARK = '<span class="sr">Vyu</span><span class="wm" aria-hidden="true">V<span class="wm-y">y</span>u</span>';
 const hallName = (h) => h.name.split(' · ')[0];
 
 // ───────────────────────── storage ─────────────────────────
@@ -300,7 +302,7 @@ function renderHome() {
     </nav></div></header>
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
-      <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>Vyu</h1>
+      <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>${WORDMARK}</h1>
       <p class="tagline">See your seat <em>before you sit.</em></p>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
       <div class="hero-cta">
@@ -362,7 +364,7 @@ function renderHome() {
     </div>
   </main>
   <footer class="site-foot"><div class="foot-in foot-centre">
-    <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span><span>Vyu</span></p>
+    <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span>${WORDMARK}</p>
     <p class="fine">“Approximate layout” halls are reconstructions from public descriptions. “Matched” halls follow the BookMyShow seat map row for row. Screen sizes and floor slope are estimates unless noted.</p>
     <p class="fine">Vyu is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
   </div></footer>`;
