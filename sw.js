@@ -2,7 +2,7 @@
    First visit: downloads and stores every file below (~3.0 MB). After that the
    site opens and runs with no internet. A deploy that changes any file changes VERSION, so
    browsers fetch the new set in the background and switch to it on the next visit. */
-const VERSION = '4e09b657ef9f';
+const VERSION = '45f54f0d4e78';
 const CACHE = 'vyu-' + VERSION;
 const FILES = [
   "./",
@@ -55,7 +55,7 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin || new URL(req.url).pathname.startsWith('/_vercel/')) return; // Vercel analytics scripts: always network, never cached
   if (req.mode === 'navigate') {
     // The page itself: try the network briefly (fresh after a deploy), else the stored copy.
     e.respondWith((async () => {

@@ -43,7 +43,7 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin || new URL(req.url).pathname.startsWith('/_vercel/')) return; // Vercel analytics scripts: always network, never cached
   if (req.mode === 'navigate') {
     // The page itself: try the network briefly (fresh after a deploy), else the stored copy.
     e.respondWith((async () => {
