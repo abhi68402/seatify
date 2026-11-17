@@ -371,6 +371,7 @@ function renderHome() {
     <p class="brand sm"><span class="logo" aria-hidden="true">${I.seat}</span>${WORDMARK}</p>
     <p class="fine">“Approximate layout” halls are reconstructions from public descriptions. “Matched” halls follow the BookMyShow seat map row for row. Screen sizes and floor slope are estimates unless noted.</p>
     <p class="fine">Vyu is an independent seat-view guide. It does not sell tickets or list showtimes.</p>
+    <p class="fine contact">Questions, fixes or a hall to add? <a href="mailto:gompaharshit7@gmail.com?subject=Vyu%20feedback">Contact me: gompaharshit7@gmail.com</a></p>
   </div></footer>`;
 }
 const countText = (n) => (n === THEATRES.length ? `All ${n} theatres` : `${n} of ${THEATRES.length} theatres`);
