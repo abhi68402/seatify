@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What the user cares about
 
 - Ambitious, polished, verified work. Check visually before calling something done.
-- **Fully offline:** no CDN links, web fonts or network calls in the app. New dependencies are vendored into `vendor/`, and only after the user approves the download (name, source, size).
+- **Fully offline:** no CDN links, web fonts or network calls in the app. One approved exception: the GoatCounter visit counter (`index.html`, `track()` in `js/app.js`, dashboard harshit88.goatcounter.com); it is cookieless, fails silently offline and is never cached by the service worker. New dependencies are vendored into `vendor/`, and only after the user approves the download (name, source, size).
 - **Real data over invented data.** Screen sizes, seat counts, ratings and specs are sourced or labelled as estimates (`screenNote`, `js/info.js`).
 - **Symmetric, centred layouts** that work from 360 px phones to 1920 px desktops, in light and dark themes, at WCAG AA.
 - **Push every finished change** to `origin/main` (see Deploy).
