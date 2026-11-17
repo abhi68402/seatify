@@ -2,7 +2,7 @@
    First visit: downloads and stores every file below (~3.0 MB). After that the
    site opens and runs with no internet. A deploy that changes any file changes VERSION, so
    browsers fetch the new set in the background and switch to it on the next visit. */
-const VERSION = '45f54f0d4e78';
+const VERSION = '89b53d1208dc';
 const CACHE = 'vyu-' + VERSION;
 const FILES = [
   "./",

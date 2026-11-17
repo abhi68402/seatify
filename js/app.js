@@ -309,6 +309,7 @@ function renderHome() {
         <button class="btn primary lg-ish" data-a="scrollfind">${I.search} Find my seat</button>
         <button class="btn ghost lg-ish" data-a="dna">${I.dna} Describe my seat</button>
       </div>
+      <p class="hero-note"><span>${I.check}No login</span><span>${I.check}No sign-up</span><span>${I.check}Free, works offline</span></p>
       ${heroPreview()}
       <ul class="facts" aria-label="At a glance"><li><b>${THEATRES.length}</b> theatres</li><li><b>${totalSeats.toLocaleString('en-IN')}</b> seats scored</li><li><b>${verifiedN}</b> matched to BookMyShow</li></ul>
     </section>

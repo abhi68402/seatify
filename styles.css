@@ -876,3 +876,8 @@ svg { display: block; }
 /* footer contact link: inherits text colour (AA in both themes), underlined, 44px tap target */
 .site-foot .contact a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; display: inline-block; padding: 12px 4px; }
 .site-foot .contact a:hover, .site-foot .contact a:focus-visible { color: var(--accent); }
+
+/* hero reassurance line under the CTAs */
+.hero-note { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin: 2px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
+.hero-note span { display: inline-flex; align-items: center; gap: 6px; }
+.hero-note svg { width: 16px; height: 16px; color: var(--accent); stroke-width: 2.4; flex: none; }
