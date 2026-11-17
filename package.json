@@ -1,0 +1,24 @@
+{
+  "name": "vyu",
+  "version": "1.0.0",
+  "description": "Vyu - View your seat before you sit. A 3D seat-by-seat view guide to Hyderabad cinema halls.",
+  "main": "sw.js",
+  "scripts": {
+    "dev": "python3 serve.py",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhi68402/vyu.git"
+  },
+  "keywords": ["cinema", "theatre", "seats", "3D", "visualization"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhi68402/vyu/issues"
+  },
+  "homepage": "https://github.com/abhi68402/vyu#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.1.0"
+  }
+}
