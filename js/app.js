@@ -132,10 +132,6 @@ function syncLayout() {
 }
 
 const TITLES = { home: 'Vyu · View your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
-// Anonymous visit counts (GoatCounter, no cookies). Silent no-op offline or when blocked.
-function track(path, title) {
-  try { window.goatcounter?.count?.({ path, title, event: false }); } catch { /* analytics must never break the app */ }
-}
 function go(route, patch = {}) {
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
@@ -145,7 +141,7 @@ function go(route, patch = {}) {
   if (!exploring()) stop3D();
   render();
   if (!(route === 'seats' && was === 'seats')) screenEl.scrollTop = 0;
-  if (route !== was) { focusPage(); track('/' + route + (S.tid && route !== 'home' && route !== 'saved' ? '/' + S.tid : ''), document.title); }
+  if (route !== was) focusPage();
 }
 
 // After a route change, move keyboard and screen-reader focus to the new page's heading.
