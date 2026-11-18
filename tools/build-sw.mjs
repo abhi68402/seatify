@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Everything under these paths is served; nothing else is (docs, tools and the dev server aren't).
-const SERVED = ['index.html', 'styles.css', 'manifest.webmanifest', 'js', 'vendor', 'icons'];
+const SERVED = ['index.html', 'styles.css', 'manifest.webmanifest', 'favicon.ico', 'js', 'vendor', 'icons'];
 
 const walk = (p) => (statSync(p).isDirectory() ? readdirSync(p).sort().flatMap((n) => (n.startsWith('.') ? [] : walk(join(p, n)))) : [p]);
 const files = SERVED.map((p) => join(ROOT, p)).flatMap((p) => { try { return walk(p); } catch { return []; } })

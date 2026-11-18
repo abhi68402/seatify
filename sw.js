@@ -2,13 +2,14 @@
    First visit: downloads and stores every file below (~3.0 MB). After that the
    site opens and runs with no internet. A deploy that changes any file changes VERSION, so
    browsers fetch the new set in the background and switch to it on the next visit. */
-const VERSION = '636152fa2aa1';
+const VERSION = '7615c96296a3';
 const CACHE = 'vyu-' + VERSION;
 const FILES = [
   "./",
   "index.html",
   "styles.css",
   "manifest.webmanifest",
+  "favicon.ico",
   "js/app.js",
   "js/assets.js",
   "js/data.js",
@@ -34,6 +35,8 @@ const FILES = [
   "vendor/three/examples/jsm/shaders/LuminosityHighPassShader.js",
   "vendor/three/examples/jsm/shaders/OutputShader.js",
   "icons/apple-touch-icon.png",
+  "icons/favicon-48.png",
+  "icons/favicon-96.png",
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon.svg",
