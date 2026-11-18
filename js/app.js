@@ -132,7 +132,7 @@ function syncLayout() {
 }
 
 const TITLES = { home: 'Vyu · View your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
-function go(route, patch = {}) {
+function go(route, patch = {}, { history: nav = 'push' } = {}) {
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
   const was = S.route;
@@ -142,7 +142,64 @@ function go(route, patch = {}) {
   render();
   if (!(route === 'seats' && was === 'seats')) screenEl.scrollTop = 0;
   if (route !== was) focusPage();
+  if (nav === 'push') pushUrl();
 }
+
+// ───────────────────────── browser history ─────────────────────────
+// Every page has its own address (#/t/prasads/0/seat/I24), so the browser's back and forward
+// buttons move between pages and a link opens the same page. Hash URLs work on any static host.
+// Picking another seat on the same page replaces the address instead of adding history steps.
+function urlOf() {
+  const r = S.route, t = S.tid && T() ? encodeURIComponent(S.tid) : null;
+  if (r === 'saved') return '#/saved';
+  if (!t || r === 'home') return '#/';
+  if (r === 'theatre') return `#/t/${t}`;
+  if (S.focus && (r === 'view' || isSplit())) return `#/t/${t}/${S.si}/seat/${encodeURIComponent(S.focus)}`;
+  return `#/t/${t}/${S.si}/seats`;
+}
+// Address → {route, patch}, or null when it names nothing that exists (then the home page shows).
+function parseUrl(hash) {
+  const p = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
+  if (!p.length) return { route: 'home', patch: {} };
+  if (p[0] === 'saved') return { route: 'saved', patch: {} };
+  if (p[0] !== 't') return null;
+  const t = theatreById(p[1]);
+  if (!t) return null;
+  if (p.length === 2) return { route: 'theatre', patch: { tid: p[1] } };
+  const si = +p[2];
+  if (!Number.isInteger(si) || !screensOf(t)[si]) return { route: 'theatre', patch: { tid: p[1] } };
+  const base = { tid: p[1], si, zoom: null, open: false };
+  if (p[3] === 'seat' && p[4] && getLayout(t, si).byId.has(p[4])) return { route: layoutOf() === 'split' ? 'seats' : 'view', patch: { ...base, focus: p[4] } };
+  return { route: 'seats', patch: { ...base, focus: null, top: -1 } };
+}
+let navIdx = 0;          // position of the current entry in this tab's history (kept in history.state)
+const navUrls = [];      // the addresses at each position, so an in-app "back" can reuse the browser's
+let quietPop = false;    // the next popstate was started by us: the page is already rendered
+function pushUrl() {
+  const u = urlOf();
+  if (u === location.hash || (u === '#/' && !location.hash)) return;
+  if (navIdx > 0 && navUrls[navIdx - 1] === u) { quietPop = true; history.back(); return; } // a "back" button: go back, don't stack
+  navIdx++; navUrls.length = navIdx; navUrls.push(u);
+  history.pushState({ vyu: navIdx }, '', u);
+}
+function replaceUrl() {
+  const u = urlOf();
+  if (u === location.hash || (u === '#/' && !location.hash)) return;
+  navUrls[navIdx] = u;
+  history.replaceState({ vyu: navIdx }, '', u);
+}
+window.addEventListener('popstate', (e) => {
+  navIdx = e.state?.vyu ?? 0;
+  navUrls[navIdx] = location.hash || '#/';
+  if (quietPop) { quietPop = false; return; }
+  closeModal();
+  const r = parseUrl(location.hash);
+  if (!r) { go('home', {}, { history: 'none' }); replaceUrl(); return; }
+  const changedHall = r.patch.tid !== S.tid || (r.patch.si != null && r.patch.si !== S.si);
+  if (r.patch.tid && changedHall && !('focus' in r.patch)) Object.assign(r.patch, { focus: null, zoom: null, si: r.patch.si ?? 0 });
+  if (S.route === r.route && exploring() && !changedHall && 'focus' in r.patch && r.patch.focus !== S.focus && r.patch.focus) { chooseSeat(r.patch.focus); return; }
+  go(r.route, r.patch, { history: 'none' });
+});
 
 // After a route change, move keyboard and screen-reader focus to the new page's heading.
 function focusPage() {
@@ -837,7 +894,9 @@ function chooseSeat(id) {
     markSelected();
     if (!$('.seat-card')) renderStage(); else updateViewUI();
     startScene();
-  } else go('view', { focus: id });
+    replaceUrl();
+  } else if (S.route === 'view') { go('view', { focus: id }, { history: 'none' }); replaceUrl(); }
+  else go('view', { focus: id });
 }
 
 function moveFocus(dir) {
@@ -848,6 +907,7 @@ function moveFocus(dir) {
   if (isSplit()) markSelected();
   updateViewUI();
   if (view3d) { view3d.setFocus(n.id); view3d.flyTo(n, false); }
+  replaceUrl();
 }
 
 // ───────────────────────── SAVED ─────────────────────────
@@ -1098,6 +1158,7 @@ document.addEventListener('click', (e) => {
   const route = S.route;
   act(el);
   restoreFocus(el, route);
+  if (S.route === route) replaceUrl();
 });
 // Many actions re-render the control that triggered them; put keyboard focus back on its replacement.
 function restoreFocus(el, route) {
@@ -1182,11 +1243,18 @@ function onResize() {
   if (was && wasSplit !== nowSplit && exploring()) {
     S.route = nowSplit ? 'seats' : S.focus ? 'view' : 'seats';
     render();
+    replaceUrl();
   } else if (exploring()) { positionFloating(); if (S.route === 'seats') { S.zoom = null; S.keepScroll = null; renderSeats(); } }
 }
 let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(onResize, 120); });
 
 lastLayout = layoutOf();
+{
+  const r = location.hash && parseUrl(location.hash);
+  if (r) { Object.assign(S, r.patch); S.route = r.route; }
+  navUrls[0] = r ? location.hash : '#/';
+  history.replaceState({ vyu: 0 }, '', r ? location.hash : location.pathname + location.search);
+}
 render();
 // warm up three.js and paint the hall textures in idle time, so opening a hall is instant
 // (the bundle carries its own copy of assets.js, so use that one when the bundle was loaded)
