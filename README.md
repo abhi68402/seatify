@@ -6,7 +6,7 @@
 
 Step into any seat of **13 Hyderabad cinema halls** in 3D, and see what the view is really like before you go.
 
-**[▶ Try it live](https://abhi68402.github.io/vyu/)**
+**[▶ Try it live]((https://www.cinevyu.site/))**
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
