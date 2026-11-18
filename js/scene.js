@@ -439,6 +439,31 @@ export class TheatreView {
     const armM = new THREE.MeshStandardMaterial({ color: 0x1d1416, roughness: 0.42, metalness: 0.1 });
 
     const groups = new Map();
+    // Seat geometry per style (metres, relative to the seat's floor point): [centre y, centre z, height, depth, tilt].
+    // The audience below is fitted against the same numbers, so nobody sits inside a backrest.
+    const SHELL = {
+      recliner: { back: [0.78, 0.4, 0.78, 0.2, 0.22], rest: [1.24, 0.46, 0.2, 0.14, 0.22] },
+      std: { back: [0.82, 0.3, 0.64, 0.1, 0.14], rest: [1.2, 0.33, 0.16, 0.12, 0.14] },
+      motion: { back: [0.82, 0.3, 0.72, 0.1, 0.14], rest: [1.2, 0.33, 0.16, 0.12, 0.14] },
+    };
+    this.shell = SHELL;
+    // How far a seated person (head centre at height eye, depth zh, size k) must slide forward so every
+    // body part clears the front face of the backrest and headrest, which lean back by their tilt.
+    // Parts: [centre y, z offset from the head, half depth], matching the bodies built below.
+    this.fitPush = (s, eye, k, zh) => {
+      const st = TIERS[s.tier].style, sh = SHELL[st === 'recliner' ? 'recliner' : st === 'motion' ? 'motion' : 'std'];
+      const frontAt = (yRel) => {
+        for (const [cy, cz, h, d, tilt] of [sh.rest, sh.back]) {
+          if (yRel >= cy - h / 2 - 0.02 && yRel <= cy + h / 2 + 0.02) return s.z + cz - d / 2 + (yRel - cy) * Math.tan(tilt);
+        }
+        return Infinity; // above the headrest or below the back: nothing to hit
+      };
+      let push = 0;
+      for (const [py, dz, half] of [[eye + 0.01 * k, 0, 0.095 * k], [eye + 0.055 * k, 0.018, 0.1 * k], [eye - 0.25 * k, 0.05, 0.105 * k], [eye - 0.42 * k, 0.07, 0.105 * k], [eye - 0.6 * k, 0.07, 0.105 * k]]) {
+        push = Math.max(push, zh + dz + half + 0.012 - frontAt(py - s.floorY));
+      }
+      return push;
+    };
     L.seats.forEach((s) => {
       const style = TIERS[s.tier].style;
       const key = style + ':' + s.sw.toFixed(2);
@@ -511,8 +536,9 @@ export class TheatreView {
       const slouch = R() < 0.25 ? 0.03 + R() * 0.04 : 0;
       const eye = s.floorY + t.eye + (child ? -0.2 - R() * 0.06 : gauss() * 0.04) - slouch;
       const k = child ? 0.78 : 0.94 + R() * 0.12;
-      const zh = s.z + 0.2 + (slouch ? 0.04 : 0);
+      let zh = s.z + 0.2 + (slouch ? 0.04 : 0);
       const X = s.x + (R() - 0.5) * 0.05;
+      zh -= this.fitPush(s, eye, k, zh);
       const place = (mesh, x, y, z, sx, sy, sz) => { o.rotation.set(0, 0, 0); o.position.set(x, y, z); o.scale.set(sx, sy, sz); o.updateMatrix(); const m = o.matrix.clone(); mesh.setMatrixAt(i, m); return m; };
       const mats = [
         place(heads, X, eye + 0.01 * k, zh, 0.78 * k, 1.15 * k, 0.95 * k),
@@ -585,7 +611,7 @@ export class TheatreView {
     paint(id, new THREE.Color(0xe3b04b));
     person(id, false);
     const fs = this.L.byId.get(id);
-    this.avatar.position.set(fs.x, fs.eyeY, fs.z + 0.2);
+    this.avatar.position.set(fs.x, fs.eyeY, fs.z + 0.2 - this.fitPush(fs, fs.eyeY, 1, fs.z + 0.2));
   }
 
   // ---------- camera poses ----------

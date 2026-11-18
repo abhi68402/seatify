@@ -881,3 +881,16 @@ svg { display: block; }
 .hero-note { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin: 2px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
 .hero-note span { display: inline-flex; align-items: center; gap: 6px; }
 .hero-note svg { width: 16px; height: 16px; color: var(--accent); stroke-width: 2.4; flex: none; }
+
+/* Booking links (theatre page under the title, and in the seat's "Why this score?" drawer) */
+.book { display: grid; gap: 8px; justify-items: center; }
+.book-h { font-size: 13px; font-weight: 700; color: var(--muted); }
+.book-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.book-btn { color: var(--text); text-decoration: none; }
+.book-btn:hover { border-color: var(--accent); }
+.book-btn svg { width: 14px; height: 14px; color: var(--faint); }
+.book-note { margin-top: -2px; }
+.book-seat { justify-items: stretch; padding: 12px 0 4px; border-top: 1px solid var(--line); margin-top: 4px; }
+.book-seat .book-h { font-weight: 500; font-size: 14px; color: var(--text); }
+.book-seat .book-h b { font-weight: 700; }
+.book-seat .book-links { justify-content: flex-start; }

@@ -154,3 +154,26 @@ export const INFO = {
 };
 
 export const infoOf = (tid) => INFO[tid] || null;
+
+// Where to book each theatre. Checked by opening every link on 18 Nov 2026: each BookMyShow
+// address (/cinemas/hyderabad/<slug>/<venue code>) opens that cinema's showtimes for today, and each
+// District address opens that cinema's page. null = the theatre is not listed on District (the Asian
+// Cinemas group, Prasads and ART sell through BookMyShow only). Re-check when a link breaks.
+const BMS = (path) => `https://in.bookmyshow.com/cinemas/hyderabad/${path}`;
+const DISTRICT = (path) => `https://www.district.in/movies/${path}`;
+export const BOOKING = {
+  prasads: { bms: BMS('prasads-multiplex-hyderabad/PRHN'), district: null },
+  amb: { bms: BMS('amb-cinemas-gachibowli/AMBH'), district: null },
+  aaa: { bms: BMS('aaa-cinemas-ameerpet/ACAS'), district: null },
+  allu: { bms: BMS('allu-cinemas-kokapet/ALUC'), district: null },
+  art: { bms: BMS('art-cinemas-vanasthalipuram/ACEV'), district: null },
+  nexus: { bms: BMS('pvr-nexus-mall-kukatpally-hyderabad/PVFS'), district: DISTRICT('pvr-nexus-mall-formerly-forum-sujana-kukatpally-hyderabad-CD1022267') },
+  lakshmikala: { bms: BMS('asian-lakshmikala-cinepride-moosapet/ACPM'), district: null },
+  sudarshan: { bms: BMS('sudarshan-35mm-4k-laser-dolby-atmos-rtc-x-roads/SUDA'), district: DISTRICT('sudarshan-35mm-4k-laser-dolby-atmos-rtc-x-roads-hyderabad-CD1065725') },
+  sandhya: { bms: BMS('sandhya-70mm-4k-dolby-atmos-rtc-x-roads/SMMR'), district: null },
+  devi: { bms: BMS('devi-70mm-4k-laser-dolby-atmos-rtc-x-roads/DVRR'), district: DISTRICT('devi-70mm-4k-laser-dolby-atmos-rtc-x-roads-hyderabad-CD1065724') },
+  inox: { bms: BMS('inox-gvk-one-banjara-hills-hyderabad/INHY'), district: DISTRICT('inox-gvk-one-banjara-hills-hyderabad-CD1020776') },
+  inorbit: { bms: BMS('pvr-superplex-inorbit-luxe-pxl-4dx-cyberabad/PIIC'), district: DISTRICT('pvr-superplex-inorbit-luxe-pxl-4dx-cyberabad-CD1022263') },
+  cinepolis: { bms: BMS('cinepolis-ccpl-mall-malkajgiri-hyderabad/CPCL'), district: DISTRICT('cinepolis-ccpl-mall-malkajgiri-hyderabad-CD126') },
+};
+export const bookingOf = (tid) => BOOKING[tid] || null;

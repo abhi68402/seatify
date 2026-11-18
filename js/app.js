@@ -1,7 +1,7 @@
 import { THEATRES, MOVIES, TIERS, theatreById } from './data.js';
 import { getLayout, crowd, topSeats, neighbour, heatColor, labelTone, insightFor } from './layout.js';
 import { profileOf, matchView, bestInTheatre, directorSeats, DNA_PRESETS, dnaProfile } from './twin.js';
-import { infoOf, INFO_AS_OF } from './info.js';
+import { infoOf, INFO_AS_OF, bookingOf } from './info.js';
 
 // ───────────────────────── helpers ─────────────────────────
 const $ = (s, r = document) => r.querySelector(s);
@@ -524,6 +524,19 @@ function hallSpecs(t, si) {
   return `<div class="specs"><p class="specs-h">Published specs${h.which ? ` · ${esc(h.which)}` : ''}</p><ul class="specs-list">${parts.join('')}</ul>
     <p class="fine specs-src">Source: ${srcLink(h.url, new URL(h.url).hostname.replace('www.', ''))} · checked ${INFO_AS_OF}</p></div>`;
 }
+// Booking: Vyu sells nothing; these open the theatre's own page on BookMyShow / District in a new tab.
+// With a seat, the links say which seat to pick there (row/number match BookMyShow in transcribed halls).
+function bookLinks(t, seat = null) {
+  const b = bookingOf(t.id);
+  if (!b) return '';
+  const link = (url, name) => `<a class="btn ghost sm book-btn" href="${url}" target="_blank" rel="noopener" aria-label="Book at ${esc(t.short || t.name)} on ${name} (opens in a new tab)">${name}${I.ext}</a>`;
+  const links = `${link(b.bms, 'BookMyShow')}${b.district ? link(b.district, 'District') : ''}`;
+  if (seat) {
+    const tip = t.source === 'bms' ? `Pick <b>Row ${esc(seat.rowLabel)}, seat ${seat.num}</b> when you book.` : `Look for <b>Row ${esc(seat.rowLabel)}</b> near seat ${seat.num}; this hall's numbering is approximate.`;
+    return `<div class="book book-seat"><p class="book-h">Like this seat? ${tip}</p><div class="book-links">${links}</div></div>`;
+  }
+  return `<div class="book" role="group" aria-label="Book tickets"><p class="book-h">Book tickets</p><div class="book-links">${links}</div>${b.district ? '' : '<p class="fine book-note">Not listed on District</p>'}</div>`;
+}
 function specialPanel(t) {
   const inf = infoOf(t.id);
   if (!inf?.highlights?.length) return '';
@@ -542,7 +555,7 @@ function renderTheatre() {
     ${iconBtn('how', I.info, 'How seats are scored')}
   </div></header>
   <main id="main" class="page t-page" tabindex="-1">
-      <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1>${ratingChip(t, { long: true })}<div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div></div>
+      <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1>${ratingChip(t, { long: true })}<div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div>${bookLinks(t)}</div>
       ${hs.length > 1 ? `<div class="seg wide" role="group" aria-label="Choose a screen">${hs.map((x, i) => `<button data-a="screen" data-id="${i}" aria-pressed="${i === S.si}">${esc(hallName(x))}</button>`).join('')}</div>` : ''}
       <div class="t-grid">
       <div class="t-main">
@@ -796,6 +809,7 @@ function cardHtml() {
       </div>
       <div class="bars" aria-label="Score breakdown">${parts.map(([n, v]) => `<div><span>${n}</span><i style="--v:${Math.round(v * 100)}%"></i></div>`).join('')}</div>
       <ul class="insights">${insightFor(seat).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+      ${bookLinks(t, seat)}
       <button class="btn ghost back-map" data-a="change">${I.back} Back to the seat map</button>
     </div>
     <div class="hud-main">
