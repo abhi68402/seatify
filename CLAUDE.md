@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Theatre-first, not a booking app.** No showtimes, tickets or payments. Flow: theatre → screen → seat → fly into the hall. Films on the 3D screen are procedural placeholders.
 - **13 theatres, 17 halls, 6,779 seats.** 8 theatres are transcribed row-for-row from BookMyShow screenshots the user supplied (`source: 'bms'`); the other 5 are approximate reconstructions. Keep that distinction honest in the UI.
-- **No backend.** Static files only; all scoring and 3D run in the browser. Live at https://abhi68402.github.io/vyu/ (GitHub Pages, repo `abhi68402/vyu`, branch `main`, served from the repo root).
+- **No backend.** Static files only; all scoring and 3D run in the browser. Live at https://www.cinevyu.site/ (Vercel project, auto-deploys from `main`; a GitHub Pages copy at https://abhi68402.github.io/vyu/ also works; repo `abhi68402/vyu`, branch `main`, served from the repo root).
 
 ## What the user cares about
 
