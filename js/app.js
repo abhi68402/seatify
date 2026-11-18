@@ -31,6 +31,7 @@ const I = {
   seat: svg('<path d="M6 11V6a2 2 0 012-2h8a2 2 0 012 2v5"/><path d="M4 11h16v5H4zM6 16v4M18 16v4"/>'),
   twin: svg('<path d="M3 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0111 7v4"/><path d="M2 11h10v3.5H2zM3.5 14.5V18M10.5 14.5V18"/><path d="M13 11V7a1.5 1.5 0 011.5-1.5h5A1.5 1.5 0 0121 7v4"/><path d="M12 11h10v3.5H12zM13.5 14.5V18M20.5 14.5V18"/>'),
   star: svg('<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.9z" fill="currentColor" stroke="none"/>'),
+  ticket: svg('<path d="M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H5a2 2 0 00-2-2v-2a2 2 0 000-4z"/><path d="M14 6.5v11" stroke-dasharray="1.5 2.5"/>'),
   ext: svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>'),
   heart: svg('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>'),
   dna: svg('<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.2" fill="currentColor"/><circle cx="15" cy="12" r="2.2" fill="currentColor"/><circle cx="7" cy="18" r="2.2" fill="currentColor"/>'),
@@ -524,18 +525,31 @@ function hallSpecs(t, si) {
   return `<div class="specs"><p class="specs-h">Published specs${h.which ? ` · ${esc(h.which)}` : ''}</p><ul class="specs-list">${parts.join('')}</ul>
     <p class="fine specs-src">Source: ${srcLink(h.url, new URL(h.url).hostname.replace('www.', ''))} · checked ${INFO_AS_OF}</p></div>`;
 }
-// Booking: Vyu sells nothing; these open the theatre's own page on BookMyShow / District in a new tab.
-// With a seat, the links say which seat to pick there (row/number match BookMyShow in transcribed halls).
-function bookLinks(t, seat = null) {
+// Booking: Vyu sells nothing. The theatre page's bottom bar opens a sheet with the theatre's own pages on
+// BookMyShow / District (new tab); the seat drawer repeats them with the seat to pick. Row/number match
+// BookMyShow in transcribed halls and are approximate elsewhere.
+const bookLink = (t, url, name, cls) => `<a class="${cls}" href="${url}" target="_blank" rel="noopener" aria-label="Book at ${esc(t.short || t.name)} on ${name} (opens in a new tab)">`;
+function bookSeatCard(t, seat) {
   const b = bookingOf(t.id);
   if (!b) return '';
-  const link = (url, name) => `<a class="btn ghost sm book-btn" href="${url}" target="_blank" rel="noopener" aria-label="Book at ${esc(t.short || t.name)} on ${name} (opens in a new tab)">${name}${I.ext}</a>`;
-  const links = `${link(b.bms, 'BookMyShow')}${b.district ? link(b.district, 'District') : ''}`;
-  if (seat) {
-    const tip = t.source === 'bms' ? `Pick <b>Row ${esc(seat.rowLabel)}, seat ${seat.num}</b> when you book.` : `Look for <b>Row ${esc(seat.rowLabel)}</b> near seat ${seat.num}; this hall's numbering is approximate.`;
-    return `<div class="book book-seat"><p class="book-h">Like this seat? ${tip}</p><div class="book-links">${links}</div></div>`;
-  }
-  return `<div class="book" role="group" aria-label="Book tickets"><p class="book-h">Book tickets</p><div class="book-links">${links}</div>${b.district ? '' : '<p class="fine book-note">Not listed on District</p>'}</div>`;
+  const tip = t.source === 'bms' ? `Pick <b>Row ${esc(seat.rowLabel)}, seat ${seat.num}</b> when you book.` : `Look for <b>Row ${esc(seat.rowLabel)}</b> near seat ${seat.num}. This hall's numbering is approximate.`;
+  const btn = (url, name) => `${bookLink(t, url, name, 'btn ghost sm book-btn')}${name}${I.ext}</a>`;
+  return `<div class="book-seat"><p class="book-seat-h">${I.ticket}<span>Book this seat</span></p><p class="book-tip">${tip}</p>
+    <div class="book-links">${btn(b.bms, 'BookMyShow')}${b.district ? btn(b.district, 'District') : ''}</div></div>`;
+}
+function openBook() {
+  const t = T(), b = bookingOf(t.id);
+  if (!b) return;
+  const Lx = L(), best = Lx.director, h = hallOf();
+  const row = (url, name, sub) => url
+    ? `${bookLink(t, url, name, 'book-row')}<span class="book-mark" aria-hidden="true">${name[0]}</span><span class="book-txt"><b>${name}</b><small>${sub}</small></span>${I.ext}</a>`
+    : `<div class="book-row off"><span class="book-mark" aria-hidden="true">${name[0]}</span><span class="book-txt"><b>${name}</b><small>Not listed for this theatre</small></span></div>`;
+  openModal(`
+    <p class="eyebrow">${I.ticket} Book tickets</p>
+    <h2 id="m-title">${esc(t.name)}</h2>
+    <p>Vyu doesn't sell tickets. Book with the theatre's own seller; the page opens on today's showtimes.</p>
+    <div class="book-list">${row(b.bms, 'BookMyShow', 'Showtimes and seat booking')}${row(b.district, 'District', 'Showtimes and seat booking')}</div>
+    <p class="book-best">${I.spark}<span>Best seat in ${esc(hallName(h))}: <b>${esc(best.id)}</b>, the director's seat (score ${best.m.score}).${t.source === 'bms' ? ' Pick it when you book.' : ' Numbering here is approximate.'}</span></p>`, 'book-card', '.book-row');
 }
 function specialPanel(t) {
   const inf = infoOf(t.id);
@@ -555,7 +569,7 @@ function renderTheatre() {
     ${iconBtn('how', I.info, 'How seats are scored')}
   </div></header>
   <main id="main" class="page t-page" tabindex="-1">
-      <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1>${ratingChip(t, { long: true })}<div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div>${bookLinks(t)}</div>
+      <div class="t-title"><p class="eyebrow">${esc(t.area)}</p><h1>${esc(t.name)}</h1>${ratingChip(t, { long: true })}<div class="tags">${verified(t)}${t.tags.map((g) => `<span class="tag">${esc(g)}</span>`).join('')}</div></div>
       ${hs.length > 1 ? `<div class="seg wide" role="group" aria-label="Choose a screen">${hs.map((x, i) => `<button data-a="screen" data-id="${i}" aria-pressed="${i === S.si}">${esc(hallName(x))}</button>`).join('')}</div>` : ''}
       <div class="t-grid">
       <div class="t-main">
@@ -583,7 +597,7 @@ function renderTheatre() {
       </div>
       </div>
   </main>
-  <div class="cta-bar"><button class="btn primary lg" data-a="seats">Explore all ${Lx.seats.length} seats</button></div>`;
+  <div class="cta-bar"><div class="cta-row">${bookingOf(t.id) ? `<button class="btn ghost lg cta-book" data-a="book" aria-haspopup="dialog">${I.ticket}<span class="w">Book tickets</span><span class="n">Tickets</span></button>` : ''}<button class="btn primary lg" data-a="seats"><span>Explore <span class="w">all </span>${Lx.seats.length} seats</span></button></div></div>`;
 }
 
 // ───────────────────────── SEAT MAP ─────────────────────────
@@ -809,7 +823,7 @@ function cardHtml() {
       </div>
       <div class="bars" aria-label="Score breakdown">${parts.map(([n, v]) => `<div><span>${n}</span><i style="--v:${Math.round(v * 100)}%"></i></div>`).join('')}</div>
       <ul class="insights">${insightFor(seat).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
-      ${bookLinks(t, seat)}
+      ${bookSeatCard(t, seat)}
       <button class="btn ghost back-map" data-a="change">${I.back} Back to the seat map</button>
     </div>
     <div class="hud-main">
@@ -1074,6 +1088,7 @@ function act(el) {
       break;
     case 'seats': go('seats', { zoom: null, top: -1, focus: null, open: false }); break;
     case 'how': openHow(); break;
+    case 'book': openBook(); break;
     case 'twin': openTwin(el.dataset.tid || S.tid, el.dataset.si != null ? +el.dataset.si : S.si, el.dataset.id || S.focus); break;
     case 'twin-go': {
       const d = el.dataset;
