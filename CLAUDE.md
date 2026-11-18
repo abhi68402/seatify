@@ -72,6 +72,14 @@ data.js ──► layout.js ──► app.js (pages, UI state)      info.js (pub
 ## Data changes
 
 - **Adding or fixing a theatre is a `data.js` change** (plus `info.js` for its facts). From a BookMyShow screenshot: transcribe as a `grid` with columns aligned to the screenshot, mark `source: 'bms'`, then run `node tools/check.mjs <id>` and compare the seat count.
+- **New theatre checklist.** The user wants every new theatre to get everything the existing 13 have. Do all of it for each one:
+  1. **`data.js`**: the theatre (`id`, `name`, `short`, `area`, `tags`, `source`) and each hall: screen `w`/`h` from a published spec (or `screenNote` saying it is estimated), `firstRow`, `riser`, sections/balconies, seats as a `grid` (BookMyShow screenshot, `source: 'bms'`) or approximate `rows`. Use an existing `TIERS` seat type; a new 3D `style` also needs a `SHELL` entry in `scene.js` so the audience sits in it properly.
+  2. **`node tools/check.mjs <id>`** passes: seat count matches the source, director's seat is #1.
+  3. **`info.js` `INFO`**: audience `rating` (the source with the most reviews, with its link), 2–3 sourced `highlights`, and per-hall `halls[i]` specs (width, projector, sound, source). The modelled screen width must match the published width.
+  4. **`info.js` `BOOKING`**: BookMyShow and District links, each opened and checked (the page title names the cinema; a made-up id should 404). BookMyShow: the venue code is in the page source of `https://in.bookmyshow.com/hyderabad/cinemas` (`venueCode` next to the name); the link is `/cinemas/hyderabad/<name slug>/<CODE>` and redirects to today's showtimes. District: find the `-CD<id>` link on `https://www.district.in/movies/cinemas-in-hyderabad`; `district: null` if it isn't listed.
+  5. **Hand-written counts** ("13 theatres" etc.): `index.html` meta description and JSON-LD, `manifest.webmanifest`, `README.md` (also "all 17 halls"), and the counts in this file. The app itself counts automatically. The hackathon deck (`../Vyu-Hackathon.pptx`) also quotes 13 / 17 / 6,779; ask before rebuilding it.
+  6. **Look at it**: the theatre page (rating, specs, What's special, director's maths, Book tickets sheet), the seat map, the 3D hall in seat view and aerial (nobody poking through seat backs), Seat Twin finding a match in the new hall, and its `#/t/<id>` link, on phone and desktop.
+  7. Regenerate `scene.bundle.js` and `sw.js`, commit, push.
 - **Tune halls with data, not special cases** in `layout.js`: `firstRow`, `riser`, `screen` and balcony `lift` drive the scores. Big single screens keep the first row ≥ 0.42 × screen width.
 
 ## Environment notes
