@@ -531,16 +531,16 @@ function renderHome() {
           <span class="only-ico">${I.twin}</span>
           <h3>Seat Twin</h3>
           ${(() => { const my = mySeat(); return my ? `
-          <p>Your seat is <b>${esc(my.t.short)} · ${esc(hallName(my.L.hall))} · ${esc(my.seat.id)}</b>. Every theatre below now shows the seat that gives you the same view.</p>
-          <div class="only-actions"><button class="btn primary" data-a="mytwins">${I.twin} See my twins</button><button class="btn ghost" data-a="dna">${I.dna} Describe instead</button><button class="linkbtn" data-a="clearmine">Change my seat</button></div>` : `
-          <p>Find your seat in every hall. Tell us where you like to sit, by picking your usual seat or by describing the view, and we find that same view everywhere: same screen size in your eyes, same angle.</p>
-          <div class="only-actions"><button class="btn primary" data-a="pickmine">${I.heart} Pick my seat</button><button class="btn ghost" data-a="dna">${I.dna} Describe my seat</button></div>`; })()}
+          <p>Your seat is <b>${esc(my.t.short)} · ${esc(hallName(my.L.hall))} · ${esc(my.seat.id)}</b>. <span class="m-long">Every theatre below now shows the seat that gives you the same view.</span><span class="m-short">Every theatre shows your twin.</span></p>
+          <div class="only-actions"><button class="btn primary" data-a="mytwins">${I.twin} See my twins</button><button class="btn ghost" data-a="dna">${I.dna} <span class="m-long">Describe instead</span><span class="m-short">Describe</span></button><button class="linkbtn" data-a="clearmine">Change <span class="m-long">my </span>seat</button></div>` : `
+          <p><span class="m-long">Find your seat in every hall. Tell us where you like to sit, by picking your usual seat or by describing the view, and we find that same view everywhere: same screen size in your eyes, same angle.</span><span class="m-short">Pick or describe your view; we match it in every hall.</span></p>
+          <div class="only-actions"><button class="btn primary" data-a="pickmine">${I.heart} Pick my seat</button><button class="btn ghost" data-a="dna">${I.dna} <span class="m-long">Describe my seat</span><span class="m-short">Describe</span></button></div>`; })()}
         </li>
         <li class="only-card">
           <span class="only-ico">${I.motion}</span>
           <h3>Motion Look</h3>
-          <p>Hold up your phone and move it: the hall moves with you, like a window into the cinema. No headset, no app to install.</p>
-          ${motionCapable() ? `<button class="btn primary" data-a="trymotion">${I.motion} Try it now</button>` : '<p class="only-note">Open <b>abhi68402.github.io/vyu</b> on your phone to try it.</p>'}
+          <p><span class="m-long">Hold up your phone and move it: the hall moves with you, like a window into the cinema. No headset, no app to install.</span><span class="m-short">Tilt your phone to look around the hall.</span></p>
+          ${motionCapable() ? `<button class="btn primary" data-a="trymotion">${I.motion} Try it now</button>` : '<p class="only-note"><span class="m-long">Open <b>abhi68402.github.io/vyu</b> on your phone to try it.</span><span class="m-short">Open Vyu on your phone to try it.</span></p>'}
         </li>
       </ul>
     </section>
@@ -1226,7 +1226,7 @@ function openModal(html, cls = '', focusSel = '.m-card .btn') {
 const twinRows = (list) => list.map((x) => `<li>
       <span class="twin-pct" aria-hidden="true"><b>${x.pct}%</b><small>match</small></span>
       <span class="twin-info"><b>${esc(x.L.theatre.short)} <span>· ${esc(hallName(x.L.hall))}</span></b><span>Seat <strong>${esc(x.seat.id)}</strong> · ${Math.round(x.seat.m.fov)}° wide · ${Math.round(x.seat.m.elevTop)}° up · ${sideText(x.seat.m)}${x.seat === x.L.director ? " · director's seat" : ''}</span></span>
-      <button class="btn ghost sm" data-a="twin-go" data-tid="${x.L.theatre.id}" data-si="${x.L.screenIdx}" data-id="${esc(x.seat.id)}" data-pct="${x.pct}" aria-label="Sit in ${esc(x.L.theatre.short)} seat ${esc(x.seat.id)}, ${x.pct}% match">Sit here</button>
+      <button class="btn ghost sm" data-a="twin-go" data-tid="${x.L.theatre.id}" data-si="${x.L.screenIdx}" data-id="${esc(x.seat.id)}" data-pct="${x.pct}" aria-label="Sit in ${esc(x.L.theatre.short)} seat ${esc(x.seat.id)}, ${x.pct}% match"><span class="m-long">Sit here</span><span class="m-short">Sit</span></button>
     </li>`).join('');
 const sideText = (m) => (m.skew < 3 ? 'centre' : `${Math.round(m.skew)}° to the side`);
 function openTwin(tid, si, id) {
@@ -1243,7 +1243,7 @@ function openTwin(tid, si, id) {
       <li><b>${m.clearance == null || m.clearance >= 0.06 ? 'Clear' : 'Partly blocked'}</b> sightline</li>
     </ul>
     <ol class="twin-list">${twinRows(twins)}</ol>
-    <p class="fine">We compare what your eyes get, not row letters: how wide the screen looks, how far you look up, how far off-centre you sit, whether heads in front block the picture and whether a balcony cuts it off.</p>`, 'twin-card', '.twin-list .btn');
+    <p class="fine"><span class="m-long">We compare what your eyes get, not row letters: how wide the screen looks, how far you look up, how far off-centre you sit, whether heads in front block the picture and whether a balcony cuts it off.</span><span class="m-short">We match the view your eyes get, not row letters: screen size, look-up, off-centre angle and blocked sightlines.</span></p>`, 'twin-card', '.twin-list .btn');
 }
 
 // Seat DNA: no seat number needed. Two sliders describe the view; results re-rank live.
@@ -1260,7 +1260,7 @@ function openDna() {
   openModal(`
     <p class="eyebrow">${I.dna} Only on Vyu</p>
     <h2 id="m-title">Seat DNA</h2>
-    <p>No seat number needed. Describe the view you like and we find it in all ${allLayouts().length} halls.</p>
+    <p><span class="m-long">No seat number needed. Describe the view you like and we find it in all ${allLayouts().length} halls.</span><span class="m-short">Describe the view you like; we find it in all ${allLayouts().length} halls.</span></p>
     <div class="dna-presets" role="group" aria-label="Presets">${Object.entries(DNA_PRESETS).map(([k, v]) => `<button class="chip" data-a="dna-preset" data-id="${k}" aria-pressed="${DNA.preset === k}">${esc(v.label)}</button>`).join('')}</div>
     <div class="dna-slider"><label for="dna-fov">How big should the screen look? <b id="dna-fov-v">${DNA.fov}° · ${fovWord(DNA.fov)}</b></label>
       <input id="dna-fov" type="range" min="36" max="80" step="1" value="${DNA.fov}" aria-describedby="dna-fov-v"><span class="dna-ends" aria-hidden="true"><span>Relaxed</span><span>Balanced</span><span>Big & close</span></span></div>

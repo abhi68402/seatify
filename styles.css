@@ -564,6 +564,7 @@ svg { display: block; }
 .only-card .btn { margin-top: 6px; }
 .only-ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
 .only-ico svg { width: 26px; height: 26px; }
+.m-short { display: none; }
 .only-note { font-size: 14px !important; padding: 10px 14px; border-radius: 12px; background: var(--surface-2); color: var(--muted); }
 .only-note b { color: var(--text); font-weight: 600; }
 
@@ -1046,3 +1047,48 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
 /* phones: theatres first; the feature block and the three "how it works" cards follow (saves ~900 px of scrolling) */
 @media (max-width: 640px) { .page.home > .only { order: 1; } .page.home > .steps-wrap { order: 2; } .hero-cta .btn svg { flex: none; } }
 @media (max-width: 389px) { .hero-cta .btn { font-size: 14px; gap: 6px; padding-inline: 6px; } .hero-cta .btn svg { width: 16px; height: 16px; } }
+
+/* ───────────────────────── phones: compact "Only on Vyu", Seat Twin and Motion ───────────────────────── */
+@media (max-width: 640px) {
+  .m-long { display: none; }
+  .m-short { display: inline; }
+  .only { gap: 8px; }
+  .only h2 { font-size: 24px; max-width: 16ch; }
+  /* the two cards become a swipeable row: the next card peeks, so it reads as "more" and costs ~170 px of scroll */
+  .only-grid { display: flex; gap: 10px; margin: 2px -16px 0; width: auto; max-width: none; padding: 2px 16px 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+  .only-grid::-webkit-scrollbar { display: none; }
+  .only-card { flex: 0 0 min(84%, 330px); scroll-snap-align: start; display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; row-gap: 4px; align-items: start; justify-items: stretch; text-align: left; padding: 14px; border-radius: 18px; }
+  .only-ico { grid-row: span 2; width: 40px; height: 40px; border-radius: 12px; }
+  .only-ico svg { width: 22px; height: 22px; }
+  .only-card h3 { font-size: 17px; align-self: end; }
+  .only-card p { margin: 0; font-size: 14px; line-height: 1.4; }
+  .only-card > .only-actions, .only-card > .btn, .only-card > .only-note { grid-column: 1 / -1; margin-top: 6px; }
+  .only-card > .only-note { padding: 8px 10px; font-size: 13px !important; }
+  .only-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .only-actions .btn, .only-card > .btn { height: 44px; padding: 0 10px; font-size: 14px; gap: 6px; white-space: nowrap; min-width: 0; }
+  .only-actions .btn svg, .only-card > .btn svg { width: 16px; height: 16px; flex: none; }
+  .only-actions .linkbtn { grid-column: 1 / -1; min-height: 44px; font-size: 13px; }
+  /* seat card + modals */
+  .m-card .twin-you { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .twin-you li { padding: 6px 10px; font-size: 12.5px; }
+  .twin-you b { font-size: 14px; }
+  .twin-list { gap: 6px; }
+  .twin-list li { flex-wrap: nowrap; gap: 10px; padding: 8px 10px; border-radius: 12px; }
+  .twin-pct { width: 44px; }
+  .twin-pct b { font-size: 17px; }
+  .twin-pct small { font-size: 12px; letter-spacing: .04em; }
+  .twin-info { flex-basis: auto; min-width: 0; }
+  .twin-info > b { font-size: 14px; }
+  .twin-info > span { font-size: 12.5px; line-height: 1.35; }
+  .twin-list .btn { width: auto; padding: 0 14px; }
+  .m-card .fine { font-size: 12.5px; line-height: 1.5; }
+  .m-card.twin-card h2 { font-size: 24px; }
+  .m-card.twin-card { padding-top: 22px; gap: 10px; }
+  .dna-slider label { font-size: 14px; }
+}
+@media (max-width: 640px) and (orientation: landscape) { .only-card { flex-basis: min(46%, 330px); } }
+/* Seat DNA presets (the .chip class had no rules, so they rendered as bare text) */
+.chip { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--line-2); background: var(--surface); color: var(--muted); font-size: 14px; font-weight: 600; transition: all .2s; }
+.chip:hover { color: var(--text); border-color: var(--accent); }
+.chip[aria-pressed='true'] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+@media (max-width: 640px) { .dna-presets { gap: 6px; } .chip { padding: 0 12px; font-size: 13px; } }
