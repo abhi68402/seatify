@@ -133,24 +133,57 @@ function syncLayout() {
 }
 
 const TITLES = { home: 'Vyu · View your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
+// Scroll memory: each history entry remembers how its page was left (scroll, seat-map pan, the
+// control that opened the next page), so going back lands exactly where the user clicked.
+const pageMem = new Map(); // history index -> { top, mapL, mapT, act }
+let shownIdx = 0;          // history index of the page on screen
+let lastAct = null;        // the control being activated right now (set by the click handler)
+function rememberPage() {
+  const mw = $('.mapwrap');
+  pageMem.set(shownIdx, { top: screenEl.scrollTop, mapL: mw?.scrollLeft, mapT: mw?.scrollTop, act: lastAct });
+}
+function restoreFocusAfterBack(m) {
+  const a = m?.act;
+  let q = a && `[data-a="${a.a}"]`;
+  if (a) for (const k of ['id', 'tid', 'si', 'm']) if (a[k] != null) q += `[data-${k}="${CSS.escape(a[k])}"]`;
+  const v = screenEl.getBoundingClientRect();
+  // the same theatre can appear twice (a shelf and the list): pick the copy that sits where the click was
+  const dist = (x) => Math.abs(x.getBoundingClientRect().top - v.top - a.y);
+  const el = q && [...screenEl.querySelectorAll(q)].sort((x, y) => dist(x) - dist(y))[0];
+  if (!el) { focusPage(); return; }
+  el.focus({ preventScroll: true });
+  const r = el.getBoundingClientRect();
+  if (r.bottom < v.top || r.top > v.bottom) el.scrollIntoView({ block: 'center' });
+}
 function go(route, patch = {}, { history: nav = 'push' } = {}) {
-  const fromShelf = S.shelf;
+  rememberPage();
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
   const was = S.route;
   S.route = route;
   S.full = false;
+  // going back (browser Back/Forward, or an in-app arrow that pops history) reopens the page as it was left
+  let back = null, backIdx = null;
+  if (nav === 'none') back = pageMem.get(navIdx);
+  else if (nav === 'push' && navIdx > 0 && navUrls[navIdx - 1] === urlOf()) { backIdx = navIdx - 1; back = pageMem.get(backIdx); }
+  if (back && was === route && route === 'seats') back = null;
+  if (back?.mapL != null) S.keepScroll = back.mapL;
   if (!exploring()) stop3D();
   render();
-  if (!(route === 'seats' && was === 'seats')) screenEl.scrollTop = 0;
-  if (route !== was) focusPage();
+  if (back) {
+    const mw = $('.mapwrap');
+    if (mw && back.mapT != null) mw.scrollTop = back.mapT;
+    screenEl.scrollTop = back.top;
+    requestAnimationFrame(() => { if (S.route === route && Math.abs(screenEl.scrollTop - back.top) > 2) screenEl.scrollTop = back.top; });
+  } else if (!(route === 'seats' && was === 'seats')) screenEl.scrollTop = 0;
+  if (route !== was) { if (back) restoreFocusAfterBack(back); else focusPage(); }
   if (route === 'home' && was === 'home' && 'shelf' in patch) { // opening or leaving a shelf's "See all"
-    const seeAll = !S.shelf && fromShelf && $(`.shelf-all[data-id="${CSS.escape(fromShelf)}"]`);
-    if (seeAll) seeAll.closest('.shelf').scrollIntoView({ block: 'start' });
-    else $('#results')?.scrollIntoView({ block: 'start' });
-    ($('#shelf-h') || seeAll || $('#results .stretch'))?.focus({ preventScroll: true });
+    if (back) restoreFocusAfterBack(back); // back to the shelves: scroll was restored above, refocus "See all"
+    else { $('#results')?.scrollIntoView({ block: 'start' }); ($('#shelf-h') || $('#results .stretch'))?.focus({ preventScroll: true }); }
   }
   if (nav === 'push') pushUrl();
+  shownIdx = backIdx ?? navIdx;
+  if (!back) for (const k of pageMem.keys()) if (k > shownIdx) pageMem.delete(k);
 }
 
 // ───────────────────────── browser history ─────────────────────────
@@ -1288,7 +1321,9 @@ document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-a]');
   if (!el || el.disabled || !app.contains(el)) return;
   const route = S.route;
+  lastAct = { ...el.dataset, y: el.getBoundingClientRect().top - screenEl.getBoundingClientRect().top };
   act(el);
+  lastAct = null;
   restoreFocus(el, route);
   if (S.route === route) replaceUrl();
 });
