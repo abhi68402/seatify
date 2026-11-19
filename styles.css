@@ -955,3 +955,5 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
 #results-body { display: grid; gap: 22px; min-width: 0; }
 .shelf-head { min-width: 0; }
 .shelf-title { flex: 1 1 auto; }
+.shelves-all { display: flex; justify-content: center; }
+.shelves-all .btn svg { width: 18px; height: 18px; color: inherit; }

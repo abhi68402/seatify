@@ -368,39 +368,26 @@ const cardCache = new Map(); // a theatre can sit on several shelves: build its 
 // ───────────────────────── HOME SHELVES ─────────────────────────
 // With no search and no filter, the home list is a stack of horizontal shelves (like a streaming
 // app), so the page grows sideways as theatres are added. Every shelf is computed from the data,
-// so a new theatre joins the right shelves (and its area) automatically. Shelves with fewer than
-// two theatres are hidden; a row shows up to SHELF_MAX cards and "See all" opens the full list.
+// so a new theatre joins the right shelves automatically. Just four shelves (the user wants the page
+// short): Biggest screens, Recliner comfort, Single-screen legends, Dolby Atmos. Shelves with fewer
+// than two theatres are hidden; a row shows up to SHELF_MAX cards and "See all" opens the full list.
 const SHELF_MAX = 10;
-// Area by longitude (west of ~78.435° E: HITEC City side; east of 78.51° E: Secunderabad side).
-// A theatre in an odd spot can set `zone: 'west' | 'central' | 'east'` in data.js.
-const ZONES = { west: 'West Hyderabad', central: 'Central Hyderabad', east: 'East Hyderabad' };
-const zoneOf = (t) => t.zone || (t.lng < 78.435 ? 'west' : t.lng <= 78.51 ? 'central' : 'east');
 const maxW = (t) => Math.max(...screensOf(t).map((h) => h.screen.w));
 const hasRec = (t) => screensOf(t).some((_, i) => getLayout(t, i).seats.some((s) => s.tier === 'recliner' || s.tier === 'semi' || s.tier === 'lounger'));
-const areasOf = (list) => [...new Set(list.map((t) => t.area))].join(', ');
 function shelves() {
   const all = [...THEATRES];
-  const out = [];
-  const my = mySeat();
-  if (my) {
-    const p = profileOf(my.seat);
-    const ranked = all.map((t) => [t, my.t === t ? 101 : bestInTheatre(p, t).pct]).sort((a, b) => b[1] - a[1]).map(([t]) => t);
-    out.push({ id: 'mine', title: 'Your view, everywhere', sub: `Closest match to your seat ${my.seat.id} at ${my.t.short} first`, list: ranked });
-  }
-  out.push({ id: 'big', title: 'Biggest screens', sub: 'Widest screen first', list: all.filter((t) => maxW(t) >= 14).sort((a, b) => maxW(b) - maxW(a)) });
-  out.push({ id: 'recliners', title: 'Recliner comfort', sub: 'Halls with recliners or loungers', list: all.filter(hasRec) });
-  out.push({ id: 'single', title: 'Single-screen legends', sub: 'Big halls, balconies and the first-day-first-show crowd', list: all.filter((t) => t.single) });
-  for (const [z, name] of Object.entries(ZONES)) {
-    const list = all.filter((t) => zoneOf(t) === z);
-    out.push({ id: z, title: name, sub: areasOf(list), list });
-  }
-  out.push({ id: 'atmos', title: 'Dolby Atmos sound', sub: 'At least one hall with Atmos', list: all.filter((t) => screensOf(t).some((h) => h.atmos)) });
-  out.push({ id: 'exact', title: 'Exact seat maps', sub: 'Matched row for row to BookMyShow', list: all.filter((t) => t.source === 'bms') });
-  const rated = all.filter((t) => (infoOf(t.id)?.rating?.count ?? 0) >= 50).sort((a, b) => infoOf(b.id).rating.value - infoOf(a.id).rating.value);
-  out.push({ id: 'rated', title: 'Highest rated', sub: 'Audience rating, 50 or more reviews', list: rated });
-  return out.filter((sh) => sh.list.length >= 2);
+  return [
+    { id: 'big', title: 'Biggest screens', sub: 'Widest screen first', list: all.filter((t) => maxW(t) >= 14).sort((a, b) => maxW(b) - maxW(a)) },
+    { id: 'recliners', title: 'Recliner comfort', sub: 'Halls with recliners or loungers', list: all.filter(hasRec) },
+    { id: 'single', title: 'Single-screen legends', sub: 'Big halls, balconies and the first-day-first-show crowd', list: all.filter((t) => t.single) },
+    { id: 'atmos', title: 'Dolby Atmos sound', sub: 'At least one hall with Atmos', list: all.filter((t) => screensOf(t).some((h) => h.atmos)) },
+  ].filter((sh) => sh.list.length >= 2);
 }
-const shelfById = (id) => shelves().find((sh) => sh.id === id) || null;
+// "all" is the full list behind the button under the shelves, so a theatre that fits no shelf
+// (e.g. PVR Nexus 4DX) is still one tap away.
+const shelfById = (id) => (id === 'all'
+  ? { id: 'all', title: 'All theatres', sub: 'Every theatre on Vyu', list: filtered() }
+  : shelves().find((sh) => sh.id === id) || null);
 const browsing = () => !S.q.trim() && S.filter === 'all';
 function shelvesHtml() {
   return shelves().map((sh) => {
@@ -416,7 +403,7 @@ function shelvesHtml() {
       </div>
       <ul class="shelf-row" data-shelf="${sh.id}">${sh.list.slice(0, SHELF_MAX).map(theatreCard).join('')}${more ? `<li class="shelf-more"><button data-a="shelf" data-id="${sh.id}">${I.chevR}<span>See all ${n}</span></button></li>` : ''}</ul>
     </section>`;
-  }).join('');
+  }).join('') + `<div class="shelves-all"><button class="btn ghost" data-a="shelf" data-id="all">See all ${THEATRES.length} theatres ${I.chevR}</button></div>`;
 }
 // What the results area shows: the map, one shelf in full, the shelves, or the filtered grid.
 function resultsHtml(list) {
