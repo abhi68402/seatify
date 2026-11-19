@@ -108,7 +108,7 @@ const isSaved = (tid, si, id) => SAVED.some((s) => s.tid === tid && s.si === si 
 // ───────────────────────── state & layout ─────────────────────────
 const S = {
   route: 'home', tid: null, si: 0, focus: null, heat: true, // seat maps open coloured by view quality
-  filter: 'all', q: '',
+  q: '',
   zoom: null, top: -1, aerial: false, crowd: true, lights: true, open: false, content: 0,
   full: false, scenePrimed: false, sceneKey: '', motion: false, homeView: 'list', shelf: null,
 };
@@ -194,6 +194,7 @@ function urlOf() {
   const r = S.route, t = S.tid && T() ? encodeURIComponent(S.tid) : null;
   if (r === 'saved') return '#/saved';
   if (r === 'home' && S.shelf) return `#/shelf/${encodeURIComponent(S.shelf)}`;
+  if (r === 'home' && S.q.trim()) return `#/search/${encodeURIComponent(S.q.trim())}`;
   if (!t || r === 'home') return '#/';
   if (r === 'theatre') return `#/t/${t}`;
   if (S.focus && (r === 'view' || isSplit())) return `#/t/${t}/${S.si}/seat/${encodeURIComponent(S.focus)}`;
@@ -202,9 +203,10 @@ function urlOf() {
 // Address → {route, patch}, or null when it names nothing that exists (then the home page shows).
 function parseUrl(hash) {
   const p = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
-  if (!p.length) return { route: 'home', patch: { shelf: null } };
+  if (!p.length) return { route: 'home', patch: { shelf: null, q: '' } };
   if (p[0] === 'saved') return { route: 'saved', patch: {} };
-  if (p[0] === 'shelf') return shelfById(p[1]) ? { route: 'home', patch: { shelf: p[1], q: '', filter: 'all', homeView: 'list' } } : { route: 'home', patch: { shelf: null } };
+  if (p[0] === 'shelf') return shelfById(p[1]) ? { route: 'home', patch: { shelf: p[1], q: '', homeView: 'list' } } : { route: 'home', patch: { shelf: null, q: '' } };
+  if (p[0] === 'search') return { route: 'home', patch: { shelf: null, q: p.slice(1).join('/').slice(0, 80) } };
   if (p[0] !== 't') return null;
   const t = theatreById(p[1]);
   if (!t) return null;
@@ -234,7 +236,7 @@ function replaceUrl() {
 window.addEventListener('popstate', (e) => {
   navIdx = e.state?.vyu ?? 0;
   navUrls[navIdx] = location.hash || '#/';
-  if (quietPop) { quietPop = false; return; }
+  if (quietPop) { quietPop = false; shownIdx = navIdx; return; }
   closeModal();
   const r = parseUrl(location.hash);
   if (!r) { go('home', {}, { history: 'none' }); replaceUrl(); return; }
@@ -307,21 +309,41 @@ const verified = (t) => (t.source === 'bms'
 const iconBtn = (a, icon, label, extra = '') => `<button class="icon-btn" data-a="${a}" aria-label="${label}" title="${label}" ${extra}>${icon}</button>`;
 
 // ───────────────────────── HOME ─────────────────────────
-const FILTERS = [['all', 'All'], ['big', 'Large format'], ['rec', 'Recliners'], ['single', 'Single screen'], ['atmos', 'Dolby Atmos'], ['balc', 'Balcony']];
-function matchFilter(t) {
+// ───────────── search ─────────────
+// One matcher serves the app-bar suggestions and the filtered list: every word you type must
+// appear in the theatre's name, area, tags or hall formats (so "imax", "recliner", "atmos" and
+// "banjara" all work). `why` names the facet a word matched when it was not the name or area.
+const FACET_TERMS = [['recliner', 'Recliners'], ['lounger', 'Recliners'], ['atmos', 'Dolby Atmos'], ['balcony', 'Balcony'], ['single screen', 'Single screen']];
+const searchIndex = new Map();
+function searchInfo(t) {
+  let x = searchIndex.get(t.id); if (x) return x;
   const hs = screensOf(t);
-  const q = S.q.trim().toLowerCase();
-  if (q && !(t.name + ' ' + t.area).toLowerCase().includes(q)) return false;
-  switch (S.filter) {
-    case 'big': return hs.some((h) => ['IMAX', 'PCX', 'PXL', 'LARGE', '70MM'].includes(h.format) || h.screen.w >= 16);
-    case 'rec': return hs.some((_, i) => getLayout(t, i).seats.some((s) => s.tier === 'recliner' || s.tier === 'semi' || s.tier === 'lounger'));
-    case 'single': return t.single;
-    case 'atmos': return hs.some((h) => h.atmos);
-    case 'balc': return hs.some((h) => h.sections.some((s) => s.balcony));
-    default: return true;
-  }
+  const facets = [...t.tags.map((g) => [g.toLowerCase(), g]), ...hs.map((h) => [String(h.format).toLowerCase(), h.format])];
+  if (hs.some((h) => h.atmos)) facets.push(['dolby atmos atmos', 'Dolby Atmos']);
+  if (hasRec(t)) facets.push(['recliner recliners lounger', 'Recliners']);
+  if (hs.some((h) => h.sections.some((s) => s.balcony))) facets.push(['balcony', 'Balcony']);
+  if (t.single) facets.push(['single screen', 'Single screen']);
+  x = { name: (t.name + ' ' + t.short).toLowerCase(), area: t.area.toLowerCase(), facets };
+  searchIndex.set(t.id, x);
+  return x;
 }
-const filtered = () => THEATRES.filter(matchFilter).sort((a, b) => (b.source === 'bms') - (a.source === 'bms'));
+const queryWords = (q) => q.toLowerCase().split(/[\s,]+/).filter(Boolean);
+function searchTheatres(q) {
+  const words = queryWords(q), out = [];
+  for (const t of THEATRES) {
+    const x = searchInfo(t);
+    let rank = 0, why = null, ok = true;
+    for (const w of words) {
+      if (x.name.startsWith(w) || x.name.includes(' ' + w)) rank += 0;
+      else if (x.name.includes(w)) rank += 1;
+      else if (x.area.includes(w)) rank += 2;
+      else { const f = x.facets.find(([k]) => k.includes(w)); if (f) { rank += 3; why = why || f[1]; } else { ok = false; break; } }
+    }
+    if (ok) out.push({ t, rank, why });
+  }
+  return out.sort((a, b) => a.rank - b.rank || (b.t.source === 'bms') - (a.t.source === 'bms'));
+}
+const filtered = () => (S.q.trim() ? searchTheatres(S.q).map((m) => m.t) : [...THEATRES].sort((a, b) => (b.source === 'bms') - (a.source === 'bms')));
 
 function cityMap(list) {
   const W = 360, H = 250;
@@ -343,7 +365,7 @@ function cityMap(list) {
 }
 
 function theatreCards(list = filtered()) {
-  if (!list.length) return '<li class="empty"><b>No theatres match.</b><span>Try another filter or clear the search.</span></li>';
+  if (!list.length) return `<li class="empty"><span class="empty-ico">${I.search}</span><b>No theatre matches “${esc(S.q.trim())}”</b><span>Try a theatre name, an area such as Banjara Hills, or a format such as Laser or recliners.</span><button class="btn ghost" data-a="gs-clear">Clear search</button></li>`;
   return list.map(theatreCard).join('');
 }
 function theatreCard(t) {
@@ -366,7 +388,7 @@ function theatreCard(t) {
 const cardCache = new Map(); // a theatre can sit on several shelves: build its card once per render
 
 // ───────────────────────── HOME SHELVES ─────────────────────────
-// With no search and no filter, the home list is a stack of horizontal shelves (like a streaming
+// With no search, the home list is a stack of horizontal shelves (like a streaming
 // app), so the page grows sideways as theatres are added. Every shelf is computed from the data,
 // so a new theatre joins the right shelves automatically. Just four shelves (the user wants the page
 // short): Biggest screens, Recliner comfort, Single-screen legends, Dolby Atmos. Shelves with fewer
@@ -388,7 +410,7 @@ function shelves() {
 const shelfById = (id) => (id === 'all'
   ? { id: 'all', title: 'All theatres', sub: 'Every theatre on Vyu', list: filtered() }
   : shelves().find((sh) => sh.id === id) || null);
-const browsing = () => !S.q.trim() && S.filter === 'all';
+const browsing = () => !S.q.trim();
 function shelvesHtml() {
   return shelves().map((sh) => {
     const n = sh.list.length, more = n > SHELF_MAX;
@@ -405,14 +427,16 @@ function shelvesHtml() {
     </section>`;
   }).join('') + `<div class="shelves-all"><button class="btn ghost" data-a="shelf" data-id="all">See all ${THEATRES.length} theatres ${I.chevR}</button></div>`;
 }
-// What the results area shows: the map, one shelf in full, the shelves, or the filtered grid.
+// What the results area shows: one shelf in full, the shelves, or the search results.
 function resultsHtml(list) {
   cardCache.clear();
   const sh = S.shelf && browsing() ? shelfById(S.shelf) : null;
   if (sh) return `<div class="shelf-page-head"><button class="linkbtn" data-a="shelves">${I.back} All shelves</button><h3 tabindex="-1" id="shelf-h">${esc(sh.title)}</h3><p>${esc(sh.sub)} · ${sh.list.length} theatres</p></div>
         <ul class="tlist" id="tlist">${theatreCards(sh.list)}</ul>`;
   if (browsing()) return `<div class="shelves">${shelvesHtml()}</div>`;
-  return `<ul class="tlist" id="tlist">${theatreCards(list)}</ul>`;
+  const n = list.length;
+  return `<div class="search-status"><p><b>${n}</b> ${n === 1 ? 'theatre matches' : 'theatres match'} “${esc(S.q.trim())}”</p>${n ? `<button class="linkbtn" data-a="gs-clear">${I.close || '×'} Clear search</button>` : ''}</div>
+        <ul class="tlist" id="tlist">${theatreCards(list)}</ul>`;
 }
 // Arrow buttons: disabled at either end of their row.
 function syncShelf(row) {
@@ -464,20 +488,24 @@ function renderHome() {
   const totalSeats = THEATRES.reduce((n, t) => n + screensOf(t).reduce((a, _, i) => a + getLayout(t, i).seats.length, 0), 0);
   const verifiedN = THEATRES.filter((t) => t.source === 'bms').length;
   screenEl.innerHTML = `
-  <header class="appbar"><div class="appbar-in wide">
+  <header class="appbar"><div class="appbar-in wide home-bar">
     <p class="loc"><span class="loc-ico" aria-hidden="true">${I.pin}</span><span>Hyderabad <small>· ${THEATRES.length} theatres</small></span></p>
+    <div class="gs-slot">${searchBox('d')}</div>
     <nav class="appbar-actions" aria-label="Site">
+      <button class="nav-btn gs-open${S.q ? ' on' : ''}" data-a="gs-open" aria-label="Search theatres${S.q ? ` (filtered: ${esc(S.q)})` : ''}" aria-haspopup="dialog">${I.search}</button>
       <button class="nav-btn" data-a="how" aria-label="How seats are scored">${I.info}<span>How scoring works</span></button>
       <button class="nav-btn theme-btn" data-a="theme" aria-pressed="${isDark()}" aria-label="Dark mode" title="${isDark() ? 'Switch to light mode' : 'Switch to dark mode'}">${isDark() ? I.sun : I.moon}</button>
       <button class="nav-btn" data-a="saved" aria-label="Saved seats${SAVED.length ? ` (${SAVED.length})` : ''}">${I.bookmark}<span>Saved</span>${SAVED.length ? `<span class="count" aria-hidden="true">${SAVED.length}</span>` : ''}</button>
     </nav></div></header>
+  <div class="gs-sheet" id="gs-sheet" role="dialog" aria-label="Search theatres"><div class="gs-scrim" data-a="gs-close"></div>
+    <div class="gs-panel"><div class="gs-top">${searchBox('m')}<button class="gs-cancel" type="button" data-a="gs-close">Cancel</button></div></div></div>
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
       <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>${WORDMARK}</h1>
       <p class="tagline">View your seat <em>before you sit.</em></p>
       <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
       <div class="hero-cta">
-        <button class="btn primary lg-ish" data-a="scrollfind">${I.search} Find my seat</button>
+        <button class="btn primary lg-ish" data-a="gs-open">${I.search} Find my seat</button>
         <button class="btn ghost lg-ish" data-a="dna">${I.dna} Describe my seat</button>
       </div>
       <p class="hero-note"><span>${I.check}No login</span><span>${I.check}No sign-up</span><span>${I.check}Free, works offline</span></p>
@@ -514,17 +542,6 @@ function renderHome() {
       </ul>
     </section>
     <div class="home-grid">
-      <section class="finder" id="finder" aria-labelledby="find-h">
-        <p class="eyebrow">${I.pin} Hyderabad</p>
-        <h2 id="find-h">Find your theatre</h2>
-        <form class="search" role="search" data-search>
-          <label for="q" class="sr">Search theatres or areas</label>${I.search}<input id="q" type="search" placeholder="Search theatres or areas" value="${esc(S.q)}" autocomplete="off" enterkeyhint="search">
-        </form>
-        <div class="chips" role="group" aria-label="Filter theatres">${FILTERS.map(([k, l]) => `<button class="chip" data-a="filter" data-id="${k}" aria-pressed="${S.filter === k}">${l}</button>`).join('')}</div>
-        <div class="finder-foot">
-          <p class="count" id="count" aria-live="polite">${countText(list.length)}</p>
-        </div>
-      </section>
       <section class="results" id="results" aria-labelledby="th-h">
         <h2 id="th-h" class="sr">Theatres</h2>
         <div id="results-body">${resultsHtml(list)}</div>
@@ -538,16 +555,131 @@ function renderHome() {
     <p class="fine contact">Questions, fixes or a hall to add? <a href="mailto:gompaharshit7@gmail.com?subject=Vyu%20feedback">Contact me: gompaharshit7@gmail.com</a></p>
   </div></footer>`;
 }
-const countText = (n) => (n === THEATRES.length ? `All ${n} theatres` : `${n} of ${THEATRES.length} theatres`);
 function refreshResults() {
   const list = filtered();
-  if (S.shelf && !browsing()) { S.shelf = null; replaceUrl(); } // a search or filter leaves the shelf page
-  const cm = $('#citymap');
-  if (cm) cm.innerHTML = cityMap(list);
-  else { const rb = $('#results-body'); if (rb) { rb.innerHTML = resultsHtml(list); syncShelves(); } }
-  const c = $('#count'); if (c) c.textContent = countText(list.length);
-  $$('.chip').forEach((b) => b.setAttribute('aria-pressed', b.dataset.id === S.filter));
+  if (S.shelf && !browsing()) S.shelf = null; // a search leaves the shelf page
+  const rb = $('#results-body');
+  if (rb) { rb.innerHTML = resultsHtml(list); syncShelves(); }
+  // a search is a history step of its own (refining it replaces that step), so Back clears it
+  if (location.hash.startsWith('#/search/') && urlOf().startsWith('#/search/')) replaceUrl();
+  else { rememberPage(); pushUrl(); shownIdx = navIdx; }
 }
+
+// ───────────────────────── search (app bar) ─────────────────────────
+// A pill in the app bar on wide screens, an icon that opens a full-width sheet on phones. Typing
+// shows suggestions (combobox + listbox); Enter or "See all matches" filters the home list.
+function searchBox(kind) {
+  const v = esc(S.q);
+  return `<form class="gsearch" data-gs="${kind}" role="search">
+    <div class="gs-field">${I.search}<input class="gs-input" id="gs-${kind}" type="text" role="combobox" aria-label="Search theatres, areas or formats" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="gs-list-${kind}" placeholder="Search theatres or areas" value="${v}" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"><kbd class="gs-kbd" aria-hidden="true">/</kbd><button type="button" class="gs-clear" data-a="gs-clear" aria-label="Clear search"${v ? '' : ' hidden'}>${I.close}</button></div>
+    <ul class="gs-list" id="gs-list-${kind}" role="listbox" aria-label="Matching theatres" hidden></ul>
+  </form>`;
+}
+const gsRoot = (el) => el?.closest?.('.gsearch');
+const gsOpts = (r) => $$('[role="option"]', r);
+let gsActive = -1, gsQuiet = false;
+function highlight(text, words) {
+  if (!words.length) return esc(text);
+  const re = new RegExp(words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi');
+  return esc(text.replace(re, (m) => `\u0001${m}\u0002`)).replace(/\u0001/g, '<mark class="gs-m">').replace(/\u0002/g, '</mark>');
+}
+function gsUpdate(root) {
+  const input = $('.gs-input', root), list = $('.gs-list', root), kind = root.dataset.gs;
+  const q = input.value.trim(), words = queryWords(q);
+  const res = q ? searchTheatres(q) : [...THEATRES].sort((a, b) => (b.source === 'bms') - (a.source === 'bms')).map((t) => ({ t, why: null }));
+  const items = res.slice(0, q ? 6 : 5);
+  const opt = (m, i) => {
+    const t = m.t, hs = screensOf(t), best = topSeats(getLayout(t, 0), 1)[0];
+    const seats = hs.reduce((a, _, k) => a + getLayout(t, k).seats.length, 0);
+    return `<li class="gs-opt" role="option" id="gs-o-${kind}-${i}" aria-selected="false" data-a="gs-pick" data-id="${t.id}">
+      <span class="gs-main"><b>${highlight(t.name, words)}</b><span class="gs-sub">${highlight(t.area, words)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))} · ${seats.toLocaleString('en-IN')} seats</span></span>
+      ${m.why ? `<span class="gs-why">${esc(m.why)}</span>` : `<span class="gs-score" title="Best seat view score">best <b>${best.m.score}</b></span>`}</li>`;
+  };
+  let html = items.map(opt).join('');
+  if (q && !res.length) html = `<li class="gs-none" role="presentation"><b>No theatre matches “${esc(q)}”</b><span>Try a name, an area, or a format like Laser or recliners.</span></li>`;
+  else html += `<li class="gs-opt gs-all" role="option" id="gs-o-${kind}-${items.length}" aria-selected="false" data-a="gs-all">${I.search}<span>${q ? `See all ${res.length} ${res.length === 1 ? 'match' : 'matches'} for “${esc(q)}”` : `See all ${THEATRES.length} theatres`}</span>${I.chevR}</li>`;
+  list.innerHTML = html;
+  list.hidden = false; input.setAttribute('aria-expanded', 'true'); input.removeAttribute('aria-activedescendant');
+  gsActive = -1;
+  $('.gs-clear', root).hidden = !input.value;
+  if (q) document.getElementById('announce').textContent = res.length ? `${res.length} ${res.length === 1 ? 'match' : 'matches'}` : 'No matches';
+}
+function gsClose(root) {
+  const list = $('.gs-list', root); if (!list) return;
+  list.hidden = true; const i = $('.gs-input', root); i.setAttribute('aria-expanded', 'false'); i.removeAttribute('aria-activedescendant'); gsActive = -1;
+}
+function gsMove(root, d) {
+  const o = gsOpts(root), input = $('.gs-input', root); if (!o.length) return;
+  if (gsActive >= 0) o[gsActive].setAttribute('aria-selected', 'false');
+  gsActive = gsActive < 0 ? (d > 0 ? 0 : o.length - 1) : (gsActive + d + o.length) % o.length;
+  o[gsActive].setAttribute('aria-selected', 'true');
+  input.setAttribute('aria-activedescendant', o[gsActive].id);
+  o[gsActive].scrollIntoView({ block: 'nearest' });
+}
+function searchTrigger() { return matchMedia('(min-width: 900px)').matches ? $('#gs-d') : $('.gs-open'); }
+function openSearch() {
+  if (S.route !== 'home') return;
+  if (matchMedia('(min-width: 900px)').matches) { const i = $('#gs-d'); i?.focus(); i?.select(); return; }
+  $('#gs-sheet')?.classList.add('open');
+  const i = $('#gs-m'); if (!i) return;
+  i.value = S.q; i.focus(); i.select(); gsUpdate(gsRoot(i));
+}
+function closeSheet(restore = false) {
+  const sh = $('#gs-sheet'); if (!sh?.classList.contains('open')) return;
+  sh.classList.remove('open'); gsClose($('.gsearch', sh));
+  if (restore) $('.gs-open')?.focus();
+}
+function syncInputs() {
+  $$('.gs-input').forEach((i) => { i.value = S.q; });
+  $$('.gs-clear').forEach((b) => { b.hidden = !S.q; });
+  const ob = $('.gs-open'); if (ob) { ob.classList.toggle('on', !!S.q); ob.setAttribute('aria-label', S.q ? `Search theatres (filtered: ${S.q})` : 'Search theatres'); }
+}
+function commitSearch(q) {
+  S.q = q.trim().slice(0, 80); S.shelf = null;
+  closeSheet(); $$('.gsearch').forEach(gsClose);
+  refreshResults(); syncInputs();
+  if (!S.q) return;
+  $('#results')?.scrollIntoView({ block: 'start', behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+  $('#results .stretch')?.focus({ preventScroll: true });
+  document.getElementById('announce').textContent = `${filtered().length} theatres match ${S.q}`;
+}
+function clearSearch(from) {
+  const root = gsRoot(from), inField = !!root;
+  S.q = ''; syncInputs();
+  $$('.gsearch').forEach(gsClose);
+  refreshResults();
+  document.getElementById('announce').textContent = 'Search cleared';
+  if (inField) { $('.gs-input', root).focus(); return; }
+  const t = searchTrigger(); gsQuiet = true; t?.focus({ preventScroll: true }); gsQuiet = false;
+}
+document.addEventListener('focusin', (e) => { if (!gsQuiet && e.target.classList?.contains('gs-input')) gsUpdate(gsRoot(e.target)); });
+document.addEventListener('focusout', (e) => { const r = gsRoot(e.target); if (r && !r.contains(e.relatedTarget) && !$('#gs-sheet')?.contains(r)) gsClose(r); });
+document.addEventListener('mousedown', (e) => { if (e.target.closest('.gs-list')) e.preventDefault(); }); // keep focus in the input
+document.addEventListener('pointerdown', (e) => { if (!e.target.closest('.gsearch')) $$('.gsearch').forEach((r) => { if (!$('#gs-sheet')?.contains(r)) gsClose(r); }); });
+document.addEventListener('keydown', (e) => {
+  const input = e.target.classList?.contains('gs-input') ? e.target : null;
+  if (input) {
+    const root = gsRoot(input), list = $('.gs-list', root);
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (list.hidden) gsUpdate(root); gsMove(root, e.key === 'ArrowDown' ? 1 : -1); }
+    else if (e.key === 'Enter') {
+      e.preventDefault();
+      const o = gsOpts(root)[gsActive];
+      if (!list.hidden && o) act(o); else commitSearch(input.value);
+    } else if (e.key === 'Escape') {
+      e.preventDefault(); e.stopPropagation();
+      if (root.dataset.gs === 'm') closeSheet(true);
+      else if (!list.hidden) gsClose(root);
+      else if (input.value || S.q) clearSearch(root);
+      else input.blur();
+    }
+    return;
+  }
+  if (e.key === 'Escape' && $('#gs-sheet')?.classList.contains('open')) { closeSheet(true); return; }
+  if (S.route !== 'home' || modalEl.classList.contains('on')) return;
+  const cmdK = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k';
+  const slash = e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) && !e.target.isContentEditable;
+  if (cmdK || slash) { e.preventDefault(); openSearch(); }
+});
 
 // ───────────────────────── THEATRE ─────────────────────────
 function sectionSvg(Lx) {
@@ -1176,20 +1308,17 @@ document.addEventListener('input', (e) => {
     updateDna();
     return;
   }
-  if (e.target.id !== 'q') return;
-  S.q = e.target.value;
-  refreshResults();
+  if (e.target.classList.contains('gs-input')) gsUpdate(gsRoot(e.target));
 });
-// the search form never navigates: results update as you type
-document.addEventListener('submit', (e) => { if (e.target.matches('[data-search]')) { e.preventDefault(); $('#results .stretch')?.focus(); } });
+// the search form never navigates (Enter is handled on the input)
+document.addEventListener('submit', (e) => { if (e.target.matches('.gsearch')) e.preventDefault(); });
 
 function act(el) {
   const a = el.dataset.a, id = el.dataset.id;
   switch (a) {
     case 'home': go('home'); break;
     case 'saved': go('saved'); break;
-    case 'filter': S.filter = id; refreshResults(); break;
-    case 'shelf': go('home', { shelf: id, q: '', filter: 'all', homeView: 'list' }); break;
+    case 'shelf': go('home', { shelf: id, q: '', homeView: 'list' }); break;
     case 'shelves': go('home', { shelf: null }); break;
     case 'shelfmove': {
       const row = $(`.shelf-row[data-shelf="${CSS.escape(id)}"]`);
@@ -1216,11 +1345,15 @@ function act(el) {
       break;
     }
     case 'motion': toggleMotion(); break;
-    case 'scrollfind': {
-      $('#finder')?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
-      setTimeout(() => $('#q')?.focus({ preventScroll: true }), reduceMotion.matches ? 0 : 450);
+    case 'gs-open': openSearch(); break;
+    case 'gs-close': closeSheet(true); break;
+    case 'gs-clear': clearSearch(el); break;
+    case 'gs-all': { const v = $('.gs-input', el.closest('.gsearch'))?.value.trim(); if (v) commitSearch(v); else { closeSheet(); go('home', { shelf: 'all', q: '', homeView: 'list' }); } break; }
+    case 'gs-pick':
+      closeSheet(); $$('.gsearch').forEach(gsClose);
+      if (id !== S.tid) { S.tid = id; S.si = 0; S.focus = null; S.zoom = null; }
+      go('theatre');
       break;
-    }
     case 'myseat': {
       const v = { tid: S.tid, si: S.si, id: S.focus };
       const was = isMySeat(v.tid, v.si, v.id);
