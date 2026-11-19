@@ -468,8 +468,9 @@ function heroPreview() {
     return `<rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="10" rx="2.5" fill="${heatColor(st.m.score)}" style="--d:${i * 55}ms"/>`;
   }).join('')).join('');
   const lblW = 150, lx = Math.min(Math.max(dxy.x - lblW / 2, 6), W - lblW - 6), ly = dxy.y + 16;
+  const cropH = Math.min(H + 30, Math.round(ly + 24 + 22)); // phones show the map down to the director's label
   return `<figure class="hero-preview">
-    <svg viewBox="0 0 ${W} ${H + 30}" role="img" aria-label="Seat map of ${esc(t.name)}, ${esc(hallName(Lx.hall))}, coloured by view quality. The director's seat ${esc(D.id)} scores ${D.m.score}.">
+    <svg viewBox="0 0 ${W} ${H + 30}" style="--ar-m:${W} / ${cropH}" preserveAspectRatio="xMidYMin slice" role="img" aria-label="Seat map of ${esc(t.name)}, ${esc(hallName(Lx.hall))}, coloured by view quality. The director's seat ${esc(D.id)} scores ${D.m.score}.">
       <defs><linearGradient id="hp-scr" x1="0" x2="1"><stop offset="0" stop-color="currentColor" stop-opacity="0"/><stop offset=".5" stop-color="currentColor"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>
       <path class="hp-screen" d="M${pad + 30} 30 Q${W / 2} 8 ${W - pad - 30} 30" stroke="url(#hp-scr)"/>
       <text class="hp-screen-t" x="${W / 2}" y="44" text-anchor="middle">SCREEN</text>
@@ -501,16 +502,18 @@ function renderHome() {
     <div class="gs-panel"><div class="gs-top">${searchBox('m')}<button class="gs-cancel" type="button" data-a="gs-close">Cancel</button></div></div></div>
   <main id="main" class="page home" tabindex="-1">
     <section class="hero" aria-labelledby="hero-h">
+      <div class="hero-copy">
       <h1 id="hero-h" class="hero-title"><span class="logo" aria-hidden="true">${I.seat}</span>${WORDMARK}</h1>
       <p class="tagline">View your seat <em>before you sit.</em></p>
-      <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes: distance, angle, and whether the head in front gets in the way.</p>
+      <p class="lede">Pick a theatre, choose a seat, and look at the screen through your own eyes<span class="lede-more">: distance, angle, and whether the head in front gets in the way</span>.</p>
       <div class="hero-cta">
         <button class="btn primary lg-ish" data-a="gs-open">${I.search} Find my seat</button>
         <button class="btn ghost lg-ish" data-a="dna">${I.dna} Describe my seat</button>
       </div>
       <p class="hero-note"><span>${I.check}No login</span><span>${I.check}No sign-up</span><span>${I.check}Free, works offline</span></p>
-      ${heroPreview()}
       <ul class="facts" aria-label="At a glance"><li><b>${THEATRES.length}</b> theatres</li><li><b>${totalSeats.toLocaleString('en-IN')}</b> seats scored</li><li><b>${verifiedN}</b> matched to BookMyShow</li></ul>
+      </div>
+      ${heroPreview()}
     </section>
     <section class="steps-wrap" aria-labelledby="steps-h">
       <h2 id="steps-h" class="sr">How it works</h2>
