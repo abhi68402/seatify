@@ -421,10 +421,6 @@ function shelvesHtml() {
 // What the results area shows: the map, one shelf in full, the shelves, or the filtered grid.
 function resultsHtml(list) {
   cardCache.clear();
-  if (S.homeView === 'map') return `<figure class="mapblock">
-          <div class="citymap" id="citymap">${cityMap(list)}</div>
-          <figcaption class="map-key"><i class="dot v" aria-hidden="true"></i>Matched to BookMyShow <i class="dot" aria-hidden="true"></i>Approximate layout</figcaption>
-        </figure>`;
   const sh = S.shelf && browsing() ? shelfById(S.shelf) : null;
   if (sh) return `<div class="shelf-page-head"><button class="linkbtn" data-a="shelves">${I.back} All shelves</button><h3 tabindex="-1" id="shelf-h">${esc(sh.title)}</h3><p>${esc(sh.sub)} · ${sh.list.length} theatres</p></div>
         <ul class="tlist" id="tlist">${theatreCards(sh.list)}</ul>`;
@@ -539,7 +535,6 @@ function renderHome() {
         </form>
         <div class="chips" role="group" aria-label="Filter theatres">${FILTERS.map(([k, l]) => `<button class="chip" data-a="filter" data-id="${k}" aria-pressed="${S.filter === k}">${l}</button>`).join('')}</div>
         <div class="finder-foot">
-          <div class="seg view-switch" role="group" aria-label="Show theatres as"><button data-a="homeview" data-id="list" aria-pressed="${S.homeView === 'list'}">List</button><button data-a="homeview" data-id="map" aria-pressed="${S.homeView === 'map'}">Map</button></div>
           <p class="count" id="count" aria-live="polite">${countText(list.length)}</p>
         </div>
       </section>
@@ -1239,7 +1234,6 @@ function act(el) {
       setTimeout(() => $('#q')?.focus({ preventScroll: true }), reduceMotion.matches ? 0 : 450);
       break;
     }
-    case 'homeview': S.homeView = el.dataset.id; S.keepHome = $('#screen').scrollTop; render(); $('#screen').scrollTop = S.keepHome; $(`[data-a="homeview"][data-id="${S.homeView}"]`)?.focus(); break;
     case 'myseat': {
       const v = { tid: S.tid, si: S.si, id: S.focus };
       const was = isMySeat(v.tid, v.si, v.id);
