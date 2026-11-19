@@ -110,7 +110,7 @@ const S = {
   route: 'home', tid: null, si: 0, focus: null, heat: true, // seat maps open coloured by view quality
   filter: 'all', q: '',
   zoom: null, top: -1, aerial: false, crowd: true, lights: true, open: false, content: 0,
-  full: false, scenePrimed: false, sceneKey: '', motion: false, homeView: 'list',
+  full: false, scenePrimed: false, sceneKey: '', motion: false, homeView: 'list', shelf: null,
 };
 const T = () => theatreById(S.tid);
 const L = () => getLayout(T(), S.si);
@@ -133,53 +133,24 @@ function syncLayout() {
 }
 
 const TITLES = { home: 'Vyu · View your seat before you sit', theatre: '', seats: '', view: '', saved: 'Saved seats · Vyu' };
-// Scroll memory: each history entry remembers how its page was left (scroll, seat-map pan, the
-// control that opened the next page), so going back lands exactly where the user clicked.
-const pageMem = new Map(); // history index -> { top, mapL, mapT, act }
-let shownIdx = 0;          // history index of the page on screen
-let lastAct = null;        // the control being activated right now (set by the click handler)
-function rememberPage() {
-  const mw = $('.mapwrap');
-  pageMem.set(shownIdx, { top: screenEl.scrollTop, mapL: mw?.scrollLeft, mapT: mw?.scrollTop, act: lastAct });
-}
-function restoreFocusAfterBack(m) {
-  const a = m?.act;
-  let q = a && `[data-a="${a.a}"]`;
-  if (a) for (const k of ['id', 'tid', 'si', 'm']) if (a[k] != null) q += `[data-${k}="${CSS.escape(a[k])}"]`;
-  const v = screenEl.getBoundingClientRect();
-  // the same theatre can appear twice (a shelf and the list): pick the copy that sits where the click was
-  const dist = (x) => Math.abs(x.getBoundingClientRect().top - v.top - a.y);
-  const el = q && [...screenEl.querySelectorAll(q)].sort((x, y) => dist(x) - dist(y))[0];
-  if (!el) { focusPage(); return; }
-  el.focus({ preventScroll: true });
-  const r = el.getBoundingClientRect();
-  if (r.bottom < v.top || r.top > v.bottom) el.scrollIntoView({ block: 'center' });
-}
 function go(route, patch = {}, { history: nav = 'push' } = {}) {
-  rememberPage();
+  const fromShelf = S.shelf;
   Object.assign(S, patch);
   if (layoutOf() === 'split' && route === 'view') route = 'seats';
   const was = S.route;
   S.route = route;
   S.full = false;
-  // going back (browser Back/Forward, or an in-app arrow that pops history) reopens the page as it was left
-  let back = null, backIdx = null;
-  if (nav === 'none') back = pageMem.get(navIdx);
-  else if (nav === 'push' && navIdx > 0 && navUrls[navIdx - 1] === urlOf()) { backIdx = navIdx - 1; back = pageMem.get(backIdx); }
-  if (back && was === route && route === 'seats') back = null;
-  if (back?.mapL != null) S.keepScroll = back.mapL;
   if (!exploring()) stop3D();
   render();
-  if (back) {
-    const mw = $('.mapwrap');
-    if (mw && back.mapT != null) mw.scrollTop = back.mapT;
-    screenEl.scrollTop = back.top;
-    requestAnimationFrame(() => { if (S.route === route && Math.abs(screenEl.scrollTop - back.top) > 2) screenEl.scrollTop = back.top; });
-  } else if (!(route === 'seats' && was === 'seats')) screenEl.scrollTop = 0;
-  if (route !== was) { if (back) restoreFocusAfterBack(back); else focusPage(); }
+  if (!(route === 'seats' && was === 'seats')) screenEl.scrollTop = 0;
+  if (route !== was) focusPage();
+  if (route === 'home' && was === 'home' && 'shelf' in patch) { // opening or leaving a shelf's "See all"
+    const seeAll = !S.shelf && fromShelf && $(`.shelf-all[data-id="${CSS.escape(fromShelf)}"]`);
+    if (seeAll) seeAll.closest('.shelf').scrollIntoView({ block: 'start' });
+    else $('#results')?.scrollIntoView({ block: 'start' });
+    ($('#shelf-h') || seeAll || $('#results .stretch'))?.focus({ preventScroll: true });
+  }
   if (nav === 'push') pushUrl();
-  shownIdx = backIdx ?? navIdx;
-  if (!back) for (const k of pageMem.keys()) if (k > shownIdx) pageMem.delete(k);
 }
 
 // ───────────────────────── browser history ─────────────────────────
@@ -189,6 +160,7 @@ function go(route, patch = {}, { history: nav = 'push' } = {}) {
 function urlOf() {
   const r = S.route, t = S.tid && T() ? encodeURIComponent(S.tid) : null;
   if (r === 'saved') return '#/saved';
+  if (r === 'home' && S.shelf) return `#/shelf/${encodeURIComponent(S.shelf)}`;
   if (!t || r === 'home') return '#/';
   if (r === 'theatre') return `#/t/${t}`;
   if (S.focus && (r === 'view' || isSplit())) return `#/t/${t}/${S.si}/seat/${encodeURIComponent(S.focus)}`;
@@ -197,8 +169,9 @@ function urlOf() {
 // Address → {route, patch}, or null when it names nothing that exists (then the home page shows).
 function parseUrl(hash) {
   const p = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent);
-  if (!p.length) return { route: 'home', patch: {} };
+  if (!p.length) return { route: 'home', patch: { shelf: null } };
   if (p[0] === 'saved') return { route: 'saved', patch: {} };
+  if (p[0] === 'shelf') return shelfById(p[1]) ? { route: 'home', patch: { shelf: p[1], q: '', filter: 'all', homeView: 'list' } } : { route: 'home', patch: { shelf: null } };
   if (p[0] !== 't') return null;
   const t = theatreById(p[1]);
   if (!t) return null;
@@ -254,7 +227,7 @@ function render() {
   else if (r === 'seats' && isSplit()) { stageEl.setAttribute('role', 'region'); stageEl.setAttribute('aria-label', '3D seat view'); }
   else { stageEl.removeAttribute('role'); stageEl.removeAttribute('aria-label'); }
   document.title = TITLES[r] || `${T()?.name ?? 'Vyu'} · Vyu`;
-  if (r === 'home') renderHome();
+  if (r === 'home') { renderHome(); syncShelves(); }
   else if (r === 'theatre') renderTheatre();
   else if (r === 'saved') renderSaved();
   else if (r === 'seats') {
@@ -336,10 +309,13 @@ function cityMap(list) {
     ${pins}</svg>`;
 }
 
-function theatreCards() {
-  const list = filtered();
+function theatreCards(list = filtered()) {
   if (!list.length) return '<li class="empty"><b>No theatres match.</b><span>Try another filter or clear the search.</span></li>';
-  return list.map((t) => {
+  return list.map(theatreCard).join('');
+}
+function theatreCard(t) {
+  if (cardCache.has(t.id)) return cardCache.get(t.id);
+  const html = (() => {
     const hs = screensOf(t);
     const best = topSeats(getLayout(t, 0), 1)[0];
     const seats = hs.reduce((a, _, i) => a + getLayout(t, i).seats.length, 0);
@@ -350,8 +326,93 @@ function theatreCards() {
       <p class="best">Best seat <b>${best.id}</b> · ${best.m.dist.toFixed(0)} m from a ${hs[0].screen.w} m screen</p>
       ${(() => { const my = mySeat(); if (!my) return ''; if (my.t === t) return `<p class="mine-line">${I.heart} Your seat: <b>${esc(my.seat.id)}</b></p>`; const r = bestInTheatre(profileOf(my.seat), t); return `<p class="mine-line">${I.twin} Your seat here: <b>${esc(r.seat.id)}</b>${hs.length > 1 ? ' · ' + esc(hallName(r.L.hall)) : ''} · ${r.pct}% match</p>`; })()}
     </li>`;
+  })();
+  cardCache.set(t.id, html);
+  return html;
+}
+const cardCache = new Map(); // a theatre can sit on several shelves: build its card once per render
+
+// ───────────────────────── HOME SHELVES ─────────────────────────
+// With no search and no filter, the home list is a stack of horizontal shelves (like a streaming
+// app), so the page grows sideways as theatres are added. Every shelf is computed from the data,
+// so a new theatre joins the right shelves (and its area) automatically. Shelves with fewer than
+// two theatres are hidden; a row shows up to SHELF_MAX cards and "See all" opens the full list.
+const SHELF_MAX = 10;
+// Area by longitude (west of ~78.435° E: HITEC City side; east of 78.51° E: Secunderabad side).
+// A theatre in an odd spot can set `zone: 'west' | 'central' | 'east'` in data.js.
+const ZONES = { west: 'West Hyderabad', central: 'Central Hyderabad', east: 'East Hyderabad' };
+const zoneOf = (t) => t.zone || (t.lng < 78.435 ? 'west' : t.lng <= 78.51 ? 'central' : 'east');
+const maxW = (t) => Math.max(...screensOf(t).map((h) => h.screen.w));
+const hasRec = (t) => screensOf(t).some((_, i) => getLayout(t, i).seats.some((s) => s.tier === 'recliner' || s.tier === 'semi' || s.tier === 'lounger'));
+const areasOf = (list) => [...new Set(list.map((t) => t.area))].join(', ');
+function shelves() {
+  const all = [...THEATRES];
+  const out = [];
+  const my = mySeat();
+  if (my) {
+    const p = profileOf(my.seat);
+    const ranked = all.map((t) => [t, my.t === t ? 101 : bestInTheatre(p, t).pct]).sort((a, b) => b[1] - a[1]).map(([t]) => t);
+    out.push({ id: 'mine', title: 'Your view, everywhere', sub: `Closest match to your seat ${my.seat.id} at ${my.t.short} first`, list: ranked });
+  }
+  out.push({ id: 'big', title: 'Biggest screens', sub: 'Widest screen first', list: all.filter((t) => maxW(t) >= 14).sort((a, b) => maxW(b) - maxW(a)) });
+  out.push({ id: 'recliners', title: 'Recliner comfort', sub: 'Halls with recliners or loungers', list: all.filter(hasRec) });
+  out.push({ id: 'single', title: 'Single-screen legends', sub: 'Big halls, balconies and the first-day-first-show crowd', list: all.filter((t) => t.single) });
+  for (const [z, name] of Object.entries(ZONES)) {
+    const list = all.filter((t) => zoneOf(t) === z);
+    out.push({ id: z, title: name, sub: areasOf(list), list });
+  }
+  out.push({ id: 'atmos', title: 'Dolby Atmos sound', sub: 'At least one hall with Atmos', list: all.filter((t) => screensOf(t).some((h) => h.atmos)) });
+  out.push({ id: 'exact', title: 'Exact seat maps', sub: 'Matched row for row to BookMyShow', list: all.filter((t) => t.source === 'bms') });
+  const rated = all.filter((t) => (infoOf(t.id)?.rating?.count ?? 0) >= 50).sort((a, b) => infoOf(b.id).rating.value - infoOf(a.id).rating.value);
+  out.push({ id: 'rated', title: 'Highest rated', sub: 'Audience rating, 50 or more reviews', list: rated });
+  return out.filter((sh) => sh.list.length >= 2);
+}
+const shelfById = (id) => shelves().find((sh) => sh.id === id) || null;
+const browsing = () => !S.q.trim() && S.filter === 'all';
+function shelvesHtml() {
+  return shelves().map((sh) => {
+    const n = sh.list.length, more = n > SHELF_MAX;
+    return `<section class="shelf" aria-labelledby="sh-${sh.id}">
+      <div class="shelf-head">
+        <div class="shelf-title"><h3 id="sh-${sh.id}">${esc(sh.title)}</h3><p>${esc(sh.sub)}</p></div>
+        <div class="shelf-nav">
+          <button class="icon-btn shelf-arrow" data-a="shelfmove" data-id="${sh.id}" data-d="-1" aria-label="Scroll ${esc(sh.title)} left" disabled>${I.back}</button>
+          <button class="icon-btn shelf-arrow" data-a="shelfmove" data-id="${sh.id}" data-d="1" aria-label="Scroll ${esc(sh.title)} right">${I.chevR}</button>
+          <button class="shelf-all" data-a="shelf" data-id="${sh.id}" aria-label="See all ${n} in ${esc(sh.title)}">See all <b>${n}</b></button>
+        </div>
+      </div>
+      <ul class="shelf-row" data-shelf="${sh.id}">${sh.list.slice(0, SHELF_MAX).map(theatreCard).join('')}${more ? `<li class="shelf-more"><button data-a="shelf" data-id="${sh.id}">${I.chevR}<span>See all ${n}</span></button></li>` : ''}</ul>
+    </section>`;
   }).join('');
 }
+// What the results area shows: the map, one shelf in full, the shelves, or the filtered grid.
+function resultsHtml(list) {
+  cardCache.clear();
+  if (S.homeView === 'map') return `<figure class="mapblock">
+          <div class="citymap" id="citymap">${cityMap(list)}</div>
+          <figcaption class="map-key"><i class="dot v" aria-hidden="true"></i>Matched to BookMyShow <i class="dot" aria-hidden="true"></i>Approximate layout</figcaption>
+        </figure>`;
+  const sh = S.shelf && browsing() ? shelfById(S.shelf) : null;
+  if (sh) return `<div class="shelf-page-head"><button class="linkbtn" data-a="shelves">${I.back} All shelves</button><h3 tabindex="-1" id="shelf-h">${esc(sh.title)}</h3><p>${esc(sh.sub)} · ${sh.list.length} theatres</p></div>
+        <ul class="tlist" id="tlist">${theatreCards(sh.list)}</ul>`;
+  if (browsing()) return `<div class="shelves">${shelvesHtml()}</div>`;
+  return `<ul class="tlist" id="tlist">${theatreCards(list)}</ul>`;
+}
+// Arrow buttons: disabled at either end of their row.
+function syncShelf(row) {
+  const sec = row.closest('.shelf'); if (!sec) return;
+  const [prev, next] = $$('.shelf-arrow', sec);
+  const end = row.scrollWidth - row.clientWidth - 2;
+  prev.disabled = row.scrollLeft <= 2;
+  next.disabled = row.scrollLeft >= end;
+  sec.classList.toggle('fits', end <= 0);
+  sec.classList.toggle('more-r', !next.disabled);
+  sec.classList.toggle('more-l', !prev.disabled);
+}
+const syncShelves = () => requestAnimationFrame(() => $$('.shelf-row').forEach(syncShelf));
+document.addEventListener('scroll', (e) => { if (e.target.classList?.contains('shelf-row')) syncShelf(e.target); }, true);
+// keyboard: a card that gets focus scrolls fully into its row
+document.addEventListener('focusin', (e) => { const li = e.target.closest?.('.shelf-row > li'); if (li) li.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth' }); });
 
 // Hero hook: a live, colour-coded seat map of a real hall (AMB HDR by Barco), built from the same
 // scores as the app. Rows fade in from the screen outward; the director's seat pulses.
@@ -449,12 +510,9 @@ function renderHome() {
           <p class="count" id="count" aria-live="polite">${countText(list.length)}</p>
         </div>
       </section>
-      <section class="results" aria-labelledby="th-h">
+      <section class="results" id="results" aria-labelledby="th-h">
         <h2 id="th-h" class="sr">Theatres</h2>
-        ${S.homeView === 'map' ? `<figure class="mapblock">
-          <div class="citymap" id="citymap">${cityMap(list)}</div>
-          <figcaption class="map-key"><i class="dot v" aria-hidden="true"></i>Matched to BookMyShow <i class="dot" aria-hidden="true"></i>Approximate layout</figcaption>
-        </figure>` : `<ul class="tlist" id="tlist">${theatreCards()}</ul>`}
+        <div id="results-body">${resultsHtml(list)}</div>
       </section>
     </div>
   </main>
@@ -468,8 +526,10 @@ function renderHome() {
 const countText = (n) => (n === THEATRES.length ? `All ${n} theatres` : `${n} of ${THEATRES.length} theatres`);
 function refreshResults() {
   const list = filtered();
-  const tl = $('#tlist'); if (tl) tl.innerHTML = theatreCards();
-  const cm = $('#citymap'); if (cm) cm.innerHTML = cityMap(list);
+  if (S.shelf && !browsing()) { S.shelf = null; replaceUrl(); } // a search or filter leaves the shelf page
+  const cm = $('#citymap');
+  if (cm) cm.innerHTML = cityMap(list);
+  else { const rb = $('#results-body'); if (rb) { rb.innerHTML = resultsHtml(list); syncShelves(); } }
   const c = $('#count'); if (c) c.textContent = countText(list.length);
   $$('.chip').forEach((b) => b.setAttribute('aria-pressed', b.dataset.id === S.filter));
 }
@@ -1106,7 +1166,7 @@ document.addEventListener('input', (e) => {
   refreshResults();
 });
 // the search form never navigates: results update as you type
-document.addEventListener('submit', (e) => { if (e.target.matches('[data-search]')) { e.preventDefault(); $('#tlist .stretch')?.focus(); } });
+document.addEventListener('submit', (e) => { if (e.target.matches('[data-search]')) { e.preventDefault(); $('#results .stretch')?.focus(); } });
 
 function act(el) {
   const a = el.dataset.a, id = el.dataset.id;
@@ -1114,6 +1174,13 @@ function act(el) {
     case 'home': go('home'); break;
     case 'saved': go('saved'); break;
     case 'filter': S.filter = id; refreshResults(); break;
+    case 'shelf': go('home', { shelf: id, q: '', filter: 'all', homeView: 'list' }); break;
+    case 'shelves': go('home', { shelf: null }); break;
+    case 'shelfmove': {
+      const row = $(`.shelf-row[data-shelf="${CSS.escape(id)}"]`);
+      row?.scrollBy({ left: +el.dataset.d * Math.max(240, row.clientWidth * 0.85), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      break;
+    }
     case 'theatre':
       if (id && id !== S.tid) { S.tid = id; S.si = 0; S.focus = null; S.zoom = null; }
       go('theatre');
@@ -1158,7 +1225,7 @@ function act(el) {
       break;
     }
     case 'pickmine': {
-      const list = $('#tlist');
+      const list = $('#results');
       list?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
       toast("Open a theatre, tap your usual seat, then tap 'This is my seat'");
       break;
@@ -1167,7 +1234,7 @@ function act(el) {
     case 'clearmine': setMySeat(null); render(); toast('Your seat was cleared'); break;
     case 'trymotion': {
       const my = mySeat();
-      if (!my) { $('#tlist')?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' }); toast('Pick a theatre and a seat, then tap the phone icon at the top'); break; }
+      if (!my) { $('#results')?.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' }); toast('Pick a theatre and a seat, then tap the phone icon at the top'); break; }
       go(isSplit() ? 'seats' : 'view', { tid: my.t.id, si: my.L.screenIdx, focus: my.seat.id, open: false, zoom: null, aerial: false });
       toast('Tap the phone icon at the top to look around by moving your phone');
       break;
@@ -1221,9 +1288,7 @@ document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-a]');
   if (!el || el.disabled || !app.contains(el)) return;
   const route = S.route;
-  lastAct = { ...el.dataset, y: el.getBoundingClientRect().top - screenEl.getBoundingClientRect().top };
   act(el);
-  lastAct = null;
   restoreFocus(el, route);
   if (S.route === route) replaceUrl();
 });

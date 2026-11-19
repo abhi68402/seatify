@@ -919,3 +919,39 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
 .book-btn { color: var(--text); text-decoration: none; }
 .book-btn:hover { border-color: var(--accent); }
 .book-btn svg { width: 14px; height: 14px; color: var(--faint); }
+
+/* Home shelves: horizontal rows of theatre cards (streaming-app style); search or a filter shows the flat grid */
+#results { scroll-margin-top: 84px; }
+.shelves { display: grid; gap: clamp(30px, 4vw, 44px); min-width: 0; }
+.shelf { display: grid; gap: 12px; min-width: 0; }
+.shelf-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.shelf-title { min-width: 0; }
+.shelf-title h3 { font-family: var(--display); font-weight: 800; font-size: clamp(20px, 2.4vw, 26px); line-height: 1.15; letter-spacing: -.03em; }
+.shelf-title p { margin-top: 3px; font-size: 14px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shelf-nav { display: flex; align-items: center; gap: 8px; flex: none; }
+.shelf-arrow svg { width: 18px; height: 18px; color: inherit; }
+.shelf.fits .shelf-arrow { display: none; }
+.shelf-all { min-height: 44px; padding: 0 14px; border-radius: 22px; font-size: 14px; font-weight: 700; color: var(--accent); white-space: nowrap; transition: background .2s; }
+.shelf-all:hover { background: var(--accent-soft); }
+.shelf-row { list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: min(84%, 340px); gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 6px 2px 14px; margin: -6px -2px -14px; }
+.shelf-row::-webkit-scrollbar { display: none; }
+.shelf-row > li { scroll-snap-align: start; min-width: 0; display: flex; }
+.shelf-row .tcard { display: flex; flex-direction: column; width: 100%; }
+.shelf-row .tcard .best { margin-top: auto; }
+.shelf-more { list-style: none; }
+.shelf-more button { width: 100%; min-height: 180px; display: grid; place-content: center; justify-items: center; gap: 10px; border: 1.5px dashed var(--line-2); border-radius: var(--r-lg); color: var(--accent); font-weight: 700; font-size: 15px; transition: background .2s, border-color .2s; }
+.shelf-more button:hover { background: var(--accent-soft); border-color: var(--accent); }
+.shelf-more svg { width: 26px; height: 26px; }
+.shelf-page-head { display: grid; justify-items: center; text-align: center; gap: 4px; }
+.shelf-page-head h3 { font-family: var(--display); font-weight: 800; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.03em; line-height: 1.15; outline: none; }
+.shelf-page-head p { font-size: 14px; color: var(--muted); }
+.shelf-page-head .linkbtn { margin: 0 0 4px; }
+@media (max-width: 639px) { .shelf-arrow { display: none; } .shelf-all { padding: 0 8px; } }
+@media (prefers-reduced-motion: reduce) { .shelf-row { scroll-snap-type: x proximity; } }
+.shelf.more-r .shelf-row { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent); }
+.shelf.more-l .shelf-row { -webkit-mask-image: linear-gradient(to right, transparent, #000 56px); mask-image: linear-gradient(to right, transparent, #000 56px); }
+.shelf.more-l.more-r .shelf-row { -webkit-mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent); mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent); }
+@media (max-width: 639px) { .shelf.more-r .shelf-row, .shelf.more-l .shelf-row { -webkit-mask-image: none; mask-image: none; } }
+#results-body { display: grid; gap: 22px; min-width: 0; }
+.shelf-head { min-width: 0; }
+.shelf-title { flex: 1 1 auto; }
