@@ -54615,6 +54615,7 @@ const S = (...runs) => { let out = '', at = 0; runs.forEach(([st, n]) => { out +
 const rows = (letters, pattern) => letters.split(' ').map((l) => `${l}  ${pattern}`);
 
 const MOVIES = [
+  { id: 'storm',  title: 'The Gathering Storm', lang: 'English', genre: 'Fantasy · Thriller', cert: 'UA', runtime: '2h 31m', tag: 'Something walks out of the fog.' },
   { id: 'sand',   title: 'Ocean of Sand', lang: 'English', genre: 'Sci-Fi · Adventure', cert: 'UA', runtime: '2h 46m', tag: 'One walker. Ten thousand dunes.' },
   { id: 'deccan', title: 'Deccan Skies',  lang: 'Telugu',  genre: 'Action · Drama',     cert: 'UA', runtime: '2h 38m', tag: 'The city never forgets its heroes.' },
   { id: 'jatara', title: 'Jatara',        lang: 'Telugu',  genre: 'Mass · Drama',       cert: 'A',  runtime: '2h 55m', tag: 'When the drums start, nobody sleeps.' },
@@ -57121,9 +57122,137 @@ function jatara(c, w, h, t) {
   }
 }
 
-const SCENES = { sand, deccan, neon, orbit, jatara };
+// ── "The Gathering Storm": green-black fog rolling over a wet floor, god-rays from the top left,
+// a cloaked wanderer walking out of the mist toward the camera, thunder pulsing in the clouds.
+// Composed against the frame height so every screen shape (Flat, Scope, PCX/IMAX) is framed well.
+// Fog is a few soft noise canvases painted once and scrolled, so a frame costs a handful of drawImage calls.
+let FOG = null;
+function fogLayers() {
+  if (FOG) return FOG;
+  const make = (seed, blobs, tint, rMin, rMax) => {
+    const cv = document.createElement('canvas'); cv.width = 512; cv.height = 256;
+    const c = cv.getContext('2d'); const r = rng(seed);
+    for (let i = 0; i < blobs; i++) {
+      const x = r() * 512, y = 70 + r() * 116, rad = rMin + r() * (rMax - rMin), a = 0.035 + r() * 0.06;
+      for (const dx of [-512, 0, 512]) { // drawn three times so the strip tiles horizontally
+        const g = c.createRadialGradient(x + dx, y, 0, x + dx, y, rad);
+        g.addColorStop(0, `rgba(${tint},${a})`); g.addColorStop(0.6, `rgba(${tint},${a * 0.45})`); g.addColorStop(1, `rgba(${tint},0)`);
+        c.fillStyle = g; c.fillRect(x + dx - rad, y - rad, rad * 2, rad * 2);
+      }
+    }
+    // fade the top and bottom of the strip so fog banks never show an edge
+    c.globalCompositeOperation = 'destination-in';
+    const m = c.createLinearGradient(0, 0, 0, 256);
+    m.addColorStop(0, 'rgba(0,0,0,0)'); m.addColorStop(0.3, 'rgba(0,0,0,1)'); m.addColorStop(0.7, 'rgba(0,0,0,1)'); m.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = m; c.fillRect(0, 0, 512, 256);
+    return cv;
+  };
+  FOG = [make(7, 90, '92,118,88', 50, 120), make(19, 80, '124,148,108', 45, 110), make(31, 110, '146,166,124', 35, 90)];
+  return FOG;
+}
+// one fog strip scrolled sideways and drawn twice so it never ends
+function fogStrip(c, img, w, y, hh, x0, alpha) {
+  const sw = hh * 2; let x = -(((x0 % sw) + sw) % sw);
+  c.globalAlpha = alpha;
+  for (; x < w; x += sw) c.drawImage(img, x, y, sw, hh);
+  c.globalAlpha = 1;
+}
+// the cloaked wanderer as a silhouette with its feet at (x, y), height s: a plain pointed hood,
+// a cape open at the front over the walking legs, its hem billowing out to the right
+function wanderer(c, x, y, s, t) {
+  const step = Math.sin(t * 2.4), gust = Math.sin(t * 1.3) * 0.5 + Math.sin(t * 2.9) * 0.25;
+  const sh = y - s * 0.8, hem = y - s * 0.04;
+  c.beginPath();
+  // hood
+  c.moveTo(x - s * 0.06, sh + s * 0.02);
+  c.quadraticCurveTo(x - s * 0.085, sh - s * 0.11, x - s * 0.01, sh - s * 0.2);
+  c.quadraticCurveTo(x + s * 0.08, sh - s * 0.12, x + s * 0.065, sh + s * 0.02);
+  // right shoulder, cape billowing out and back
+  c.quadraticCurveTo(x + s * 0.15, sh + s * 0.03, x + s * 0.17, sh + s * 0.12);
+  c.bezierCurveTo(x + s * (0.2 + gust * 0.04), y - s * 0.45, x + s * (0.32 + gust * 0.08), y - s * 0.2, x + s * (0.4 + gust * 0.1), hem - s * 0.02);
+  for (let k = 0; k <= 6; k++) { const u = k / 6; c.lineTo(x + s * (0.4 + gust * 0.1) * (1 - u) + s * 0.08 * u, hem + s * 0.025 * Math.sin(u * 7 + t * 4)); }
+  // the front opening: the cape parts over the legs
+  c.lineTo(x + s * 0.05, y - s * 0.3);
+  c.lineTo(x + s * 0.035 - step * s * 0.03, y);              // right leg
+  c.lineTo(x - s * 0.005 - step * s * 0.03, y);
+  c.lineTo(x - s * 0.0, y - s * 0.22);
+  c.lineTo(x - s * 0.04 + step * s * 0.03, y);              // left leg
+  c.lineTo(x - s * 0.08 + step * s * 0.03, y);
+  c.lineTo(x - s * 0.07, y - s * 0.3);
+  // left side of the cape, hanging closer to the body
+  for (let k = 0; k <= 5; k++) { const u = k / 5; c.lineTo(x - s * 0.08 - s * 0.14 * u, hem + s * 0.02 * Math.sin(u * 6 - t * 3)); }
+  c.bezierCurveTo(x - s * 0.21, y - s * 0.3, x - s * 0.17, y - s * 0.6, x - s * 0.15, sh + s * 0.1);
+  c.quadraticCurveTo(x - s * 0.13, sh + s * 0.02, x - s * 0.06, sh + s * 0.02);
+  c.closePath();
+}
+function storm(c, w, h, t) {
+  const F = fogLayers();
+  // thunder: a double flicker every ~9 s, brightening the clouds and the hall
+  const ph = t % 9.3, flash = ph < 0.55 ? Math.max(0, Math.exp(-ph * 9) * 0.9 + (ph > 0.18 ? Math.exp(-(ph - 0.18) * 11) * 0.6 : 0)) : 0;
+  // sky
+  let g = c.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, '#0d1510'); g.addColorStop(0.55, '#16231a'); g.addColorStop(0.78, '#1c2b20'); g.addColorStop(1, '#070a08');
+  c.fillStyle = g; c.fillRect(0, 0, w, h);
+  // light source behind the clouds, top left
+  const lx = w * 0.06, ly = -h * 0.08;
+  g = c.createRadialGradient(lx, ly, 0, lx, ly, h * 1.1);
+  g.addColorStop(0, 'rgba(232,236,190,.85)'); g.addColorStop(0.25, 'rgba(170,190,130,.35)'); g.addColorStop(1, 'rgba(60,80,55,0)');
+  c.fillStyle = g; c.fillRect(0, 0, w, h);
+  // god-rays fanning down to the right
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 7; i++) {
+    const a = 0.2 + i * 0.13 + Math.sin(t * 0.25 + i) * 0.02, spread = 0.035 + (i % 3) * 0.012;
+    const len = Math.hypot(w, h) * 1.1, al = (0.05 + 0.03 * Math.sin(t * 0.6 + i * 1.7)) * (1 + flash);
+    g = c.createLinearGradient(lx, ly, lx + Math.cos(a) * len, ly + Math.sin(a) * len);
+    g.addColorStop(0, `rgba(220,230,180,${al})`); g.addColorStop(1, 'rgba(220,230,180,0)');
+    c.fillStyle = g; c.beginPath(); c.moveTo(lx, ly);
+    c.lineTo(lx + Math.cos(a - spread) * len, ly + Math.sin(a - spread) * len);
+    c.lineTo(lx + Math.cos(a + spread) * len, ly + Math.sin(a + spread) * len);
+    c.closePath(); c.fill();
+  }
+  c.restore();
+  // far cloud banks
+  fogStrip(c, F[0], w, -h * 0.1, h * 0.75, t * h * 0.012, 0.9 + flash * 0.4);
+  fogStrip(c, F[1], w, h * 0.15, h * 0.6, -t * h * 0.02, 0.6 + flash * 0.4);
+  // the wanderer: walks out of the fog over a 22 s loop, growing as it nears, then the mist swallows it
+  const L = 22, u = (t % L) / L, horizon = h * 0.74;
+  const s = h * (0.18 + 0.55 * u * u), fx = w * 0.5 + Math.sin(u * 5) * h * 0.02, fy = horizon + (h * 0.94 - horizon) * u;
+  const vis = Math.min(1, u * 5) * Math.min(1, (1 - u) * 8);
+  c.save(); c.globalAlpha = vis;
+  // rim light on the side facing the glow: the shape in pale light, nudged up-left, under the dark figure
+  wanderer(c, fx - s * 0.008, fy - s * 0.006, s, t); c.fillStyle = `rgba(190,210,150,${0.28 + flash * 0.5})`; c.fill();
+  wanderer(c, fx, fy, s, t); c.fillStyle = '#040605'; c.fill();
+  c.restore();
+  // wet floor: dark mirror with the glow and the figure reflected, and slow ripple streaks
+  const fl = h * 0.8;
+  g = c.createLinearGradient(0, fl, 0, h);
+  g.addColorStop(0, 'rgba(10,16,12,.55)'); g.addColorStop(1, 'rgba(3,5,4,.92)');
+  c.fillStyle = g; c.fillRect(0, fl, w, h - fl);
+  if (fy > fl) {
+    c.save(); c.globalAlpha = vis * 0.35; c.translate(0, fy * 2); c.scale(1, -1);
+    c.beginPath(); c.rect(0, fy, w, h); c.clip(); wanderer(c, fx, fy, s, t); c.fillStyle = '#020302'; c.fill(); c.restore();
+  }
+  c.save(); c.globalCompositeOperation = 'lighter';
+  for (let k = 0; k < 14; k++) {
+    const yy = fl + (h - fl) * (k / 14), xx = ((k * 137.5 + t * h * 0.03 * (1 + (k % 3))) % (w + h)) - h * 0.5;
+    c.fillStyle = `rgba(160,190,140,${0.035 + flash * 0.05})`;
+    c.fillRect(xx, yy, h * (0.25 + (k % 4) * 0.1), Math.max(1, h * 0.003));
+  }
+  c.restore();
+  // ground mist rolling through the figure's legs, and a near fog bank
+  fogStrip(c, F[2], w, h * 0.62, h * 0.38, t * h * 0.045, 0.95);
+  fogStrip(c, F[0], w, h * 0.74, h * 0.34, -t * h * 0.06, 0.8);
+  // thunder flash over everything
+  if (flash > 0.01) { c.fillStyle = `rgba(190,215,170,${flash * 0.28})`; c.fillRect(0, 0, w, h); }
+  // vignette
+  g = c.createRadialGradient(w / 2, h * 0.55, h * 0.3, w / 2, h * 0.55, Math.max(w, h) * 0.75);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.55)');
+  c.fillStyle = g; c.fillRect(0, 0, w, h);
+}
+
+const SCENES = { storm, sand, deccan, neon, orbit, jatara };
 function drawMovie(ctx, w, h, t, id) {
-  (SCENES[id] || sand)(ctx, w, h, t);
+  (SCENES[id] || storm)(ctx, w, h, t);
 }
 
 return Object.freeze({ get drawMovie() { return drawMovie; } });

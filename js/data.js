@@ -46,6 +46,7 @@ const S = (...runs) => { let out = '', at = 0; runs.forEach(([st, n]) => { out +
 const rows = (letters, pattern) => letters.split(' ').map((l) => `${l}  ${pattern}`);
 
 export const MOVIES = [
+  { id: 'storm',  title: 'The Gathering Storm', lang: 'English', genre: 'Fantasy · Thriller', cert: 'UA', runtime: '2h 31m', tag: 'Something walks out of the fog.' },
   { id: 'sand',   title: 'Ocean of Sand', lang: 'English', genre: 'Sci-Fi · Adventure', cert: 'UA', runtime: '2h 46m', tag: 'One walker. Ten thousand dunes.' },
   { id: 'deccan', title: 'Deccan Skies',  lang: 'Telugu',  genre: 'Action · Drama',     cert: 'UA', runtime: '2h 38m', tag: 'The city never forgets its heroes.' },
   { id: 'jatara', title: 'Jatara',        lang: 'Telugu',  genre: 'Mass · Drama',       cert: 'A',  runtime: '2h 55m', tag: 'When the drums start, nobody sleeps.' },
