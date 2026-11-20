@@ -21,6 +21,9 @@ const precache = files.filter((f) => !LAZY.has(f));
 
 const h = createHash('sha256');
 for (const f of files) { h.update(f); h.update(readFileSync(join(ROOT, f))); }
+// This generator holds the service worker's own code too: changing it must also ship a new VERSION,
+// or browsers that already hold a cache under the old VERSION would keep their stale files.
+h.update(readFileSync(new URL(import.meta.url)));
 const version = h.digest('hex').slice(0, 12);
 const bytes = precache.reduce((n, f) => n + statSync(join(ROOT, f)).size, 0);
 
