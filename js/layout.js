@@ -4,6 +4,47 @@
 import { TIERS } from './data.js';
 
 const cache = new Map();
+
+// What a seated person and a seat put in the way of the row behind. scene.js builds the 3D hall from
+// exactly these numbers, so the sightline maths here and the picture agree.
+// SHELL: per seat style, [centre y, centre z, height, depth, tilt] of the backrest and the headrest,
+// relative to the seat's floor point (metres). HEAD_TOP: top of a seated person's hair above their eyes.
+export const SHELL = {
+  recliner: { back: [0.78, 0.4, 0.78, 0.2, 0.22], rest: [1.24, 0.46, 0.2, 0.14, 0.22] },
+  std: { back: [0.82, 0.3, 0.64, 0.1, 0.14], rest: [1.2, 0.33, 0.16, 0.12, 0.14] },
+  motion: { back: [0.82, 0.3, 0.72, 0.1, 0.14], rest: [1.2, 0.33, 0.16, 0.12, 0.14] },
+};
+export const shellOf = (tier) => { const st = TIERS[tier].style; return SHELL[st === 'recliner' ? 'recliner' : st === 'motion' ? 'motion' : 'std']; };
+export const HEAD_TOP = 0.145;
+const HEAD_Z = 0.17; // z offset of the crown of the head's front half from the seat point
+const EYE_Z = 0.11;  // eyes sit ~11 cm in front of the seat point
+// The things in front row `r` (floor point z, floor height, tier) that can cut the line of sight, as
+// [z, top height above floor]: the crown of the head and the top front edge of the headrest.
+function blockers(tier, z, floorY) {
+  const sh = shellOf(tier), [cy, cz, h, d, tilt] = sh.rest;
+  return [[z + HEAD_Z, floorY + TIERS[tier].eye + HEAD_TOP], [z + cz - d / 2 + (h / 2) * tilt, floorY + cy + h / 2]];
+}
+// Height above the line of sight to the bottom of the screen (C-value convention: 0.12 m of head above the
+// eye counts as zero), looking from `eye` (z, y) over the row in front.
+function sightClear(eyeZ, eyeY, screenBottom, tier, z, floorY) {
+  return Math.min(...blockers(tier, z, floorY).map(([bz, top]) => eyeY + (screenBottom - eyeY) * ((eyeZ - bz) / eyeZ) - top + 0.12));
+}
+// Lowest floor for a row at (z, tier) that keeps `want` metres of C-value over the rows in front (solves
+// sightClear for the floor height; the line's drop towards the screen depends on the eye height itself).
+// Every row in front is checked, not just the nearest: where the rake flattens, a head two rows ahead can
+// poke through a line that clears the row in front.
+function floorFor(z, tier, fronts, screenBottom, want) {
+  const eyeZ = z + EYE_Z, e = TIERS[tier].eye;
+  let need = -Infinity;
+  for (const front of fronts) for (const [bz, top] of blockers(front.tier, front.z, front.floorY)) {
+    const k = (eyeZ - bz) / eyeZ; // share of the eye-to-screen distance that lies between you and the obstruction
+    // (floor + e)(1 - k) + screenBottom k >= top + want - 0.12
+    need = Math.max(need, (top + want - 0.12 - screenBottom * k) / (1 - k) - e);
+  }
+  return need;
+}
+const CLEAR_WANT = 0.15; // C-value to aim for (m): the line clears the average head top (hair is 0.145 above the eyes) by 3 cm, so even the taller people in the crowd (±5 cm) barely reach it
+const MAX_STEP = 0.8;    // no row steps up more than this (m)
 const rowLetter = (i) => (i < 26 ? String.fromCharCode(65 + i) : 'A' + String.fromCharCode(65 + i - 26));
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
 const deg = (r) => (r * 180) / Math.PI;
@@ -76,13 +117,20 @@ export function getLayout(theatre, screenIdx = 0) {
     if (sec.balcony) Object.assign(info, { parapetZ: zCursor - 0.15, floorY: baseY, undersideY: baseY - 0.35 });
     let idx = 0;
     let lastFloor = baseY;
+    let frontRow = null; // the row in front, in this section
+    const sightRows = stacked ? rows.slice() : []; // rows whose heads this tier looks over: its own, plus the tiers below for a stacked tier
     specsBySec[si].forEach((spec) => {
       if (spec.walkway) { zCursor += spec.pitch; return; }
       const tier = TIERS[spec.tier];
       const pitch = spec.pitch || tier.pitch;
       const z = zCursor + pitch / 2;
       zCursor += pitch;
-      const floorY = baseY + idx * riser;
+      // each row stands at least one riser above the row in front, and higher where the heads and headrests
+      // in front (recliner backs, deep pitches, cross-aisles) would otherwise cut the line to the screen
+      let floorY = baseY + idx * riser;
+      if (frontRow) {
+        floorY = Math.max(frontRow.floorY + riser, Math.min(floorFor(z, spec.tier, sightRows, hall.screen.bottom, CLEAR_WANT), frontRow.floorY + MAX_STEP));
+      }
       lastFloor = floorY;
       // grid rows share the hall's column grid (BookMyShow style), centred on the screen;
       // generated rows centre themselves
@@ -133,6 +181,7 @@ export function getLayout(theatre, screenIdx = 0) {
       });
       rows.push(row);
       info.rows.push(row);
+      frontRow = row; sightRows.push(row);
       idx++;
     });
     info.endZ = zCursor;
@@ -257,27 +306,28 @@ function computeMetrics(seat, L) {
   const elevTop = deg(Math.atan2(sc.top - seat.eyeY, seat.z));
   const elevCenter = deg(Math.atan2(sc.midY - seat.eyeY, seat.z));
 
-  // Sightline clearance ("C-value"): how far the line from your eye to the bottom
-  // of the screen passes above the eyes of the person in the row in front.
+  // Sightline clearance ("C-value"): how far the line from your eye to the bottom of the screen passes
+  // above the heads and headrests of the row in front (the head tops count as 0.12 m above the eyes, as
+  // in the standard C-value, so 100 mm+ is a clean sightline). The same shapes are drawn in the 3D hall.
   let clearance = null;
   const yLine = (zAt) => seat.eyeY + (sc.bottom - seat.eyeY) * ((seat.z - zAt) / seat.z);
   const secRows = L.sections[seat.row.section].rows;
+  const over = (front) => sightClear(seat.z + EYE_Z, seat.eyeY, sc.bottom, front.tier, front.z, front.floorY);
   if (seat.row.idx > 0) {
-    const front = secRows[seat.row.idx - 1];
-    clearance = yLine(front.z) - (front.floorY + TIERS[front.tier].eye);
+    clearance = over(secRows[seat.row.idx - 1]);
   } else if (L.sections[seat.row.section].stacked) {
     // first row of a stacked tier: looks over the heads in the last row of the tier below
-    const front = L.sections[seat.row.section - 1].rows.at(-1);
-    clearance = yLine(front.z) - (front.floorY + TIERS[front.tier].eye);
+    clearance = over(L.sections[seat.row.section - 1].rows.at(-1));
   } else if (L.sections[seat.row.section].balcony) {
     clearance = yLine(L.balcony.parapetZ) - (L.balcony.floorY + 0.9) + 0.12;
   }
 
   // Under-balcony: does the balcony slab hide the top of the screen?
   let overhangCut = 0;
-  if (L.balcony && seat.row.section === 0 && seat.z > L.balcony.parapetZ) {
-    const uy = L.balcony.undersideY;
-    const yHit = seat.eyeY + (uy - seat.eyeY) * (seat.z / (seat.z - L.balcony.parapetZ));
+  if (L.balcony && seat.row.section === 0 && seat.z > L.balcony.parapetZ - 0.12) {
+    // the slab's front edge is the parapet's front face (scene.js: parapet 0.24 m deep), seen from the eyes
+    const uy = L.balcony.undersideY, ez = seat.z + EYE_Z, edge = L.balcony.parapetZ - 0.12;
+    const yHit = seat.eyeY + (uy - seat.eyeY) * (ez / (ez - edge));
     if (yHit < sc.top) overhangCut = clamp01((sc.top - Math.max(yHit, sc.bottom)) / sc.h);
   }
 

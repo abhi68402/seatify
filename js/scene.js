@@ -8,7 +8,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { TIERS } from './data.js';
 import { drawMovie } from './movies.js';
-import { rng } from './layout.js';
+import { rng, SHELL } from './layout.js';
 import { configureAssets, getAssets, surface, fabric } from './assets.js';
 
 const V3 = THREE.Vector3;
@@ -439,13 +439,8 @@ export class TheatreView {
     const armM = new THREE.MeshStandardMaterial({ color: 0x1d1416, roughness: 0.42, metalness: 0.1 });
 
     const groups = new Map();
-    // Seat geometry per style (metres, relative to the seat's floor point): [centre y, centre z, height, depth, tilt].
+    // Seat geometry per style (SHELL, shared with layout.js: [centre y, centre z, height, depth, tilt]).
     // The audience below is fitted against the same numbers, so nobody sits inside a backrest.
-    const SHELL = {
-      recliner: { back: [0.78, 0.4, 0.78, 0.2, 0.22], rest: [1.24, 0.46, 0.2, 0.14, 0.22] },
-      std: { back: [0.82, 0.3, 0.64, 0.1, 0.14], rest: [1.2, 0.33, 0.16, 0.12, 0.14] },
-      motion: { back: [0.82, 0.3, 0.72, 0.1, 0.14], rest: [1.2, 0.33, 0.16, 0.12, 0.14] },
-    };
     this.shell = SHELL;
     // How far a seated person (head centre at height eye, depth zh, size k) must slide forward so every
     // body part clears the front face of the backrest and headrest, which lean back by their tilt.
@@ -512,7 +507,8 @@ export class TheatreView {
     // 42 cm shoulders). Seated eye height varies (adult SD ≈ 4 cm, ~8% children, some slouch).
     const people = L.seats.filter((s) => crowdSet.has(s.id));
     const R = rng(people.length * 31 + 7);
-    const gauss = () => (R() + R() + R() + R() - 2) * 1.73;
+    // clamped at ±1.25 SD (±5 cm): the hall's risers are cut to clear the heads of the row in front (layout.js)
+    const gauss = () => Math.max(-1.25, Math.min(1.25, (R() + R() + R() + R() - 2) * 1.73));
     const skinMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.62 });
     const hairMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.75 });
     const clothMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.92 });

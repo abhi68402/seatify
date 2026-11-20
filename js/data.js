@@ -303,7 +303,7 @@ export const THEATRES = [
           ] },
         ] },
         // Lower balcony, ₹200: over the first class
-        { name: 'Lower Balcony', balcony: { lift: 2.6, overhang: 3 }, riser: 0.3, grid: [
+        { name: 'Lower Balcony', balcony: { lift: 2.9, overhang: 3 }, riser: 0.3, grid: [
           { tier: 'balcony', label: 'Lower Balcony', prefix: 'Lower', price: 200, rows: [
             `H  ${S([0, 13], [14, 14], [29, 13])}`,
             ...rows('G F', S([0, 12], [14, 14], [32, 12])),
@@ -341,7 +341,7 @@ export const THEATRES = [
           { n: 4, tier: 'classic', blocks: [7, 18, 7], price: 110, label: 'Front Stalls' },
           { n: 11, tier: 'classic', blocks: [7, 20, 7], price: 150, label: 'Rear Stalls' },
         ] },
-        { name: 'Balcony', balcony: { lift: 3.0, overhang: 7 }, riser: 0.48, rows: [
+        { name: 'Balcony', balcony: { lift: 3.3, overhang: 7 }, riser: 0.48, rows: [
           { n: 8, tier: 'balcony', blocks: [7, 20, 7], price: 200 },
         ] },
       ],
@@ -360,7 +360,7 @@ export const THEATRES = [
           { n: 3, tier: 'classic', blocks: [6, 20, 6], price: 110, label: 'Front Stalls' },
           { n: 10, tier: 'classic', blocks: [6, 22, 6], price: 175, label: 'Rear Stalls' },
         ] },
-        { name: 'Balcony', balcony: { lift: 3.6, overhang: 6 }, riser: 0.5, rows: [ // raised for the taller 83 ft screen
+        { name: 'Balcony', balcony: { lift: 4.2, overhang: 6 }, riser: 0.5, rows: [ // raised for the taller 83 ft screen
           { n: 6, tier: 'balcony', blocks: [6, 22, 6], price: 250 },
         ] },
       ],
