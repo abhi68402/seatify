@@ -763,7 +763,7 @@ function hallSpecs(t, si) {
   if (!h) return '';
   const parts = [h.width && `<li><b>${esc(h.width)}</b><span>screen width</span></li>`, `<li><b>${esc(h.projector)}</b><span>projection</span></li>`, `<li><b>${esc(h.sound)}</b><span>sound</span></li>`].filter(Boolean);
   return `<div class="specs"><p class="specs-h">Published specs${h.which ? ` · ${esc(h.which)}` : ''}</p><ul class="specs-list">${parts.join('')}</ul>
-    <p class="fine specs-src">Source: ${srcLink(h.url, new URL(h.url).hostname.replace('www.', ''))} · checked ${INFO_AS_OF}</p></div>`;
+    <p class="fine specs-src">Source: ${srcLink(h.url, new URL(h.url).hostname.replace('www.', ''))} · checked ${infoOf(t.id)?.asOf || INFO_AS_OF}</p></div>`;
 }
 // Booking: Vyu sells nothing. The theatre page's bottom bar opens a sheet with the theatre's own pages on
 // BookMyShow / District (new tab); the seat drawer repeats them with the seat to pick. Row/number match
@@ -818,7 +818,7 @@ function renderTheatre() {
         <div class="stats">
           <div class="stat"><b>${h.screen.w} × ${h.screen.h} m</b><span>screen · about ${autos} autos wide</span></div>
           <div class="stat"><b>${Lx.seats.length}</b><span>seats in ${Lx.rows.length} rows</span></div>
-          <div class="stat"><b>${Lx.balcony ? 'Balcony' : h.riser < 0.2 ? 'Gentle' : 'Stadium'}</b><span>${Lx.balconies.length > 1 ? 'stalls + 2 balconies' : Lx.balcony ? 'stalls + balcony' : 'floor slope'}</span></div>
+          <div class="stat"><b>${Lx.balconies.length ? 'Balcony' : h.riser < 0.2 ? 'Gentle' : 'Stadium'}</b><span>${Lx.balconies.length > 1 ? 'stalls + 2 balconies' : Lx.balconies.length ? 'stalls + balcony' : 'floor slope'}</span></div>
         </div>
         ${hallSpecs(t, S.si)}
         <figure class="section-svg">${sectionSvg(Lx)}<figcaption>Side section, to scale. Screen on the left.${h.screenNote ? ` <em>${esc(h.screenNote)}.</em>` : ''}</figcaption></figure>

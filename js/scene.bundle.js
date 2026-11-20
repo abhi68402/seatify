@@ -54979,6 +54979,754 @@ const THEATRES = [
       ] }],
     },
   },
+  // ───────────── Read from BookMyShow seat objects (20–21 Nov 2026): one hall per cinema, the biggest ─────────────
+  {
+    id: 'aparna-nallagandla', name: 'Aparna Cinemas Nallagandla', short: 'Aparna Cinemas', area: 'Nallagandla',
+    lat: 17.4669, lng: 78.3104, single: false, source: 'bms', tags: ['Dolby Atmos', '4K Laser', 'Recliners'],
+    hall: {
+      // BookMyShow seat objects, 292 seats (SCREEN 5, read 21 Nov 2026). Biggest of: SCREEN 3[VIP SCREEN]=52; SCREEN 6[INFINITY VISION DOLBY ATMOS]=185; SCREEN 5[INFINITY VISION DOLBY ATMOS]=292; SCREEN 7[INFINITY VISION DOLBY ATMOS]=246; SCREEN 4[INFINITY VISION DOLBY ATMOS]=193; SCREEN 2[4K DOLBY 7.1]=120; SCREEN 1[4K DOLBY 7.1]=120
+      name: 'Screen 5 · Infinity Vision', format: 'LARGE', atmos: true, screenNote: '48.4 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 14.75, h: 7.08, bottom: 1.2, curve: 0 },
+      firstRow: 5.9, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'Gold', price: 350, rows: [
+            'R  ..oooo...oooooooo',
+            'Q  .ooooo...oooooooooo',
+          ] },
+          { tier: 'classic', label: 'Executive', price: 200, rows: [
+            'P  ooooooo.oooooooooooooo',
+            'N  ooooooo.oooooooooooooo',
+            'M  ooooooo.oooooooooooooo',
+            'L  ooooooo.oooooooooooooo',
+            'K  ooooooo.oooooooooooooo',
+            'J  ooooooo.oooooooooooooo',
+            'H  ooooooo.ooooooooooo',
+            'G  ooooooo.ooooooooooo',
+            'F  ooooooo.ooooooooooo',
+            'E  ooooooo.ooooooooooo',
+            'D  ooooooo.ooooooooooo',
+            'C  ooooooo.ooooooooooo',
+            'B  ooooooo.ooooooooooo',
+          ] },
+          { tier: 'lounger', label: 'Lounges', price: 200, colW: 0.7, rows: [
+            'A  .ooooo...oooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'cinepolis-tnr', name: 'Cinepolis TNR North City', short: 'Cinepolis TNR', area: 'Suchitra',
+    lat: 17.503, lng: 78.4773, single: false, source: 'bms', tags: ['Macro XE', 'Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 334 seats (MACROXE, read 21 Nov 2026). Biggest of: MACROXE[MACRO XE]=1
+      name: 'Audi 7 · Macro XE', format: 'LARGE', atmos: true, screenNote: '57 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 17.37, h: 8.34, bottom: 1.2, curve: 0 },
+      firstRow: 6.9, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Executive', price: 295, rows: [
+            'N  ....ooooooooooooooooooooooooooo',
+            'M  ......ooooooooooooooo...oooooooo',
+            'L  ......ooooooooooooooo...oooooooo',
+            'K  ......ooooooooooooooo...oooooooo',
+            'J  ......ooooooooooooooo...oooooooo',
+            'I  ......ooooooooooooooo...oooooooo',
+            'H  ......ooooooooooooooo...oooooooo',
+            '-',
+            'G  oooo..ooooooooooooooo...oooooooo',
+            'F  oooo..ooooooooooooooo...oooooooo',
+            'E  ......ooooooooooooooo...oooooooo',
+            'D  ......ooooooooooooooo...oooooooo',
+            'C  ......ooooooooooooooo...oooooooo',
+            'B  ......ooooooooooooooo...oooooooo',
+            'A  ......ooooooooooooooo...oooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'sree-ramulu', name: 'Sree Ramulu 70MM', short: 'Sree Ramulu', area: 'Moosapet',
+    lat: 17.4679, lng: 78.4292, single: true, source: 'bms', tags: ['Single screen', '70mm', '4K Laser'],
+    hall: {
+      // BookMyShow seat objects, 1166 seats (Sree Ramulu 029, read 21 Nov 2026). Biggest of: Sree Ramulu 029=1
+      name: 'Main Screen · 70mm', format: '70MM', screenNote: '70 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 21.34, h: 10.24, bottom: 1.2, curve: 0 },
+      firstRow: 9.0, riser: 0.25,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'First Class', prefix: 'First', price: 150, rows: [
+            'A  ooooooooooooooooooooooooooooooooooooooooooooooo',
+            'B  oooooooooo..ooooooooooo.ooooooooooo..oooooooooo',
+            'C  oooooooooo..ooooooooooo.ooooooooooo..ooooooooo',
+            'D  ooooooooo...ooooooooooo.ooooooooooo..ooooooooo',
+            'E  oooooooooo..ooooooooooo.ooooooooooo..ooooooooo',
+          ] },
+          { tier: 'classic', label: 'Second Class', prefix: 'Second', price: 50, rows: [
+            'A  ooooooooooooooooooooooooooooooooooooooooooooooooo',
+            'B  oooooooooo..ooooooooooo..ooooooooooo.ooooooooooo',
+            'C  oooooooooo..ooooooooooo..ooooooooooo.oooooooooo',
+            'D  oooooooooo..ooooooooooo..ooooooooooo.oooooooooo',
+            'E  oooooooooo..ooooooooooo..ooooooooooo.oooooooooo',
+            'F  oooooooooo..oooo',
+          ] },
+        ] },
+        { name: 'Balcony', balcony: { stack: true, lift: 1.2, gap: 1 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Box A', prefix: 'Box A', price: 175, rows: [
+            '1  ooooooooooo',
+          ] },
+          { tier: 'balcony', label: 'Box B', prefix: 'Box B', price: 175, rows: [
+            '1  ooooooooooo',
+          ] },
+          { tier: 'balcony', label: 'Balcony', price: 175, rows: [
+            'A  oooooooooooooooooooooooooooooooooooooooooooooo',
+            'B  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'C  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'D  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'E  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'F  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'G  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'H  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'I  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'J  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'K  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            'L  oooooooooo.ooooooooooo.ooooooooooo.oooooooooo',
+            '-',
+            'M  oooooooooo.ooooooooo...oooooooooo..oooooooooo',
+            'N  oooooooooo.ooooooooo...oooooooooo..oooooooooo',
+            'O  oooooooooo.ooooooooo...oooooooooo..oooooooooo',
+            'P  oooooooooo.ooooooooo...oooooooooo..oooooooooo',
+            'Q  ooooooooo..ooooooooo...oooooooooo..ooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'miraj-cinetown', name: 'Miraj Cinemas CineTown', short: 'Miraj CineTown', area: 'Miyapur',
+    lat: 17.4956, lng: 78.3533, single: false, source: 'bms', tags: ['Dolby 7.1'],
+    hall: {
+      // BookMyShow seat objects, 702 seats (SCREEN 1, read 21 Nov 2026). Biggest of: SCREEN 1=702; SCREEN 2=702; SCREEN 3=313
+      name: 'Screen 1', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 16.0, h: 7.68, bottom: 1.2, curve: 0 },
+      firstRow: 6.4, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Executive', price: 175, rows: [
+            'A:1/26  oooooooooo.................oooooooooo',
+            'B:3/26  ..ooooooooo................ooooooooo',
+            'C:3/26  ..ooooooooo................ooooooooo',
+            'D:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'E:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'F:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'G:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'H:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            '-',
+            'I:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'J:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'K:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'L:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'M:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'N:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+          ] },
+          { tier: 'prime', label: 'Gold', price: 235, rows: [
+            'O  ..oooooo.....oooooooooo.....oooooo',
+          ] },
+          { tier: 'prime', label: 'Executivep', price: 175, rows: [
+            'P:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'Q:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'R:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'S:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'T:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'U:3  ..ooooooooo.oooooooooooooo.ooooooooo',
+            'V:7  ......ooooo.oooooooooooooo.ooooo',
+            '-',
+            'W  oooooooooooooooooooooooooooooooo',
+            'X:2/10/26  .ooooo...oooooooooooooo..ooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'inox-gsm', name: 'INOX GSM Mall', short: 'INOX GSM Mall', area: 'Madinaguda',
+    lat: 17.4964, lng: 78.3357, single: false, source: 'bms', tags: ['Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 403 seats (SCREEN 1, read 21 Nov 2026). Biggest of: SCREEN 2[ATMOS]=304; SCREEN 1[ATMOS]=403; SCREEN 4=152; SCREEN 3=192; SCREEN 6=163; SCREEN 8=205; SCREEN 5=153; SCREEN 7=119
+      name: 'Screen 1', format: '2D', atmos: true, screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 10.5, h: 5.04, bottom: 1.2, curve: 0 },
+      firstRow: 4.2, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'Royal', price: 354, rows: [
+            'A  oooooooooooooo........ooo',
+          ] },
+          { tier: 'classic', label: 'Executive', price: 295, rows: [
+            'B  ooooo.oooooooooooooo.oooo',
+            'C  ooooo.oooooooooooooo.oooo',
+            'D  ooooo.oooooooooooooo.oooo',
+            'E  ooooo.oooooooooooooo.oooo',
+            'F  ooooo.oooooooooooooo.oooo',
+            'G  ooooo.oooooooooooooo.oooo',
+            'H  ooooo.oooooooooooooo.oooo',
+            'I  ooooo.oooooooooooooo.oooo',
+            'J  ooooo.oooooooooooooo.oooo',
+            '-',
+            'K  ooooo.oooooooooooooo.oooo',
+            'L  ooooo.oooooooooooooo.oooo',
+            'M  ooooo.oooooooooooooo',
+            'N  ooooo.oooooooooooooo',
+            'O  ooooo.oooooooooooooo',
+            'P  ooooo.oooooooooooooo',
+            'Q  ooooo.oooooooooooooo',
+            'R  ooooo.oooooooooooooo',
+            'S  ooooo.oooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'moviemax-amr', name: 'MovieMax AMR Planet Mall', short: 'MovieMax AMR', area: 'ECIL',
+    lat: 17.4631, lng: 78.5607, single: false, source: 'bms', tags: ['Laser', 'Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 242 seats (SCREEN3, read 21 Nov 2026). Biggest of: SCREEN2[LASER & 7.1]=236; SCREEN7[DOLBY 7.1  ]=182; SCREEN5[ATMOS]=240; SCREEN4[DOLBY 7.1  ]=212; SCREEN1[LASER & 7.1]=239; SCREEN6[LASER & 7.1]=184; SCREEN3[ATMOS + LASER]=242
+      name: 'Screen 3', format: 'LASER', atmos: true, screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 11.0, h: 5.28, bottom: 1.2, curve: 0 },
+      firstRow: 4.4, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 354, colW: 0.7, rows: [
+            'A  oooooooo.oooo',
+          ] },
+          { tier: 'prime', label: 'Prime', price: 295, rows: [
+            'B  oooo..oooooooooooooo',
+            'C  oooo..oooooooooooooo',
+            '-',
+            'D  oooo..oooooooooooooo..oooo',
+            'E  oooo..oooooooooooooo..oooo',
+            'F  oooo..oooooooooooooo..oooo',
+            'G  oooo..oooooooooooooo..oooo',
+            'H  oooo..oooooooooooooo',
+            'I  oooo..oooooooooooooo',
+            'J  oooo..oooooooooooooo',
+            'K  oooo..oooooooooooooo',
+          ] },
+          { tier: 'classic', label: 'Classic', price: 250, rows: [
+            'L  oooo..oooooooooooooo',
+            'M  oooo..oooo.oooo.oooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'pvr-lakeshore', name: 'PVR Lakeshore Mall', short: 'PVR Lakeshore', area: 'Kukatpally Y Junction',
+    lat: 17.4771, lng: 78.4223, single: false, source: 'bms', tags: ['PXL', 'Dolby Atmos', 'DTS:X'],
+    hall: {
+      // BookMyShow seat objects, 293 seats (PXL Audi 6, read 21 Nov 2026). Biggest of: PXL Audi 6[PXL]=1
+      name: 'Audi 6 · P[XL]', format: 'PXL', atmos: true, screenNote: '55 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 16.76, h: 8.04, bottom: 1.2, curve: 0 },
+      firstRow: 6.7, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 354, colW: 0.7, rows: [
+            'Q  oo.......oooooooooo....oo',
+          ] },
+          { tier: 'prime', label: 'Prime', price: 295, rows: [
+            'P  oooo..ooooooooooooo..oooo',
+            'N  oooo..ooooooooooooo..oooo',
+            'M  oooo..ooooooooooooo..oooo',
+            'L  oooo..ooooooooooooo..oooo',
+          ] },
+          { tier: 'classic', label: 'Classic', price: 295, rows: [
+            'K  oooo..ooooooooooooo..oooo',
+            'J  oooo..ooooooooooooo..oooo',
+            'H  oooo..ooooooooooooo..oooo',
+            'G  oooo..ooooooooooooo..oooo',
+            'F  oooo..ooooooooooooo..oooo',
+            'E  oooo..ooooooooooooo..oooo',
+            'D  oooo..ooooooooooooo..oooo',
+            'C  oooo..ooooooooooooo..oooo',
+            'B  oooo..ooooooooooooo',
+          ] },
+          { tier: 'lounger', label: 'Lounger', price: 354, colW: 0.7, rows: [
+            'A  ........oooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'cineverse-uppal', name: 'Cineverse Multiplex Uppal', short: 'Cineverse Uppal', area: 'Uppal',
+    lat: 17.402, lng: 78.5719, single: false, source: 'bms', tags: ['Laser', 'Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 496 seats (5.MAGNUS, read 21 Nov 2026). Biggest of: 3.CLASSIC[2K DOLBY]=197; 5.MAGNUS[4K RGB LASER LARGE SCREEN DOLBY ATMOS]=496; 2.VINTAGE[7.1 DOLBY]=198; 4.BELLEZIA[4K RGB LASER LARGE SCREEN DOLBY 7.1]=475; 1.RETRO[7.1 DOLBY]=150
+      name: 'Screen 5 · Magnus', format: 'LARGE', atmos: true, screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 13.5, h: 6.48, bottom: 1.2, curve: 0 },
+      firstRow: 5.4, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'semi', label: 'Platinum Sofa', price: 350, colW: 0.7, rows: [
+            'A  oooo.ooooooooooooooo',
+          ] },
+          { tier: 'prime', label: 'Gold', prefix: 'Gold', price: 295, rows: [
+            'A  oooooooo.ooooooooooooooo.ooooooo',
+            'B  oooooooo.ooooooooooooooo.ooooooo',
+            'C  oooooooo.ooooooooooooooo.ooooooo',
+            'D  oooooooo.ooooooooooooooo.ooooooo',
+            'E  oooooooo.ooooooooooooooo.ooooooo',
+            'F  oooooooo.ooooooooooooooo.ooooooo',
+            'G  oooooooo.ooooooooooooooo.ooooooo',
+            'H  oooooooo.ooooooooooooooo.ooooooo',
+            'I  oooooooo.ooooooooooooooo.ooooooo',
+            'J  ....oooo.ooooooooooooooo.ooooooo',
+            '-',
+            'K  ....oooo.ooooooooooooooo.ooooooo',
+            'L  ....oooo.ooooooooooooooo.ooooooo',
+            'M  ....oooo.ooooooooooooooo.ooooooo',
+            'N  ....oooo.ooooooooooooooo.ooooooo',
+            'O  ....oooo.ooooooooooooooo.ooooooo',
+            'P  ....oooo.ooooooooooooooo.ooooooo',
+            'Q  ....oooo.ooooooooooooooo.oooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'cinepolis-lulu', name: 'Cinepolis Lulu Mall', short: 'Cinepolis Lulu', area: 'Kukatpally',
+    lat: 17.4901, lng: 78.3933, single: false, source: 'bms', tags: ['Laser'],
+    hall: {
+      // BookMyShow seat objects, 295 seats (AUDI 04, read 21 Nov 2026). Biggest of: AUDI 02[2K LASER DOLBY 7.1]=293; AUDI 04[4K LASER]=295; AUDI 01[2K LASER DOLBY 7.1]=253; AUDI 03[2K LASER DOLBY 7.1]=293; AUDI 05[2K LASER DOLBY 7.1]=293
+      name: 'Audi 4', format: 'LASER', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 12.0, h: 5.76, bottom: 1.2, curve: 0 },
+      firstRow: 4.8, riser: 0.35, rtl: true,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'VIP', price: 354, colW: 0.7, rows: [
+            'O  oo..oo..oo.oo.oo.oo.oo',
+            'N  oo..oo..oo.oo.oo.oo.oo',
+          ] },
+          { tier: 'classic', label: 'Normal', price: 199, rows: [
+            'M  oooooo..oooooooooooooo',
+            'L  oooooo..oooooooooooooo',
+            'K  oooooo..oooooooooooooo',
+            'J  oooooo..oooooooooooooo',
+            'I  oooooo..oooooooooooooo',
+            '-',
+            'H  oooooo..oooooooooooooo..oooo',
+            'G  oooooo..oooooooooooooo..oooo',
+            'F  oooooo..oooooooooooooo',
+            'E  oooooo..oooooooooooooo',
+            'D  oooooo..oooooooooooooo',
+            'C  oooooo..oooooooooooooo',
+            'B  oooooo..oooooooooooooo',
+            'A  oooooo..ooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'gpr-nizampet', name: 'GPR Multiplex Nizampet', short: 'GPR Multiplex', area: 'Nizampet',
+    lat: 17.4993, lng: 78.3907, single: false, source: 'bms', tags: ['Laser', 'Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 683 seats (SCREEN 3, read 21 Nov 2026). Biggest of: SCREEN 3[Dolby Atmos]=683; SCREEN 2=230; SCREEN 1=230
+      name: 'Screen 3', format: 'LASER', atmos: true, screenNote: '54 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 16.46, h: 7.9, bottom: 1.2, curve: 0 },
+      firstRow: 6.6, riser: 0.35, rtl: true,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 350, colW: 0.7, rows: [
+            'A  ooo..oooooooooooooooooooooo',
+          ] },
+          { tier: 'prime', label: 'Gold', price: 200, rows: [
+            'B  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'C  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'D  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'E  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'F  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'G  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'H  ........oooooooooooooo.oooooooooooooo.oooo',
+            '-',
+            'I:5  .oooooo.oooooooooooooo.oooooooooooooo',
+            'J  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'K  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'L  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'M  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'N  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'O  .oooooo.oooooooooooooo.oooooooooooooo.oooo',
+            'P  .oooooo.oooooooooooooo.oooooooooooooo',
+            'Q  .oooooo.oooooooooooooo.oooooooooooooo',
+            'R  .oooooo.oooooooooooooo.oooooooooooooo',
+            '-',
+            'S  .oooooo.oooooooooooooo.oooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'asian-cinemart', name: 'Asian Cinemart RC Puram', short: 'Asian Cinemart', area: 'RC Puram',
+    lat: 17.5107, lng: 78.2952, single: false, source: 'bms', tags: ['4K'],
+    hall: {
+      // BookMyShow seat objects, 387 seats (SCREEN 1, read 21 Nov 2026). Biggest of: SCREEN 3[4K DOLBY 7.1]=212; SCREEN 4[4K DOLBY 7.1]=125; SCREEN 2[4K DOLBY 7.1]=319; SCREEN 5[4K DOLBY 7.1]=125; SCREEN 1[4K DOLBY 7.1]=387
+      name: 'Screen 1', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 12.0, h: 5.76, bottom: 1.2, curve: 0 },
+      firstRow: 4.8, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'semi', label: 'Sofa', price: 250, colW: 0.7, rows: [
+            'A  ...ooo.oooooooooooooooooo',
+          ] },
+          { tier: 'prime', label: 'Platinum', price: 200, rows: [
+            'B  oooooo.oooooooooooooo.oooooo',
+            'C  oooooo.oooooooooooooo.oooooo',
+            'D  oooooo.oooooooooooooo.oooooo',
+            'E  oooooo.oooooooooooooo.oooooo',
+            'F  oooooo.oooooooooooooo.oooooo',
+            'G  oooooo.oooooooooooooo.oooooo',
+            'H  oooooo.oooooooooooooo.oooooo',
+            'I  oooooo.oooooooooooooo.oooooo',
+            'J  oooooo.oooooooooooooo.oooooo',
+            '-',
+            'K  ....oo.oooooooooooooo.oooooo',
+            'L  ....oo.oooooooooooooo.oooooo',
+            'M  ....oo.oooooooooooooo.oooooo',
+            'N  ....oo.oooooooooooooo.oooooo',
+            'O  ....oo.oooooooooooooo.oooooo',
+            'P  ....oo.oooooooooooooo.oooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'sai-ranga', name: 'Sai Ranga 70MM', short: 'Sai Ranga', area: 'Miyapur',
+    lat: 17.4955, lng: 78.3597, single: true, source: 'bms', tags: ['Single screen', '70mm', '4K Laser'],
+    hall: {
+      // BookMyShow seat objects, 1055 seats (Sai Ranga, read 21 Nov 2026). Biggest of: Sai Ranga[Christie 4k Laser]=1
+      name: 'Main Screen · 70mm', format: '70MM', screenNote: '58.6 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 17.86, h: 8.57, bottom: 1.2, curve: 0 },
+      firstRow: 7.5, riser: 0.25,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Dress Circle', prefix: 'Dress Circle', price: 150, rows: [
+            'A  oooooooooooooooooooooooooooooooooooo',
+            'B  .oooooooooooooooo.ooooooooooooooooo',
+            'C  .oooooooooooooooo.ooooooooooooooooo',
+            'D  .oooooooooooooooo.ooooooooooooooooo',
+            'E  .oooooooooooooooo.ooooooooooooooooo',
+          ] },
+          { tier: 'classic', label: 'Lower Class', prefix: 'Lower', price: 50, rows: [
+            'A  oooooooooooooooooooooooooooooooooooooooo',
+            'B  .oooooooooooooooooo.ooooooooooooooooooo',
+            'C  .oooooooooooooooooo.ooooooooooooooooooo',
+            'D  .oooooooooooooooooo.ooooooooooooooooooo',
+            'E  .oooooooooooooooooo.ooooooooooooooooooo',
+            'F  .........oooooooooo.oooooooooo',
+          ] },
+        ] },
+        { name: 'Balcony', balcony: { stack: true, lift: 1.2, gap: 1 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Upper Balcony', price: 175, rows: [
+            'A  oooooooooooooooooooooooooooooooooo',
+            'B  ooooooooooooooooooo...oooooooooooo',
+            'C  ooooooooooooooooooo...oooooooooooo',
+            'D  ooooooooooooooooooo...oooooooooooo',
+            'E  ooooooooooooooooooo...oooooooooooo',
+            'F  ooooooooooooooooooo...oooooooooooo',
+            'G  oooooo....ooooooooo...ooooooooo',
+            'H  oooooo....oooooooo....ooooooooo',
+            'I  oooooo....oooooooo....ooooooooo',
+            'J  oooooo....oooooooo....ooooooooo',
+            'K  oooooo....oooooooo....ooooooooo',
+          ] },
+          { tier: 'balcony', label: 'Lower Balcony', price: 175, rows: [
+            'L  oooooooooooooooooooooooooooooooooo',
+            'M  ooooooooooooooo...oooooooooooooooo',
+            'N  ooooooooooooooo...oooooooooooooooo',
+            'O  ooooooooooooooo...oooooooooooooooo',
+            'P  ooooooooooooooo...oooooooooooooooo',
+            'Q  ooooooooooooooo...oooooooooooooooo',
+            'R  ooooooooooooooo...oooooooooooooooo',
+            'S  ooooooooooooooo...oooooooooooooooo',
+            'T  ooooooooooooooo...ooooooooooooooo',
+            '-',
+            'U  ooooooooooooooo...oooooooooooooooo',
+            'V  ooooooooooooooo...oooooooooooooooo',
+            'W  ooooooooooooooo...oooooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'bhramaramba', name: 'Bhramaramba 70MM', short: 'Bhramaramba', area: 'Kukatpally',
+    lat: 17.5002, lng: 78.3866, single: true, source: 'bms', tags: ['Single screen', '70mm'],
+    hall: {
+      // BookMyShow seat objects, 861 seats (BHRAMARAMBA 70MM, read 21 Nov 2026). Biggest of: BHRAMARAMBA 70MM=1
+      name: 'Main Screen · 70mm', format: '70MM', screenNote: '70 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 21.34, h: 10.24, bottom: 1.2, curve: 0 },
+      firstRow: 9.0, riser: 0.25,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Dress Circle', prefix: 'Dress Circle', price: 150, rows: [
+            'A  .ooooooooooooooooooooooooooooooooooo',
+            'B  oooooo..ooooooooooooooooooo...oooooo',
+            'C  oooooo..ooooooooooooooooooo...oooooo',
+            'D  oooooo..ooooooooooooooooooo...oooooo',
+            'E  oooooo..ooooooooooooooooooo...oooooo',
+            'F  oooooo..ooooooooooooooooooo...oooooo',
+          ] },
+          { tier: 'classic', label: 'First Class', prefix: 'First', price: 50, rows: [
+            'A  oooooooooooooooooooooooooooooooooooooo',
+            'B  oooooo..ooooooooooooooooooooo...oooooo',
+            'C  oooooo..ooooooooooooooooooooo...oooooo',
+            'D  oooooo..ooooooooooooooooooooo...oooooo',
+            'E  oooooo..ooooooooooooooooooooo...oooooo',
+          ] },
+        ] },
+        { name: 'Balcony', balcony: { stack: true, lift: 1.2, gap: 1 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Box', price: 175, rows: [
+            'A  ....................ooooooooooooo',
+          ] },
+          { tier: 'balcony', label: 'Maharaja Circle', prefix: 'Maharaja Circle', price: 175, rows: [
+            'A  .oooooooo.oooooooooooooooo..oooooo',
+            'B  oooooo...oooooooooooooooo...oooooo',
+            'C  oooooo...oooooooooooooooo...oooooo',
+            'D  oooooo...oooooooooooooooo...oooooo',
+            'E  oooooo..oooooooooooooooooo..oooooo',
+            'F  oooooo..oooooooooooooooooo..oooooo',
+            'G  oooooo..oooooooooooooooooo..oooooo',
+            'H  oooooo..oooooooooooooooooo..oooooo',
+            'I  oooooo..oooooooooooooooooo..oooooo',
+            'J  oooooo..oooooooooooooooooo..oooooo',
+            'K  oooooo..oooooooooooooooooo..oooooo',
+            'L  oooooo..oooooooooooooooooo..oooooo',
+            'M  oooooo..oooooooooooooooooo..oooooo',
+            'N  oooooo..ooooooo....ooooooo..oooooo',
+            'O  oooooo..ooooooo....ooooooo..oooooo',
+            'P  oooooo..ooooooo....ooooooo..oooooo',
+            'Q  oooooo..ooooooo....ooooooo..oooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'mallikarjuna', name: 'Mallikarjuna 70MM', short: 'Mallikarjuna', area: 'Kukatpally',
+    lat: 17.4999, lng: 78.3866, single: true, source: 'bms', tags: ['Single screen', '70mm', 'DTS'],
+    hall: {
+      // BookMyShow seat objects, 861 seats (MALLIKARJUNA 70MM, read 21 Nov 2026). Biggest of: MALLIKARJUNA 70MM=1
+      name: 'Main Screen · 70mm', format: '70MM', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 16.5, h: 7.92, bottom: 1.2, curve: 0 },
+      firstRow: 6.9, riser: 0.25,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Dress Circle', prefix: 'Dress Circle', price: 100, rows: [
+            'A  .ooooooooooooooooooooooooooooooooooo',
+            'B  oooooo..ooooooooooooooooooo...oooooo',
+            'C  oooooo..ooooooooooooooooooo...oooooo',
+            'D  oooooo..ooooooooooooooooooo...oooooo',
+            'E  oooooo..ooooooooooooooooooo...oooooo',
+            'F  oooooo..ooooooooooooooooooo...oooooo',
+          ] },
+          { tier: 'classic', label: 'First Class', prefix: 'First', price: 50, rows: [
+            'A  oooooooooooooooooooooooooooooooooooooo',
+            'B  oooooo..ooooooooooooooooooooo...oooooo',
+            'C  oooooo..ooooooooooooooooooooo...oooooo',
+            'D  oooooo..ooooooooooooooooooooo...oooooo',
+            'E  oooooo..ooooooooooooooooooooo...oooooo',
+          ] },
+        ] },
+        { name: 'Balcony', balcony: { stack: true, lift: 1.2, gap: 1 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Box', price: 150, rows: [
+            'A  .....................ooooooooooooo',
+          ] },
+          { tier: 'balcony', label: 'Maharaja Circle', prefix: 'Maharaja Circle', price: 150, rows: [
+            'A  .oooooooo.oooooooooooooooo..oooooo',
+            'B  oooooo...oooooooooooooooo...oooooo',
+            'C  oooooo...oooooooooooooooo...oooooo',
+            'D  oooooo...oooooooooooooooo...oooooo',
+            'E  oooooo..oooooooooooooooooo..oooooo',
+            'F  oooooo..oooooooooooooooooo..oooooo',
+            'G  oooooo..oooooooooooooooooo..oooooo',
+            'H  oooooo..oooooooooooooooooo..oooooo',
+            'I  oooooo..oooooooooooooooooo..oooooo',
+            'J  oooooo..oooooooooooooooooo..oooooo',
+            'K  oooooo..oooooooooooooooooo..oooooo',
+            'L  oooooo..oooooooooooooooooo..oooooo',
+            'M  oooooo..oooooooooooooooooo..oooooo',
+            'N  oooooo..ooooooo....ooooooo..oooooo',
+            'O  oooooo..ooooooo....ooooooo..oooooo',
+            'P  oooooo..ooooooo....ooooooo..oooooo',
+            'Q  oooooo..ooooooo....ooooooo..oooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'asian-mcube', name: 'Asian M Cube Mall Attapur', short: 'Asian M Cube', area: 'Attapur',
+    lat: 17.3717, lng: 78.4302, single: false, source: 'bms', tags: ['Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 356 seats (SCREEN 1, read 21 Nov 2026). Biggest of: SCREEN 4[4K DOLBY ATMOS]=320; SCREEN 1[DOLBY 7.1]=356; SCREEN 3[DOLBY 7.1]=352; SCREEN 2[DOLBY 7.1]=324
+      name: 'Screen 1', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 10.5, h: 5.04, bottom: 1.2, curve: 0 },
+      firstRow: 4.2, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'Gold', price: 200, rows: [
+            'A  oooooooooooo.oooooooooooo',
+            'B  .oooo.oooooooooooo.oooooo',
+            'C  .oooo.oooooooooooo.oooooo',
+            'D  .oooo.oooooooooooo.oooooo',
+            'E  .oooo.oooooooooooo.oooooo',
+            'F  .oooo.oooooooooooo.oooooo',
+            'G  .oooo.oooooooooooo.oooooo',
+            'H  .oooo.oooooooooooo.oooooo',
+            '-',
+            'I  .oooo.oooooooooooo.oooooo',
+            'J  .oooo.oooooooooooo.oooooo',
+            'K  .oooo.oooooooooooo.oooooo',
+            'L  .oooo.oooooooooooo.oooooo',
+            'M  ......oooooooooooo.oooooo',
+            'N  ......oooooooooooo.oooooo',
+            'O  ......oooooooooooo.oooooo',
+            'P  ......oooooooooooo.oooooo',
+            'Q  ......oooooooooooo.oooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'cinepolis-dsl', name: 'Cinepolis DSL Virtue Mall', short: 'Cinepolis DSL', area: 'Uppal',
+    lat: 17.4005, lng: 78.5548, single: false, source: 'bms', tags: ['Dolby 7.1'],
+    hall: {
+      // BookMyShow seat objects, 245 seats (AUDI02, read 21 Nov 2026). Biggest of: AUDI02=245; AUDI05=168; AUDI06=209; AUDI03=245; AUDI01=209; AUDI04=164
+      name: 'Audi 2', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 11.0, h: 5.28, bottom: 1.2, curve: 0 },
+      firstRow: 4.4, riser: 0.35, rtl: true,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'VIP', price: 354, colW: 0.7, rows: [
+            'M  oo.oo.oo.oo.oo.oo..oo',
+          ] },
+          { tier: 'classic', label: 'Executive', price: 295, rows: [
+            'L  oooo..oooooooooooooo',
+            'K  oooo..oooooooooooooo',
+            'J  oooo..oooooooooooooo',
+            '-',
+            'I  oooo..oooooooooooooo..oooo',
+            'H  oooo..oooooooooooooo..oooo',
+            'G  oooo..oooooooooooooo..oooo',
+            'F  oooo..oooooooooooooo..oooo',
+            'E  oooo..oooooooooooooo',
+            'D  oooo..oooooooooooooo',
+            'C  oooo..oooooooooooooo',
+          ] },
+          { tier: 'classic', label: 'Normal', price: 295, rows: [
+            'B  oooo..oooooooooooooo',
+            'A  oooo...ooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'gokul', name: 'Gokul 70MM', short: 'Gokul 70MM', area: 'Erragadda',
+    lat: 17.4536, lng: 78.4344, single: true, source: 'bms', tags: ['Single screen', '70mm', 'DTS'],
+    hall: {
+      // BookMyShow seat objects, 981 seats (GOKUL 70MM A/C DTS, read 21 Nov 2026). Biggest of: GOKUL 70MM A/C DTS=1
+      name: 'Main Screen · 70mm', format: '70MM', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 16.5, h: 7.92, bottom: 1.2, curve: 0 },
+      firstRow: 6.9, riser: 0.25,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'First Class', prefix: 'First', price: 100, rows: [
+            'A  ...oooooooo.ooooooooooooo.oooooooo',
+            'B  ...oooooooo.ooooooooooooo.oooooooo',
+            'C  ...oooooooo.ooooooooooooo.oooooooo',
+            'D  ...oooooooo.ooooooooooooo.oooooooo',
+            'E  ...oooooooo.ooooooooooooo.oooooooo',
+            'F  ...oooooooo.ooooooooooooo.oooooooo',
+          ] },
+          { tier: 'classic', label: 'Second Class', prefix: 'Second', price: 50, rows: [
+            'A  oooooooooooooooooooooooooooooooooooooo',
+            'B  oooooooo..ooooooooooooooooooo..oooooooo',
+            'C  oooooooo..oooooooooooooooooooo..ooooooo',
+            'D  ooooooooo.oooooooooooooooooo...oooooooo',
+            'E  oooooo....ooooooooooooooooooo...ooooooo',
+            'F  ooooo.....oooooooooooooooooo....ooooooo',
+          ] },
+        ] },
+        { name: 'Balcony', balcony: { stack: true, lift: 1.2, gap: 1 }, riser: 0.3, grid: [
+          { tier: 'balcony', label: 'Upper Balcony', price: 150, rows: [
+            'A  ...oooooooooooooooooooooooooooooo',
+            'B  ...ooooooo..oooooooooooo..ooooooo',
+            'C  ...ooooooo..oooooooooooo..ooooooo',
+            'D  ...ooooooo..oooooooooooo..ooooooo',
+            'E  ...ooooooo..oooooooooooo..ooooooo',
+            'F  ....oooooo..oooooooooooo..oooooo',
+            'G  ...ooooooo..oooooooooooo..ooooooo',
+            'H  ...ooooooo..oooooooooooo..ooooooo',
+            'I  ...ooooooo..oooooooooooo..ooooooo',
+            'J  ...ooooooo..oooooooooooo..ooooooo',
+            'K  ...ooooooo..oooooooooooo..ooooooo',
+            'L  ...ooooooo..oooooooooooo..ooooooo',
+            'M  ...ooooooo..oooooooooooo..ooooooo',
+          ] },
+          { tier: 'balcony', label: 'Lower Balcony', price: 150, rows: [
+            'N  ...ooooooo...oooooooooo...ooooooo',
+            'O  ...ooooooo.oooooooooooo..oooooooo',
+            'P  ...ooooooo.oooooooooooo...ooooooo',
+            'Q  ...ooooooo.oooooooooooo...ooooooo',
+            'R  ...ooooooo.oooooooooooo...ooooooo',
+            'S  ...ooooooo.oooooooooooo..oooooooo',
+            'T  ...ooooooo.oooooooooooo...ooooooo',
+            'U  ...ooooooo.oooooooooooo..oooooooo',
+            'V  ...ooooooo.oooooooooooo...ooooooo',
+            'W  ...ooooooo.oooooooooooo..oooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'pvr-galleria', name: 'PVR Next Galleria Mall', short: 'PVR Galleria', area: 'Panjagutta',
+    lat: 17.4294, lng: 78.4501, single: false, source: 'bms', tags: ['Dolby Atmos', 'Recliners'],
+    hall: {
+      // BookMyShow seat objects, 220 seats (AUDI 08, read 21 Nov 2026). Biggest of: AUDI 01[ATMOS]=203; AUDI 05=190; AUDI 06=144; AUDI 08[ATMOS]=220; AUDI 07=170; AUDI 04=152; AUDI 03 PLAY HOUSE[PLAYHOUSE]=54; AUDI 02=145
+      name: 'Audi 8', format: '2D', atmos: true, screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 8.5, h: 4.08, bottom: 1.2, curve: 0 },
+      firstRow: 4.2, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 349, colW: 0.7, rows: [
+            'M  .....ooooooo.oooo',
+          ] },
+          { tier: 'classic', label: 'Classic', price: 199, rows: [
+            'L  oooooooooooo.ooooooo',
+            '-',
+            'K  oooooooooooo.ooooooo',
+            'J  oooooooooooo.ooooooo',
+            'H  oooooooooooo.ooooooo',
+            'G  oooooooooooo.ooooooo',
+            'F  oooooooooooo.ooooooo',
+            'E  oooooooooooo.ooooooo',
+            'D  oooooooooooo.ooooooo',
+            'C  oooooooooooo.ooooooo',
+            'B  oooooooooooo.ooooooo',
+            'A  oooooooooooo.ooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
 ];
 
 const theatreById = (id) => THEATRES.find((t) => t.id === id);
@@ -55006,6 +55754,8 @@ const deg = (r) => (r * 180) / Math.PI;
 //         seat map, listed TOP-TO-BOTTOM as on screen (back → front).
 //         'o' = seat, '.' = empty column, '-' alone = walkway,
 //         'F:4  ...' = row F whose first seat is numbered 4.
+//         'B:3/26  ...' = each block (run of seats) has its own first number, in numbering
+//         order (with rtl the rightmost block comes first); a block without one continues.
 function normaliseSection(sec, hall) {
   const out = [];
   if (sec.grid) {
@@ -55013,9 +55763,10 @@ function normaliseSection(sec, hall) {
       g.rows.slice().reverse().forEach((line) => {
         const t = line.trim();
         if (t === '-' || t === '') { out.push({ walkway: true, pitch: g.walkway || 1.0 }); return; }
-        const m = t.match(/^([^\s:]+)(?::(\d+))?\s+(.*)$/);
+        const m = t.match(/^([^\s:]+)(?::([\d/]+))?\s+(.*)$/);
+        const st = m[2] ? m[2].split('/').map(Number) : [1];
         out.push({
-          tier: g.tier, label: m[1], start: m[2] ? +m[2] : 1, cells: m[3].replace(/\s/g, '.'),
+          tier: g.tier, label: m[1], start: st[0], starts: st.length > 1 ? st : null, cells: m[3].replace(/\s/g, '.'),
           tierLabel: g.label, price: g.price, align: 'grid', colW: g.colW, prefix: g.prefix,
           pitch: g.pitch, rtl: g.rtl ?? sec.rtl ?? hall.rtl, numbering: g.numbering || hall.numbering,
         });
@@ -55091,9 +55842,19 @@ function getLayout(theatre, screenIdx = 0) {
         const last = runs.at(-1);
         if (last && last.end === c - 1) last.end = c; else runs.push({ start: c, end: c });
       }
-      const nums = [];
-      runs.forEach((r) => { for (let c = r.start; c <= r.end; c++) nums.push(spec.numbering === 'col' ? c + 1 : nums.length + (spec.start || 1)); });
-      if (spec.rtl) nums.reverse();
+      let nums = [];
+      if (spec.starts) { // a first number per block, in numbering order
+        const byCol = new Map(); let next = spec.starts[0];
+        (spec.rtl ? runs.slice().reverse() : runs).forEach((r, i) => {
+          if (spec.starts[i] != null) next = spec.starts[i];
+          const cols = []; for (let c = r.start; c <= r.end; c++) cols.push(c);
+          (spec.rtl ? cols.reverse() : cols).forEach((c) => byCol.set(c, next++));
+        });
+        runs.forEach((r) => { for (let c = r.start; c <= r.end; c++) nums.push(byCol.get(c)); });
+      } else {
+        runs.forEach((r) => { for (let c = r.start; c <= r.end; c++) nums.push(spec.numbering === 'col' ? c + 1 : nums.length + (spec.start || 1)); });
+        if (spec.rtl) nums.reverse();
+      }
       let block = 0, k = 0;
       runs.forEach((r, ri) => {
         if (ri > 0) {

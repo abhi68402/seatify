@@ -1,0 +1,1675 @@
+{
+ "ARMH": {
+  "name": "Asian Radhika Multiplex",
+  "short": "Asian Radhika",
+  "area": "ECIL",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Dolby 7.1",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 355,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-radhika-multiplex-ecil-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 201,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-radhika-multiplex-ecil-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 201,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-radhika-multiplex-ecil-screen-3/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 33632,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/2159824/asian-radhika-multiplex"
+  },
+  "highlights": [
+   {
+    "text": "All three screens use 2K Xenon projection with Dolby 7.1 sound, with 757 seats in total.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/asian-radhika-multiplex/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/asian-radhika-multiplex/"
+ },
+ "APNS": {
+  "name": "Aparna Cinemas Shamshabad",
+  "short": "Aparna Cinemas",
+  "area": "Shamshabad",
+  "single": false,
+  "screens": 7,
+  "tags": [
+   "Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 141,
+    "width_ft": 32,
+    "projector": "Barco RGB SP4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 132,
+    "width_ft": 32,
+    "projector": "Barco RGB SP4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 214,
+    "width_ft": 53.5,
+    "projector": "Barco SP4K-35B Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 139,
+    "width_ft": 36.4,
+    "projector": "Barco RGB SP4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 289,
+    "width_ft": 60,
+    "projector": "Barco SP4K-35B Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-5/"
+   },
+   {
+    "screen": "Screen 6",
+    "seats": 109,
+    "width_ft": 32,
+    "projector": "Barco SP4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-6/"
+   },
+   {
+    "screen": "Screen 7 (VIP)",
+    "seats": 25,
+    "width_ft": 18.5,
+    "projector": "Barco SP4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-7/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "All 7 screens use Barco 4K laser projectors, and Screens 3 and 5 have Dolby Atmos.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/aparna-cinemas-satamrai/"
+   },
+   {
+    "text": "Screen 5 is the largest, 60 ft wide, with a Barco SP4K-35B laser projector rated at 36,000 lumens.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-satamrai-screen-5/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/aparna-cinemas-satamrai/"
+ },
+ "HMHD": {
+  "name": "BR Hitech 70MM",
+  "short": "BR Hitech",
+  "area": "Madhapur",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "BR Hitech",
+    "seats": 696,
+    "width_ft": 65,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/br-hitech-70mm-br-hitech/"
+   }
+  ],
+  "rating": {
+   "value": 3.7,
+   "count": 14718,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/br-hitech-theatre/1749423"
+  },
+  "highlights": [
+   {
+    "text": "A single hall with a 65 ft wide screen and 696 seats.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/br-hitech-70mm-br-hitech/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/br-hitech-70mm/"
+ },
+ "ACHI": {
+  "name": "Asian Sha & Shahensha",
+  "short": "Sha & Shahensha",
+  "area": "Chintal",
+  "single": false,
+  "screens": 2,
+  "tags": [
+   "Dolby 7.1",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Sha (Screen 1)",
+    "seats": 650,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-sha-shahensha-sha-screen-1/"
+   },
+   {
+    "screen": "Shahensha (Screen 2)",
+    "seats": 409,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-sha-shahensha-shahensha-screen-2/"
+   }
+  ],
+  "rating": {
+   "value": 3.8,
+   "count": 17656,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202025/asian-shah-shahensha"
+  },
+  "highlights": [
+   {
+    "text": "The two halls are named Sha (650 seats) and Shahensha (409 seats).",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/asian-sha-shahensha/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/asian-sha-shahensha/",
+  "notes": "HyderabadTheatres places it in Balanagar; BMS says Chintal; Wanderlog address is Jeedimetla Main Road."
+ },
+ "IOMH": {
+  "name": "INOX Odeon",
+  "short": "INOX Odeon",
+  "area": "RTC X Roads",
+  "single": false,
+  "screens": 8,
+  "tags": [
+   "Dolby Atmos",
+   "DTS:X"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 183,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 203,
+    "width_ft": null,
+    "projector": "Barco 2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 191,
+    "width_ft": null,
+    "projector": "Barco 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 139,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 257,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-5/"
+   },
+   {
+    "screen": "Screen 6",
+    "seats": 179,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-6/"
+   },
+   {
+    "screen": "Screen 7",
+    "seats": 163,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-7/"
+   },
+   {
+    "screen": "Screen 8",
+    "seats": 91,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "DTS:X",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-8/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 335,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/20332595"
+  },
+  "highlights": [
+   {
+    "text": "Built on the site of the old Odeon complex at RTC X Roads, which held Odeon 70mm, Odeon Deluxe and Mini Odeon and was a release centre for Telugu blockbusters for decades.",
+    "src": "The News Minute",
+    "url": "https://www.thenewsminute.com/telangana/sangeet-odeon-iconic-hyd-theatres-have-faded-oblivion-86620"
+   },
+   {
+    "text": "The 8-screen INOX opened at the old Odeon site as the 19th PVR INOX cinema in Hyderabad, taking the chain to 119 screens in the city.",
+    "src": "Cinejosh",
+    "url": "https://cinejosh.com/news/1/125757/inox-odeon-opened-at-rtc-x-roads.html"
+   },
+   {
+    "text": "Screen 8 has DTS:X sound with 2K laser projection.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-8/"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-odeon-4k-laser-dolby-atmos-dts-x-rtc-x-roads-CD1022247",
+  "source": "https://www.hyderabadtheatres.com/theaters/inox-odeon-mall/",
+  "notes": "Wanderlog rating count is low (335) because the cinema opened in 2026."
+ },
+ "SNDY": {
+  "name": "Sandhya 35MM",
+  "short": "Sandhya 35MM",
+  "area": "RTC X Roads",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 1050,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/sandhya-35mm-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 1863,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/sandhya-35-mm/668137"
+  },
+  "highlights": [
+   {
+    "text": "The team of the Telugu film Baby visited Sandhya 35MM to watch the audience response to the film.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/baby-movie-theatre-response-sandhya-35mm-hyderabad"
+   },
+   {
+    "text": "A single hall of 1,050 seats in 33 rows, with 4K laser projection and Dolby Atmos.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/sandhya-35mm-screen-1/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/sandhya-35mm/"
+ },
+ "PIMH": {
+  "name": "PVR Irrum Manzil",
+  "short": "PVR Irrum Manzil",
+  "area": "Irrum Manzil",
+  "single": false,
+  "screens": 7,
+  "tags": [
+   "4DX",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1 (4DX)",
+    "seats": 96,
+    "width_ft": 50,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "4DX / 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-1-4dx/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 104,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 168,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 140,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 150,
+    "width_ft": 38,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": 282,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-6/"
+   },
+   {
+    "screen": "Audi 7",
+    "seats": 242,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-7/"
+   }
+  ],
+  "rating": {
+   "value": 4.0,
+   "count": 18715,
+   "src": "Google, via Explurger",
+   "url": "https://www.explurger.com/pd/s55nrkrmgaxwhdy41"
+  },
+  "highlights": [
+   {
+    "text": "Opened as PVR's seventh multiplex in Hyderabad, with 7 screens and 1,182 seats across 42,461 sq ft.",
+    "src": "Dalal Street Journal",
+    "url": "https://www.dsij.in/appmindshare/pvr-opens-7-screen-multiplex-in-hyderabad-4940"
+   },
+   {
+    "text": "PVR announced the opening in November 2018, with BARCO 2K projection and Dolby 7.1 sound in all auditoriums.",
+    "src": "Business Standard",
+    "url": "https://www.business-standard.com/article/news-cm/pvr-opens-7-screen-multiplex-in-telangana-118113000367_1.html"
+   },
+   {
+    "text": "Audi 1 is a 4DX auditorium with 96 seats and a 50 ft screen.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-1-4dx/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-irrum-manzil-khairatabad-hyderabad-CD1022282",
+  "source": "https://www.hyderabadtheatres.com/theaters/pvr-irrum-manzil/",
+  "notes": "Rating is Explurger listing \"PVR Cinemas Irrum Manzil\" (Irram Manzil Colony, Punjagutta); Explurger shows ratingValue 4 (recorded 4.0)."
+ },
+ "PVHM": {
+  "name": "PVR ICON Hitech",
+  "short": "PVR ICON Hitech",
+  "area": "Hitech City",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Dolby Atmos",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 190,
+    "width_ft": 45,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-icon-hitech-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 173,
+    "width_ft": 45,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-icon-hitech-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 140,
+    "width_ft": 45,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-icon-hitech-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 302,
+    "width_ft": 45,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-icon-hitech-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 161,
+    "width_ft": 45,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-icon-hitech-audi-5/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 4286,
+   "src": "Google, via Explurger",
+   "url": "https://www.explurger.com/pd/z8661997m8pzgnqfy"
+  },
+  "highlights": [
+   {
+    "text": "Opened in February 2018 as a 5-screen PVR at Next Galleria, Hitech City.",
+    "src": "Business Standard",
+    "url": "https://www.business-standard.com/article/news-cm/pvr-opens-5-screen-multiplex-at-hitech-city-hyderabad-118021300377_1.html"
+   },
+   {
+    "text": "All five audis now have 4K Xenon projection, Dolby Atmos and 45 ft screens.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/pvr-icon/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-icon-hitech-madhapur-hyderabad-CD1022280",
+  "source": "https://www.hyderabadtheatres.com/theaters/pvr-icon/"
+ },
+ "SNKH": {
+  "name": "Asian Mukta A2 Sensation",
+  "short": "Mukta Sensation",
+  "area": "Khairatabad",
+  "single": false,
+  "screens": 2,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 440,
+    "width_ft": null,
+    "projector": "Christie CP2230",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-mukta-a2-sensation-cinema-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 664,
+    "width_ft": null,
+    "projector": "Christie CP2230",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-mukta-a2-sensation-cinema-screen-2/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 410,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202050"
+  },
+  "highlights": [
+   {
+    "text": "Screen 2 is the larger hall, with 664 seats and Dolby Atmos sound.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-mukta-a2-sensation-cinema-screen-2/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/asian-mukta-a2-sensation/",
+  "notes": "Only rating found is the Wanderlog combined listing (410). Separate Google listings exist for \"Sensation Insomnia\" and \"Sensation Sunshine\" halls nearby but were not used."
+ },
+ "IPRS": {
+  "name": "INOX Prism Mall",
+  "short": "INOX Prism",
+  "area": "Gachibowli",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Laser",
+   "Dolby Atmos",
+   "Recliners"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 225,
+    "width_ft": null,
+    "projector": "Barco SP4K-35B RGB Laser",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-prism-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 219,
+    "width_ft": null,
+    "projector": "Barco SP4K-25B",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-prism-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 306,
+    "width_ft": null,
+    "projector": "Barco SP4K-35B RGB Laser",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-prism-mall-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 200,
+    "width_ft": null,
+    "projector": "Barco SP4K-25B",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-prism-mall-screen-4/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Opened by PVR INOX as a 4-screen cinema with 4K laser projection in every auditorium and 950 seats including recliners.",
+    "src": "Medianews4u",
+    "url": "https://www.medianews4u.com/pvr-inox-launches-a-4-screen-cinema-in-hyderabad-with-4k-laser-projection-in-all-auditoriums"
+   },
+   {
+    "text": "The lobby is Art Deco inspired, and the launch plans included a hydroponics display in the foyer.",
+    "src": "Medianews4u",
+    "url": "https://www.medianews4u.com/pvr-inox-launches-a-4-screen-cinema-in-hyderabad-with-4k-laser-projection-in-all-auditoriums"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-prism-mall-gachibowli-hyderabad-CD1030419",
+  "source": "https://www.hyderabadtheatres.com/theaters/inox-prism-mall/",
+  "notes": "Theatre page header says 988 seats; per-screen pages and the launch press release both say 950."
+ },
+ "PVUM": {
+  "name": "PVR Musarambagh",
+  "short": "PVR Musarambagh",
+  "area": "Musarambagh",
+  "single": false,
+  "screens": 6,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 160,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 181,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 127,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 196,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 116,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": 189,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-6/"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 13433,
+   "src": "Google, via Explurger",
+   "url": "https://www.explurger.com/pd/ntuwtatu5rb532dx9"
+  },
+  "highlights": [
+   {
+    "text": "Opened in March 2019 as PVR's 8th multiplex in Hyderabad, with 6 screens and 985 seats.",
+    "src": "Indian Television",
+    "url": "https://indiantelevision.com/mam/pvr-cinemas-expands-its-footprints-in-the-southern-market-with-the-launch-of-its-10th-multiplex-in-telangana/"
+   },
+   {
+    "text": "Its interiors are themed on theatrical art in an art deco style.",
+    "src": "Indian Television",
+    "url": "https://indiantelevision.com/mam/pvr-cinemas-expands-its-footprints-in-the-southern-market-with-the-launch-of-its-10th-multiplex-in-telangana/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-musarambagh-new-malakpet-hyderabad-CD1022283",
+  "source": "https://www.hyderabadtheatres.com/theaters/pvr-musarambagh/",
+  "notes": "Per-screen seats sum to 969; launch press (2019) said 985."
+ },
+ "MRAD": {
+  "name": "Miraj Cinemas Anand Mall",
+  "short": "Miraj Narsingi",
+  "area": "Narsingi",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 232,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-anand-mall-movies-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 179,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-anand-mall-movies-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 168,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-anand-mall-movies-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 233,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-anand-mall-movies-screen-4/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Opened as Miraj Cinemas' sixth property in Hyderabad, raising its city screen count to 22.",
+    "src": "Franchise India",
+    "url": "https://www.franchiseindia.com/insights/en/news/miraj-cinemas-expands-hyderabad-footprint-with-new-4-screen-multiplex-at-narsingi.57559"
+   },
+   {
+    "text": "The four auditoriums have sofa-style seating and mood lighting, with 801 seats in total at launch.",
+    "src": "Franchise India",
+    "url": "https://www.franchiseindia.com/insights/en/news/miraj-cinemas-expands-hyderabad-footprint-with-new-4-screen-multiplex-at-narsingi.57559"
+   }
+  ],
+  "district": "https://www.district.in/movies/miraj-cinemas-anand-mall-and-movies-narsingi-CD1099532",
+  "source": "https://www.hyderabadtheatres.com/theaters/miraj-cinemas-anand-mall/",
+  "notes": "Per-screen seats sum to 812; launch coverage says 801."
+ },
+ "MCSS": {
+  "name": "Miraj Shalini Shivani",
+  "short": "Miraj Shalini",
+  "area": "Kothapet",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby 7.1",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 94,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 454,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 130,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 571,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-4/"
+   }
+  ],
+  "rating": {
+   "value": 4.0,
+   "count": 32065,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/miraj-cinemas-shalini-shivani/220299"
+  },
+  "highlights": [
+   {
+    "text": "Screen 4 is the largest hall, with 571 seats.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-4/"
+   }
+  ],
+  "district": "https://www.district.in/movies/miraj-cinemas-shalini-shivani-kothapet-CD183",
+  "source": "https://www.hyderabadtheatres.com/theaters/miraj-cinemas-shalini-shivani/"
+ },
+ "ASJY": {
+  "name": "Asian Jyothi",
+  "short": "Asian Jyothi",
+  "area": "RC Puram",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 500,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby Digital",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-jyothi-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.7,
+   "count": 11105,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202038/asian-jyothi-cinema"
+  },
+  "highlights": [
+   {
+    "text": "A single hall of 500 seats.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/asian-jyothi/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/asian-jyothi/"
+ },
+ "SPCB": {
+  "name": "Asian Super Cinema",
+  "short": "Asian Super",
+  "area": "Balapur",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Asian Super Cinema",
+    "seats": 686,
+    "width_ft": null,
+    "projector": "Christie CP4420-Xe",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-super-cinema-balapur-asian-super-cinema/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single hall of 686 seats in 30 rows, with a Christie CP4420-Xe 4K projector.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-super-cinema-balapur-asian-super-cinema/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/asian-super-cinema/"
+ },
+ "PVYH": {
+  "name": "PVR Central Mall",
+  "short": "PVR Central",
+  "area": "Panjagutta",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Recliners",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 259,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 226,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 140,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 261,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 390,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-5/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 41472,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/550860/pvr-panjagutta-hyderabad"
+  },
+  "highlights": [
+   {
+    "text": "Located on the 5th floor of Hyderabad Central Mall at Panjagutta.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/pvr-central-mall/"
+   },
+   {
+    "text": "Audi 5 is the largest hall, with 390 seats and 4K projection.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-5/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-panjagutta-central-mall-hyderabad-CD1022251",
+  "source": "https://www.hyderabadtheatres.com/theaters/pvr-central-mall/"
+ },
+ "MRAA": {
+  "name": "Miraj Cinemas A2A Central Mall",
+  "short": "Miraj A2A",
+  "area": "Balanagar",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 143,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-a2a-central-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 284,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-a2a-central-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 284,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-a2a-central-mall-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 363,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-a2a-central-mall-screen-4/"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 8237,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15201992/miraj-cinemas"
+  },
+  "highlights": [
+   {
+    "text": "Screen 4 is the only Dolby Atmos hall of the four, with 363 seats and 4K projection.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-a2a-central-mall-screen-4/"
+   }
+  ],
+  "district": "https://www.district.in/movies/miraj-cinemas-a2a-central-mall-balanagar-CD9338",
+  "source": "https://www.hyderabadtheatres.com/theaters/miraj-cinemas-a2a-central-mall/",
+  "notes": "Per-screen seats sum to 1,074; theatre page header says 1,071. Wanderlog listing is titled just \"Miraj Cinemas\" (Balanagar); matched by coordinates (17.4820, 78.4488)."
+ },
+ "ARYH": {
+  "name": "Asian Rajya Lakshmi",
+  "short": "Rajya Lakshmi",
+  "area": "Uppal",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Rajya Lakshmi",
+    "seats": 654,
+    "width_ft": null,
+    "projector": "Barco 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-rajya-lakshmi-uppal-rajya-lakshmi/"
+   }
+  ],
+  "rating": {
+   "value": 3.4,
+   "count": 6836,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/raj-laxmi-70mm-dts/646657"
+  },
+  "highlights": [
+   {
+    "text": "A single hall of 654 seats with 2K Xenon projection and Dolby 7.1.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/asian-rajya-lakshmi/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/asian-rajya-lakshmi/",
+  "notes": "Two Google listings sit at this junction: \"Raj Laxmi 70mm Dts\" (3.4, 6836) and \"Rajyalaxmi Cinema\" (3.3, 514, https://yappe.in/telangana/hyderabad/rajyalaxmi-cinema/646653). Used the larger; both are within about 100 m of the BMS pin."
+ },
+ "VTRB": {
+  "name": "Vijetha 70MM",
+  "short": "Vijetha 70MM",
+  "area": "Borabanda",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Dolby Atmos",
+   "4K"
+  ],
+  "halls": [
+   {
+    "screen": "Vijetha 70MM",
+    "seats": 594,
+    "width_ft": 52,
+    "projector": "Barco DP4K-23B",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/vijetha-70mm-vijetha-70mm/"
+   }
+  ],
+  "rating": {
+   "value": 3.8,
+   "count": 8550,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/vijetha-theatre/668140"
+  },
+  "highlights": [
+   {
+    "text": "A single hall with a 52 ft screen, a Barco DP4K-23B projector and Dolby Atmos, seating 594.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/vijetha-70mm-vijetha-70mm/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/vijetha-70mm/",
+  "notes": "HyderabadTheatres spec block says 52 x 21.7 ft, but its own \"About this screen\" text says a 67-foot wide screen. Recorded 52."
+ },
+ "MCKT": {
+  "name": "Mahalaxmi Complex",
+  "short": "Mahalaxmi",
+  "area": "Kothapet",
+  "single": false,
+  "screens": 2,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 543,
+    "width_ft": null,
+    "projector": "Barco DP2K-20C",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/mahalaxmi-complex-kothapet-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 367,
+    "width_ft": null,
+    "projector": "NEC 2K",
+    "sound": "DTS",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/mahalaxmi-complex-kothapet-screen-2/"
+   }
+  ],
+  "rating": {
+   "value": 3.6,
+   "count": 1550,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/mahalaxmi-theater/220313"
+  },
+  "highlights": [
+   {
+    "text": "Two halls: Screen 1 with 543 seats and Screen 2 with 367 seats.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/mahalaxmi-complex-kothapet/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/mahalaxmi-complex-kothapet/",
+  "notes": "Per-screen seats sum to 910; theatre page header says 900."
+ },
+ "VRKC": {
+  "name": "Venkataramana & Padmavati",
+  "short": "Venkataramana",
+  "area": "Kachiguda",
+  "single": false,
+  "screens": 2,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Padmavati",
+    "seats": 422,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/indra-venkataramana-padmavati-cinema-padmavati/"
+   },
+   {
+    "screen": "Venkataramana",
+    "seats": 630,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/indra-venkataramana-padmavati-cinema-venkataramana/"
+   }
+  ],
+  "rating": {
+   "value": 3.9,
+   "count": 7848,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/indra-venkataramana-padmavati-cineplex/220319"
+  },
+  "highlights": [
+   {
+    "text": "Two halls named Venkataramana (630 seats) and Padmavati (422 seats).",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/theaters/indra-venkataramana-padmavati-cinema/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/indra-venkataramana-padmavati-cinema/"
+ },
+ "MRRG": {
+  "name": "Miraj Cinemas Raghavendra",
+  "short": "Miraj Malkajgiri",
+  "area": "Malkajgiri",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 660,
+    "width_ft": null,
+    "projector": "Barco DP2K-20CLP",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-raghavendra-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 275,
+    "width_ft": null,
+    "projector": "Barco DP2K-6E",
+    "sound": "Dolby 5.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-raghavendra-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 492,
+    "width_ft": null,
+    "projector": "Barco DP2K-20CLP",
+    "sound": "Dolby 5.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-raghavendra-screen-3/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Screen 1 is the largest hall, with 660 seats.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-raghavendra-screen-1/"
+   }
+  ],
+  "district": "https://www.district.in/movies/miraj-cinemas-raghavendra-malkajgiri-CD25026",
+  "source": "https://www.hyderabadtheatres.com/theaters/miraj-cinemas-raghavendra/"
+ },
+ "TVHY": {
+  "name": "Tivoli Cinemas",
+  "short": "Tivoli",
+  "area": "Secunderabad",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Laser",
+   "Dolby 7.1",
+   "3D"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 4 (EXTREEME)",
+    "seats": 757,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/tivoli-cinemas-extreeme/"
+   },
+   {
+    "screen": "Screen 1",
+    "seats": 397,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/tivoli-cinemas-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 223,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/tivoli-cinemas-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 56,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/tivoli-cinemas-screen-3/"
+   }
+  ],
+  "rating": {
+   "value": 3.9,
+   "count": 22254,
+   "src": "Google, via Yappe",
+   "url": "https://yappe.in/telangana/secunderabad/tivoli-cinema/1039905"
+  },
+  "highlights": [
+   {
+    "text": "Named by The Hans India as the one old Secunderabad cinema that stood the test of time, upgraded to newer projection technology.",
+    "src": "The Hans India",
+    "url": "https://www.thehansindia.com/posts/index/Telangana/2017-08-11/Moving-memories-of-vanished-movie-halls/318187"
+   },
+   {
+    "text": "Screen 4 is branded EXTREEME and is the largest hall, with 757 seats.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/tivoli-cinemas-extreeme/"
+   }
+  ],
+  "district": null,
+  "source": "https://www.hyderabadtheatres.com/theaters/tivoli-cinemas/",
+  "notes": "Per-screen seats sum to 1,433; the theatre page header says 1,500 and its About text says 700. Screen 3 is listed with only 56 seats."
+ },
+ "INMH": {
+  "name": "INOX Maheshwari Parmeshwari",
+  "short": "INOX Kachiguda",
+  "area": "Kachiguda",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 236,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-maheshwari-parmeshwari-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 160,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-maheshwari-parmeshwari-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 220,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-maheshwari-parmeshwari-mall-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 304,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-maheshwari-parmeshwari-mall-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 242,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-maheshwari-parmeshwari-mall-screen-5/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 33971,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/12559545/inox-maheshwari-parameshwari"
+  },
+  "highlights": [
+   {
+    "text": "Stands on the site of the 1980s Maheshwari and Parameshwari twin theatres, known for what was probably the first escalator in a public space in Hyderabad.",
+    "src": "The News Minute",
+    "url": "https://www.thenewsminute.com/telangana/sangeet-odeon-iconic-hyd-theatres-have-faded-oblivion-86620"
+   },
+   {
+    "text": "The twin theatres were demolished and rebuilt as the Maheshwari Parameshwari INOX multiplex in 2010.",
+    "src": "The News Minute",
+    "url": "https://www.thenewsminute.com/telangana/sangeet-odeon-iconic-hyd-theatres-have-faded-oblivion-86620"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-maheshwari-parmeshwari-mall-kachiguda-hyderabad-CD1020777",
+  "source": "https://www.hyderabadtheatres.com/theaters/inox-maheshwari-parmeshwari-mall/"
+ },
+ "IVNM": {
+  "name": "INOX SMR Vinay Metro Mall",
+  "short": "INOX SMR Vinay",
+  "area": "Miyapur",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 248,
+    "width_ft": null,
+    "projector": "Barco 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-smr-vinay-metro-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 231,
+    "width_ft": null,
+    "projector": "Barco 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-smr-vinay-metro-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 125,
+    "width_ft": null,
+    "projector": "Barco 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-smr-vinay-metro-mall-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 250,
+    "width_ft": null,
+    "projector": "Barco 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-smr-vinay-metro-mall-screen-4/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 285,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/12559543/inox-smr-vinay-metro-mall"
+  },
+  "highlights": [
+   {
+    "text": "Opened by PVR INOX in July 2025 with 849 seats, including 49 leatherette recliners.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/hyderabad-pvr-inox-opens-new-4-screen-multiplex-at-smr-vinay-mall-hafeezpet"
+   },
+   {
+    "text": "Two of its four screens have Dolby Atmos sound.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/hyderabad-pvr-inox-opens-new-4-screen-multiplex-at-smr-vinay-mall-hafeezpet"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-smr-vinay-metro-mall-hyderabad-CD1022248",
+  "source": "https://www.hyderabadtheatres.com/theaters/inox-smr-vinay-metro-mall/",
+  "notes": "Per-screen seats sum to 854; theatre page says 850; launch press says 849."
+ },
+ "MRGT": {
+  "name": "Miraj Cinemas Geeta",
+  "short": "Miraj Geeta",
+  "area": "Chandanagar",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 434,
+    "width_ft": null,
+    "projector": "4K Digital",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-geeta-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 111,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby Digital",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-geeta-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 324,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-geeta-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 100,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby Digital",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-geeta-screen-4/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 5192,
+   "src": "Google, via Explurger",
+   "url": "https://www.explurger.com/pd/cn9aun96hskyhj7ge"
+  },
+  "highlights": [
+   {
+    "text": "Screen 1 is the largest hall, with 434 seats, 4K projection and Dolby Atmos.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-geeta-screen-1/"
+   }
+  ],
+  "district": "https://www.district.in/movies/miraj-cinemas-geeta-chandanagar-CD10249",
+  "source": "https://www.hyderabadtheatres.com/theaters/miraj-cinemas-geeta/"
+ },
+ "PRCX": {
+  "name": "PVR RK Cineplex",
+  "short": "PVR RK Cineplex",
+  "area": "Banjara Hills",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Dolby Atmos",
+   "Recliners"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 481,
+    "width_ft": null,
+    "projector": "4K Digital",
+    "sound": "Dolby Atmos",
+    "format": "Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-rk-cineplex-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 231,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-rk-cineplex-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 231,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-rk-cineplex-screen-3/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 22538,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/8052078/pvr-rk-cineplex-hyderabad"
+  },
+  "highlights": [
+   {
+    "text": "Screen 1 is the largest hall, with 481 seats, 4K projection and Dolby Atmos.",
+    "src": "HyderabadTheatres",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-rk-cineplex-screen-1/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-rk-cineplex-rk-complex-hyderabad-CD1022256",
+  "source": "https://www.hyderabadtheatres.com/theaters/pvr-rk-cineplex/"
+ },
+ "AMCM": {
+  "name": "Asian Mukund Cinema",
+  "short": "Asian Mukund",
+  "area": "Medchal",
+  "single": null,
+  "screens": null,
+  "tags": [],
+  "halls": [],
+  "rating": {
+   "value": 3.9,
+   "count": 5438,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/9415824/asian-mukund-ac-theatre"
+  },
+  "highlights": [],
+  "district": null,
+  "notes": "Not on HyderabadTheatres; no screen or seat data found. Rating matched by coordinates (17.6387, 78.4849)."
+ }
+}

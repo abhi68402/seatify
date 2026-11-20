@@ -1,7 +1,7 @@
 {
   "name": "Vyu · View your seat before you sit",
   "short_name": "Vyu",
-  "description": "Sit in any seat of 13 Hyderabad theatres in 3D before you go. Works offline.",
+  "description": "Sit in any seat of 31 Hyderabad theatres in 3D before you go. Works offline.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

@@ -1,0 +1,1155 @@
+{
+ "UKCC": {
+  "name": "UK Cineplex",
+  "short": "UK Cineplex",
+  "area": "Nacharam",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos",
+   "Laser"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 292,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Sound",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/uk-cineplex-nacharam-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby Atmos",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/uk-cineplex-nacharam-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby Atmos",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/uk-cineplex-nacharam-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby Atmos",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/uk-cineplex-nacharam-screen-4/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A 4-screen multiplex with 600 seats in all.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/uk-cineplex/"
+   },
+   {
+    "text": "Screens 2, 3 and 4 use 2K laser projection with Dolby Atmos sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/uk-cineplex/"
+   }
+  ],
+  "district": "https://www.district.in/movies/uk-cineplex-hyderabad-CD1084596"
+ },
+ "SCHC": {
+  "name": "VLS Sridevi",
+  "short": "VLS Sridevi",
+  "area": "Chilakalguda",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "DTS"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 762,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "DTS",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/vls-sridevi-theatre-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.9,
+   "count": 6120,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/secunderabad/vls-sridevi-theatre-70-mm/1039909"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 762 seats, 2K Xenon projection and DTS sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/vls-sridevi-theatre/"
+   }
+  ],
+  "district": null
+ },
+ "VAJA": {
+  "name": "Vyjayanthi Cinema",
+  "short": "Vyjayanthi",
+  "area": "Nacharam",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 645,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/vyjayanthi-cinema-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 645 seats, 2K Xenon projection and Dolby 7.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/vyjayanthi-cinema/"
+   }
+  ],
+  "district": null
+ },
+ "MTHY": {
+  "name": "Platinum Movietime",
+  "short": "Platinum MT",
+  "area": "Gachibowli",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Recliners",
+   "Dolby Atmos",
+   "Laser"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 50,
+    "width_ft": 50,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/platinum-movietime-gachibowli-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 39,
+    "width_ft": 45,
+    "projector": "Digital 4K",
+    "sound": "Dolby Atmos",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/platinum-movietime-gachibowli-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 48,
+    "width_ft": 42,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/platinum-movietime-gachibowli-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 58,
+    "width_ft": 40,
+    "projector": "4K Digital",
+    "sound": "Dolby Atmos",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/platinum-movietime-gachibowli-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 34,
+    "width_ft": 38,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/platinum-movietime-gachibowli-screen-5/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 4768,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/2001321/platinum-cinemas"
+  },
+  "highlights": [
+   {
+    "text": "Five screens with 229 recliner seats in all, from 34 to 58 seats per screen.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/platinum-movietime-sln-terminus/"
+   },
+   {
+    "text": "Every screen has Dolby Atmos; Screen 1 is the widest, at 50 ft, with 4K laser projection.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/platinum-movietime-sln-terminus/"
+   },
+   {
+    "text": "It is on the 3rd floor of SLN Terminus mall in Gachibowli.",
+    "src": "Wanderlog",
+    "url": "https://wanderlog.com/place/details/2001321/platinum-cinemas"
+   }
+  ],
+  "district": "https://www.district.in/movies/platinum-movietime-cinemas-gachibowli-sln-terminus-hyderabad-CD1040670"
+ },
+ "PSMJ": {
+  "name": "Movietime SKY Mall",
+  "short": "Movietime SKY",
+  "area": "Erragadda",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Dolby Atmos",
+   "Laser"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 435,
+    "width_ft": 45,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/sky-mall-movietime-cinemas-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 233,
+    "width_ft": 45,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/sky-mall-movietime-cinemas-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 189,
+    "width_ft": 45,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/sky-mall-movietime-cinemas-screen-3/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A 3-screen multiplex with 857 seats in all; each screen is 45 ft wide.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sky-mall-movietime-cinemas/"
+   },
+   {
+    "text": "Screen 1, the largest with 435 seats, has 4K laser projection and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/sky-mall-movietime-cinemas-screen-1/"
+   }
+  ],
+  "district": "https://www.district.in/movies/movietime-cinemas-sky-mall-erragadda-x-road-hyderabad-CD1040594"
+ },
+ "TRHY": {
+  "name": "Asian Tarakarama",
+  "short": "Tarakarama",
+  "area": "Kachiguda",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Recliners",
+   "4K",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 592,
+    "width_ft": null,
+    "projector": "Barco 4K",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-tarakarama-cineplex-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 4.0,
+   "count": 9088,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202036/asian-tarakarama-cineplex"
+  },
+  "highlights": [
+   {
+    "text": "Built by the family of actor N. T. Rama Rao in 1978.",
+    "src": "The News Minute",
+    "url": "https://www.thenewsminute.com/article/hyderabad-s-renovated-tarakarama-theatre-reopens-after-10-yrs-launched-balakrishna-170955"
+   },
+   {
+    "text": "Renovated by Asian Cinemas and reopened by Nandamuri Balakrishna in December 2022, with Avatar: The Way of Water as the first film.",
+    "src": "The News Minute",
+    "url": "https://www.thenewsminute.com/article/hyderabad-s-renovated-tarakarama-theatre-reopens-after-10-yrs-launched-balakrishna-170955"
+   },
+   {
+    "text": "The renovation cut the hall from 975 seats to 590 and added sofas, recliners and 4K projection.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/nandamuri-balakrishna-to-re-open-asian-tarakarama-on-december-14"
+   }
+  ],
+  "district": null
+ },
+ "STHD": {
+  "name": "Cinepolis Sudha",
+  "short": "Cinepolis Sudha",
+  "area": "Lal Darwaza",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Multiplex"
+  ],
+  "halls": [
+   {
+    "screen": "Auditorium 1",
+    "seats": 267,
+    "width_ft": null,
+    "projector": null,
+    "sound": null,
+    "format": null,
+    "url": "https://smartads.in/services/cinema/sudha-cinepolis-cinema-advertising-in-hyderabad"
+   },
+   {
+    "screen": "Auditorium 2",
+    "seats": 220,
+    "width_ft": null,
+    "projector": null,
+    "sound": null,
+    "format": null,
+    "url": "https://smartads.in/services/cinema/sudha-cinepolis-cinema-advertising-in-hyderabad"
+   },
+   {
+    "screen": "Auditorium 3",
+    "seats": 164,
+    "width_ft": null,
+    "projector": null,
+    "sound": null,
+    "format": null,
+    "url": "https://smartads.in/services/cinema/sudha-cinepolis-cinema-advertising-in-hyderabad"
+   },
+   {
+    "screen": "Auditorium 4",
+    "seats": 122,
+    "width_ft": null,
+    "projector": null,
+    "sound": null,
+    "format": null,
+    "url": "https://smartads.in/services/cinema/sudha-cinepolis-cinema-advertising-in-hyderabad"
+   },
+   {
+    "screen": "Auditorium 5",
+    "seats": 205,
+    "width_ft": null,
+    "projector": null,
+    "sound": null,
+    "format": null,
+    "url": "https://smartads.in/services/cinema/sudha-cinepolis-cinema-advertising-in-hyderabad"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 16943,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/6687141/cin%C3%A9polis-sudha"
+  },
+  "highlights": [
+   {
+    "text": "The former Sudha 70mm in Lal Darwaza was remodelled and reopened on 20 October 2017 with five screens.",
+    "src": "Cinema Treasures",
+    "url": "https://cinematreasures.org/theaters/60954"
+   },
+   {
+    "text": "Cinepolis called it its 4th signature theatre in India, with 5 screens and 1,006 seats, in the Old City.",
+    "src": "MediaNews4U",
+    "url": "https://medianews4u.com/?p=2175362"
+   }
+  ],
+  "district": "https://www.district.in/movies/cinepolis-sudha-cinemas-rajpal-nagar-hyderabad-CD3870"
+ },
+ "PRCS": {
+  "name": "Prashant Cinema",
+  "short": "Prashant",
+  "area": "Secunderabad",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 445,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/prashant-cinema-secunderabad-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.6,
+   "count": 5598,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/prashant-theatre/667931"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 445 seats, 2K projection and Dolby 7.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/prashant-cinema-secunderabad/"
+   },
+   {
+    "text": "It is on Regimental Bazar Main Road, next to Secunderabad railway station.",
+    "src": "Yappe",
+    "url": "https://yappe.in/telangana/hyderabad/prashant-theatre/667931"
+   }
+  ],
+  "district": null
+ },
+ "PTTH": {
+  "name": "Alankar Theatre",
+  "short": "Alankar",
+  "area": "Langar Houz",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 720,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Basic",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/alankar-theatre-langer-house-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.8,
+   "count": 2266,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/alankar-cinema/646140"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with about 720 seats and a basic sound setup.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/alankar-theatre-langer-house/"
+   }
+  ],
+  "district": null
+ },
+ "SCVM": {
+  "name": "Sushma Theatre",
+  "short": "Sushma",
+  "area": "Vanasthalipuram",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Dolby Digital"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 1082,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby Digital",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/sushma-theatre-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.6,
+   "count": 12120,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/sahebnagar-kalan/sushma-theater/1058339"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 1,082 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sushma-theatre/"
+   },
+   {
+    "text": "It has 2K digital projection and Dolby Digital sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sushma-theatre/"
+   }
+  ],
+  "district": "https://www.district.in/movies/sushma-70mm-2k-dolby-digital-vanasthalipuram-hyderabad-CD4496"
+ },
+ "RKMH": {
+  "name": "Rama Krishna 70mm",
+  "short": "Rama Krishna",
+  "area": "Abids",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Dolby 7.1",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 922,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/rama-krishna-70mm-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.7,
+   "count": 7679,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202103/rama-krishna-theatre"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen 70mm hall with 922 seats, 2K digital projection and Dolby 7.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/rama-krishna-70mm/"
+   }
+  ],
+  "district": null
+ },
+ "RMKN": {
+  "name": "Ramakrishna 35mm",
+  "short": "Ramakrishna 35",
+  "area": "Abids",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Ramakrishna 35MM",
+    "seats": 568,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/ramakrishna-glitterati-abids-ramakrishna-35mm/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 568 seats, 2K digital projection and Dolby 7.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/ramakrishna-glitterati-abids/"
+   },
+   {
+    "text": "Also listed as Ramakrishna Glitterati.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/ramakrishna-glitterati-abids/"
+   }
+  ],
+  "district": null
+ },
+ "BJNG": {
+  "name": "Bhujanga 70MM",
+  "short": "Bhujanga",
+  "area": "Jeedimetla",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 1252,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Digital",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/bhujanga-70mm-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.3,
+   "count": 7708,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202079/bhujanga-theatre"
+  },
+  "highlights": [
+   {
+    "text": "A 70mm hall with 1,252 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/bhujanga-70mm/"
+   },
+   {
+    "text": "It has 2K Xenon projection and Dolby Digital sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/bhujanga-70mm/"
+   }
+  ],
+  "district": "https://www.district.in/movies/bhujanga-70mm-hyderabad-CD1101585"
+ },
+ "CPLK": {
+  "name": "Connplex MPM Mall",
+  "short": "Connplex MPM",
+  "area": "Banjara Hills",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Recliners"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 62,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/connplex-cinemas-mpm-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 72,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/connplex-cinemas-mpm-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 37,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/connplex-cinemas-mpm-mall-screen-3/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A small 3-screen multiplex with 171 seats in all, every one a recliner.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/connplex-cinemas-mpm-mall/"
+   },
+   {
+    "text": "All three screens have Dolby 7.1 sound; Screen 1 uses 2K laser projection.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/connplex-cinemas-mpm-mall/"
+   }
+  ],
+  "district": null
+ },
+ "ARTH": {
+  "name": "Aradhana 70MM",
+  "short": "Aradhana",
+  "area": "Tarnaka",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 782,
+    "width_ft": 66,
+    "projector": "Full HD",
+    "sound": "Dolby 5.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/aradhana-70mm-theatre-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 782 seats and a 66 ft wide screen.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/aradhana-theatre/"
+   },
+   {
+    "text": "It uses Full HD projection with Dolby 5.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/aradhana-theatre/"
+   }
+  ],
+  "district": "https://www.district.in/movies/aradhana-70mm-theatre-hyderabad-CD1088830"
+ },
+ "SRCA": {
+  "name": "Sree Ramana 70MM",
+  "short": "Sree Ramana",
+  "area": "Amberpet",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "4K",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Sree Ramana 70MM",
+    "seats": 1082,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/sree-ramana-70mm-sree-ramana-70mm/"
+   }
+  ],
+  "rating": {
+   "value": 3.9,
+   "count": 12352,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202002/sree-ramana-theatre"
+  },
+  "highlights": [
+   {
+    "text": "The larger of the two Sree Ramana halls, with 1,082 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sree-ramana-70mm/"
+   },
+   {
+    "text": "It has 4K Xenon projection and Dolby 7.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sree-ramana-70mm/"
+   }
+  ],
+  "district": "https://www.district.in/movies/sree-ramana-theatre-70mm-4k-laser-dolby-7-1-amberpet-CD1102292"
+ },
+ "SRKR": {
+  "name": "Sri Krishna 70MM",
+  "short": "Sri Krishna",
+  "area": "Uppal",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "DTS",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 769,
+    "width_ft": null,
+    "projector": "Digital",
+    "sound": "DTS",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/sri-krishna-70mm-uppal-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.3,
+   "count": 6729,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/sri-krishna-theatre/646659"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 769 seats and DTS sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sri-krishna-70mm-uppal/"
+   }
+  ],
+  "district": "https://www.district.in/movies/shri-krishna-talkies-uppal-hyderabad-CD733"
+ },
+ "SRCH": {
+  "name": "Sree Ramana Gold",
+  "short": "Ramana Gold",
+  "area": "Amberpet",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "4K",
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Sree Ramana Gold",
+    "seats": 820,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": "2D, Passive 3D",
+    "url": "https://www.hyderabadtheatres.com/screen/sree-ramana-gold-sree-ramana-gold/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "The second hall in the Sree Ramana complex, with 820 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sree-ramana-gold/"
+   },
+   {
+    "text": "It has 4K Xenon projection, Dolby 7.1 sound and passive 3D.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sree-ramana-gold/"
+   }
+  ],
+  "district": "https://www.district.in/movies/sree-ramana-gold-4k-dolby-7-1-amberpet-hyderabad-CD36376"
+ },
+ "RCNH": {
+  "name": "Roongta Cinemas Novum",
+  "short": "Roongta Novum",
+  "area": "Nampally",
+  "single": false,
+  "screens": 2,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 182,
+    "width_ft": null,
+    "projector": "Barco 2K",
+    "sound": "Dolby Atmos",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/roongta-cinemas-nampally-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 107,
+    "width_ft": null,
+    "projector": "Barco 2K",
+    "sound": "Dolby Atmos",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/roongta-cinemas-nampally-screen-2/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Opened on 19 December 2025 as Roongta Cinemas' first multiplex in South India.",
+    "src": "Celluloid Junkie",
+    "url": "https://celluloidjunkie.com/?p=114109"
+   },
+   {
+    "text": "Both screens have Dolby Atmos, and the cinema has a live cooking food counter.",
+    "src": "Celluloid Junkie",
+    "url": "https://celluloidjunkie.com/?p=114109"
+   },
+   {
+    "text": "Two screens with 182 and 107 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/roongta-cinemas-nampally/"
+   }
+  ],
+  "district": "https://www.district.in/movies/roongta-cinemas-novum-nampally-CD1101081"
+ },
+ "SSRJ": {
+  "name": "Sree Sai Raja",
+  "short": "Sai Raja",
+  "area": "Musheerabad",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 823,
+    "width_ft": null,
+    "projector": "Digital 2D",
+    "sound": "Dolby Digital",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/sree-sai-raja-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 823 seats and Dolby Digital sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sree-sai-raja/"
+   }
+  ],
+  "district": "https://www.district.in/movies/sree-sai-raja-theatre-musheerabad-hyderabad-CD731"
+ },
+ "KTKT": {
+  "name": "Kumar 70MM",
+  "short": "Kumar",
+  "area": "Kachiguda",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Laser",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 602,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby Digital",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/kumar-70-mm-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.2,
+   "count": 3100,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/kumar-theatre/220279"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 602 seats and 2K laser projection.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/kumar-70-mm/"
+   }
+  ],
+  "district": "https://www.district.in/movies/kumar-70mm-2k-kachiguda-hyderabad-CD1102309"
+ },
+ "SNIB": {
+  "name": "Santosh Theatre",
+  "short": "Santosh",
+  "area": "Ibrahimpatnam",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 512,
+    "width_ft": null,
+    "projector": "1K Xenon",
+    "sound": "Basic",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/santosh-theatre-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 512 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/santosh-theatre/"
+   }
+  ],
+  "district": "https://www.district.in/movies/santosh-theatre-ibrahimpatnam-CD1102357"
+ },
+ "SLRT": {
+  "name": "Laxmi 70MM",
+  "short": "Laxmi",
+  "area": "Shamshabad",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Laser",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Laxmi 70MM",
+    "seats": 478,
+    "width_ft": 40,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/laxmi-70mm-laxmi-70mm/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 478 seats and a 40 ft wide screen.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/laxmi-70mm/"
+   }
+  ],
+  "district": null
+ },
+ "LKMT": {
+  "name": "Lakshmi Kala Mandir",
+  "short": "Lakshmi Kala",
+  "area": "Alwal",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": null,
+    "width_ft": null,
+    "projector": "Digital 2D",
+    "sound": "DTS 5.1",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/lakshmi-kala-mandir-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A single-screen hall with 650 seats and DTS 5.1 sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/lakshmi-kala-mandir/"
+   }
+  ],
+  "district": "https://www.district.in/movies/sri-lakshmi-kalamandir-70mm-a-c-alwal-hyderabad-CD9478"
+ },
+ "MCBH": {
+  "name": "Metro Theatre",
+  "short": "Metro",
+  "area": "Bahadurpura",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 771,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Digital",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/metro-theatre-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.2,
+   "count": 1150,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/metro-cinema-hall/1862605"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 771 seats, 2K Xenon projection and Dolby Digital sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/metro-theatre/"
+   },
+   {
+    "text": "It is on NH 7 near the Zoo Park.",
+    "src": "Yappe",
+    "url": "https://yappe.in/telangana/hyderabad/metro-cinema-hall/1862605"
+   }
+  ],
+  "district": "https://www.district.in/movies/metro-theatre-70mm-bahadurpura-hyderabad-CD4503"
+ },
+ "SART": {
+  "name": "Saptagiri 70MM",
+  "short": "Saptagiri",
+  "area": "RTC X Roads",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "70mm",
+   "Single screen"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 1150,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Digital",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/saptagiri-70mm-screen-1/"
+   }
+  ],
+  "rating": {
+   "value": 3.4,
+   "count": 3315,
+   "src": "Yappe",
+   "url": "https://yappe.in/telangana/hyderabad/saptagiri-cinema-2k-3d/229661"
+  },
+  "highlights": [
+   {
+    "text": "A single-screen hall with 1,150 seats, 2K Xenon projection and Dolby Digital sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/saptagiri-70mm/"
+   },
+   {
+    "text": "One of the longstanding single screens at RTC X Roads.",
+    "src": "Siasat",
+    "url": "https://www.siasat.com/a-hyderabad-theatre-which-stays-away-from-big-films-hates-crowd-3550925/"
+   },
+   {
+    "text": "It mostly shows dubbed and smaller films and tends to stay away from the biggest Telugu releases.",
+    "src": "Siasat",
+    "url": "https://www.siasat.com/a-hyderabad-theatre-which-stays-away-from-big-films-hates-crowd-3550925/"
+   }
+  ],
+  "district": null
+ },
+ "SKTA": {
+  "name": "Sri Krishna Theatre",
+  "short": "Sri Krishna",
+  "area": "Shamirpet",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "DTS"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 300,
+    "width_ft": null,
+    "projector": "Digital",
+    "sound": "DTS",
+    "format": "2D",
+    "url": "https://www.hyderabadtheatres.com/screen/sri-krishna-theatre-shamirpet-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A small single-screen hall with 300 seats and DTS sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sri-krishna-theatre/"
+   }
+  ],
+  "district": null
+ }
+}

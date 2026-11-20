@@ -14,6 +14,8 @@ const deg = (r) => (r * 180) / Math.PI;
 //         seat map, listed TOP-TO-BOTTOM as on screen (back → front).
 //         'o' = seat, '.' = empty column, '-' alone = walkway,
 //         'F:4  ...' = row F whose first seat is numbered 4.
+//         'B:3/26  ...' = each block (run of seats) has its own first number, in numbering
+//         order (with rtl the rightmost block comes first); a block without one continues.
 function normaliseSection(sec, hall) {
   const out = [];
   if (sec.grid) {
@@ -21,9 +23,10 @@ function normaliseSection(sec, hall) {
       g.rows.slice().reverse().forEach((line) => {
         const t = line.trim();
         if (t === '-' || t === '') { out.push({ walkway: true, pitch: g.walkway || 1.0 }); return; }
-        const m = t.match(/^([^\s:]+)(?::(\d+))?\s+(.*)$/);
+        const m = t.match(/^([^\s:]+)(?::([\d/]+))?\s+(.*)$/);
+        const st = m[2] ? m[2].split('/').map(Number) : [1];
         out.push({
-          tier: g.tier, label: m[1], start: m[2] ? +m[2] : 1, cells: m[3].replace(/\s/g, '.'),
+          tier: g.tier, label: m[1], start: st[0], starts: st.length > 1 ? st : null, cells: m[3].replace(/\s/g, '.'),
           tierLabel: g.label, price: g.price, align: 'grid', colW: g.colW, prefix: g.prefix,
           pitch: g.pitch, rtl: g.rtl ?? sec.rtl ?? hall.rtl, numbering: g.numbering || hall.numbering,
         });
@@ -99,9 +102,19 @@ export function getLayout(theatre, screenIdx = 0) {
         const last = runs.at(-1);
         if (last && last.end === c - 1) last.end = c; else runs.push({ start: c, end: c });
       }
-      const nums = [];
-      runs.forEach((r) => { for (let c = r.start; c <= r.end; c++) nums.push(spec.numbering === 'col' ? c + 1 : nums.length + (spec.start || 1)); });
-      if (spec.rtl) nums.reverse();
+      let nums = [];
+      if (spec.starts) { // a first number per block, in numbering order
+        const byCol = new Map(); let next = spec.starts[0];
+        (spec.rtl ? runs.slice().reverse() : runs).forEach((r, i) => {
+          if (spec.starts[i] != null) next = spec.starts[i];
+          const cols = []; for (let c = r.start; c <= r.end; c++) cols.push(c);
+          (spec.rtl ? cols.reverse() : cols).forEach((c) => byCol.set(c, next++));
+        });
+        runs.forEach((r) => { for (let c = r.start; c <= r.end; c++) nums.push(byCol.get(c)); });
+      } else {
+        runs.forEach((r) => { for (let c = r.start; c <= r.end; c++) nums.push(spec.numbering === 'col' ? c + 1 : nums.length + (spec.start || 1)); });
+        if (spec.rtl) nums.reverse();
+      }
       let block = 0, k = 0;
       runs.forEach((r, ri) => {
         if (ri > 0) {

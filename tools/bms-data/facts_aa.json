@@ -1,0 +1,1960 @@
+{
+ "AACN": {
+  "name": "Aparna Cinemas Nallagandla",
+  "short": "Aparna Cinemas",
+  "area": "Nallagandla",
+  "single": false,
+  "screens": 7,
+  "tags": [
+   "Dolby Atmos",
+   "4K Laser",
+   "Recliners"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 120,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 120,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-2/"
+   },
+   {
+    "screen": "Screen 3 (VIP)",
+    "seats": 52,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 193,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 292,
+    "width_ft": 48.4,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-5/"
+   },
+   {
+    "screen": "Screen 6",
+    "seats": 185,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-6/"
+   },
+   {
+    "screen": "Screen 7",
+    "seats": 246,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-7/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Opened with Aparna Neo Mall in May 2024; the builder invested Rs 32 crore in the 1,200-plus seat cinema.",
+    "src": "Deccan Chronicle",
+    "url": "https://www.deccanchronicle.com/news/aparna-invests-rs-284-crore-in-neo-mall-aparna-cinemas-896020"
+   },
+   {
+    "text": "Screen 5 is its largest hall, with a 48.4 ft wide scope screen, Barco 4K laser and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/aparna-cinemas-screen-5/"
+   }
+  ],
+  "district": null
+ },
+ "CTNR": {
+  "name": "Cinepolis TNR North City",
+  "short": "Cinepolis TNR",
+  "area": "Suchitra",
+  "single": false,
+  "screens": 10,
+  "tags": [
+   "Macro XE",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 164,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 193,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 191,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 162,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 184,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": 144,
+    "width_ft": null,
+    "projector": "2K",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-6/"
+   },
+   {
+    "screen": "Audi 7 (Macro XE)",
+    "seats": 262,
+    "width_ft": 57,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": "Macro XE",
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-7-macro-xe/",
+    "seats_in_layout": 334,
+    "screen_type": "MacroXE"
+   },
+   {
+    "screen": "Audi 8",
+    "seats": 177,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-8/"
+   },
+   {
+    "screen": "Audi 9",
+    "seats": 163,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-9/"
+   },
+   {
+    "screen": "Audi 10",
+    "seats": 188,
+    "width_ft": null,
+    "projector": null,
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-10/"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 4,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/cinepolis-tnr-north-city/"
+  },
+  "highlights": [
+   {
+    "text": "Cinepolis opened this 10-screen multiplex in October 2025 with nearly 1,900 seats.",
+    "src": "The Tribune",
+    "url": "https://www.tribuneindia.com/news/business/cinepolis-launches-a-new-10-screen-multiplex-in-hyderabad"
+   },
+   {
+    "text": "Audi 7 is a Macro XE premium large-format hall with a 57 ft wide screen, 4K laser and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-tnr-north-city-audi-7-macro-xe/"
+   }
+  ],
+  "district": "https://www.district.in/movies/cinepolis-tnr-north-city-suchitra-hyderabad-CD1039952"
+ },
+ "SRMO": {
+  "name": "Sree Ramulu 70MM",
+  "short": "Sree Ramulu",
+  "area": "Moosapet",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm",
+   "4K Laser"
+  ],
+  "halls": [
+   {
+    "screen": "Sree Ramulu 70MM",
+    "seats": 1152,
+    "width_ft": 70,
+    "projector": "4K RGB laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/sree-ramulu-70mm-sree-ramulu-70mm/",
+    "seats_in_layout": 1065,
+    "screen_type": "Silver Screen"
+   }
+  ],
+  "rating": {
+   "value": 4.0,
+   "count": 18149,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202081"
+  },
+  "highlights": [
+   {
+    "text": "Shut in May 2026 so its lessee, Sri Venkateswara Creations, could completely renovate it.",
+    "src": "TeluguCinema.com",
+    "url": "https://telugucinema.com/?p=229041"
+   },
+   {
+    "text": "Reopened in June 2026 with a 70 ft screen, a Barco 4K laser projector and Dolby 7.1 sound with 20 subwoofers.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/sree-ramulu-70mm/"
+   },
+   {
+    "text": "Listed among Hyderabad's 7 legendary theatres.",
+    "src": "Siasat",
+    "url": "https://www.siasat.com/hyderabads-7-legendary-theatres-that-fans-still-worship-3477076/"
+   }
+  ],
+  "district": null
+ },
+ "MMCA": {
+  "name": "Miraj Cinemas CineTown",
+  "short": "Miraj CineTown",
+  "area": "Miyapur",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 704,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-cine-town-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 700,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-cine-town-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 309,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/miraj-cinemas-cine-town-screen-3/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Screens 1 and 2 are large halls with 704 and 700 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/miraj-cinemas-cine-town/"
+   }
+  ],
+  "district": "https://www.district.in/movies/miraj-cinemas-cinetown-miyapur-CD24951"
+ },
+ "IGMH": {
+  "name": "INOX GSM Mall",
+  "short": "INOX GSM Mall",
+  "area": "Madinaguda",
+  "single": false,
+  "screens": 8,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 403,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-1/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 303,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-2/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 197,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-3/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 176,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-4/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 153,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": 163,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-6/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 7",
+    "seats": 119,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-7/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 8",
+    "seats": 223,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-8/",
+    "screen_type": "Silver Screen"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Audi 1 is the largest hall, with 403 seats, 4K Xenon projection and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/inox-gsm-mall-audi-1/"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-gsm-mall-madinaguda-hyderabad-CD1020780"
+ },
+ "MMAH": {
+  "name": "MovieMax AMR Planet Mall",
+  "short": "MovieMax AMR",
+  "area": "ECIL",
+  "single": false,
+  "screens": 7,
+  "tags": [
+   "Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 180,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 236,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 242,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-3/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 212,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-4/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 240,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-5/"
+   },
+   {
+    "screen": "Screen 6",
+    "seats": 183,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-6/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 7",
+    "seats": 183,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/moviemax-amr-ecil-screen-7/"
+   }
+  ],
+  "rating": {
+   "value": 4.5,
+   "count": 4956,
+   "src": "Explurger",
+   "url": "https://www.explurger.com/pd/a2nlj1lj2r9p6tddk"
+  },
+  "highlights": [
+   {
+    "text": "MovieMax opened this 7-screen multiplex at AMR Planet Mall in December 2022.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/moviemax-cinemas-unveils-7-screen-multiplex-in-hyderabad"
+   },
+   {
+    "text": "The opening announcement said every auditorium has reclining seats.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/moviemax-cinemas-unveils-7-screen-multiplex-in-hyderabad"
+   }
+  ],
+  "district": "https://www.district.in/movies/moviemax-amr-ecil-secunderabad-hyderabad-CD52274"
+ },
+ "ILKS": {
+  "name": "PVR Lakeshore Mall",
+  "short": "PVR Lakeshore",
+  "area": "Kukatpally Y Junction",
+  "single": false,
+  "screens": 9,
+  "tags": [
+   "PXL",
+   "Dolby Atmos",
+   "DTS:X"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1 (GALAXIA)",
+    "seats": 120,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "DTS:X",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-1/"
+   },
+   {
+    "screen": "Audi 2 (TURBO)",
+    "seats": 152,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "DTS:X",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-2/"
+   },
+   {
+    "screen": "Audi 3 (MYTHOS)",
+    "seats": 206,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-3/"
+   },
+   {
+    "screen": "Audi 4 (MELODY)",
+    "seats": 194,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-4/"
+   },
+   {
+    "screen": "Audi 5 (Play House)",
+    "seats": 55,
+    "width_ft": 31,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-5-play-house/"
+   },
+   {
+    "screen": "Audi 6 (P[XL])",
+    "seats": 380,
+    "width_ft": 55,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": "PXL",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-6-pxl/",
+    "seats_in_layout": 293,
+    "screen_type": "Large Format"
+   },
+   {
+    "screen": "Audi 7 (AMUSE)",
+    "seats": 167,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-7/"
+   },
+   {
+    "screen": "Audi 8 (GLITZ)",
+    "seats": 146,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-8/"
+   },
+   {
+    "screen": "Audi 9 (HERITAGE)",
+    "seats": 143,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-9/"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 16,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/pvr-lakeshore-mall-y-junction/"
+  },
+  "highlights": [
+   {
+    "text": "Opened in January 2026 as PVR INOX's 18th cinema in Hyderabad, with 9 screens and 1,476 seats.",
+    "src": "Investywise",
+    "url": "https://www.investywise.com/?p=41088"
+   },
+   {
+    "text": "Audi 6 is a P[XL] large-format hall with a 55 ft wide screen, Barco 4K laser and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-lakeshore-mall-y-junction-audi-6-pxl/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-lakeshore-mall-y-junction-hyderabad-CD1102157"
+ },
+ "CVMU": {
+  "name": "Cineverse Multiplex Uppal",
+  "short": "Cineverse Uppal",
+  "area": "Uppal",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1 (Retro)",
+    "seats": 150,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cineverse-multiplex-uppal-screen-1/"
+   },
+   {
+    "screen": "Screen 2 (Vintage)",
+    "seats": 198,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cineverse-multiplex-uppal-screen-2/"
+   },
+   {
+    "screen": "Screen 3 (Classic)",
+    "seats": 197,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cineverse-multiplex-uppal-screen-3/"
+   },
+   {
+    "screen": "Screen 4 (Bellezia)",
+    "seats": 456,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cineverse-multiplex-uppal-screen-4/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 5 (Magnus)",
+    "seats": 496,
+    "width_ft": null,
+    "projector": "4K RGB Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cineverse-multiplex-uppal-screen-5/",
+    "screen_type": "Silver Screen"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 34212,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/12559544"
+  },
+  "highlights": [
+   {
+    "text": "Formerly Asian Cine Square, now leased and operated by Cineverse Multiplex.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/cineverse-multiplex-uppal/"
+   },
+   {
+    "text": "Screen 5 (Magnus) is the premium hall, with 496 seats, 4K RGB laser and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/cineverse-multiplex-uppal-screen-5/"
+   }
+  ],
+  "district": null
+ },
+ "CPMH": {
+  "name": "Cinepolis Lulu Mall",
+  "short": "Cinepolis Lulu",
+  "area": "Kukatpally",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Laser"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 253,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-lulu-mall-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 273,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-lulu-mall-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 273,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-lulu-mall-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 275,
+    "width_ft": null,
+    "projector": "4K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-lulu-mall-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 293,
+    "width_ft": null,
+    "projector": "2K Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-lulu-mall-audi-5/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Cinepolis opened this 5-screen, 1,427-seat multiplex at Lulu Mall in November 2023.",
+    "src": "BizzBuzz",
+    "url": "https://bizzbuzz.news/economy/cinepolis-multiplex-now-open-at-lulu-mall-in-hyd-1267651"
+   },
+   {
+    "text": "Audi 4 is the 4K laser hall; the other four audis use 2K laser.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/cinepolis-lulu-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/cinepolis-lulu-mall-formerly-manjeera-hyderabad-CD124"
+ },
+ "GPRH": {
+  "name": "GPR Multiplex Nizampet",
+  "short": "GPR Multiplex",
+  "area": "Nizampet",
+  "single": false,
+  "screens": 3,
+  "tags": [
+   "Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 230,
+    "width_ft": 37,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/gpr-multiplex-nizampet-screen-1/",
+    "screen_type": "Galalite Silver screen"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 232,
+    "width_ft": 37,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/gpr-multiplex-nizampet-screen-2/",
+    "screen_type": "Galalite Silver screen"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 655,
+    "width_ft": 54,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/gpr-multiplex-nizampet-screen-3/",
+    "screen_type": "Galalite Silver screen"
+   }
+  ],
+  "rating": {
+   "value": 4.6,
+   "count": 5,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/gpr-multiplex-nizampet/"
+  },
+  "highlights": [
+   {
+    "text": "Screen 3 is the big hall, with 655 seats, a 54 ft screen, 4K laser and Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/gpr-multiplex-nizampet-screen-3/"
+   }
+  ],
+  "district": null
+ },
+ "ASHN": {
+  "name": "Asian Cinemart RC Puram",
+  "short": "Asian Cinemart",
+  "area": "RC Puram",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "4K"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 387,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cinemart-rc-puram-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 305,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cinemart-rc-puram-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 215,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cinemart-rc-puram-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 125,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cinemart-rc-puram-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 125,
+    "width_ft": null,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cinemart-rc-puram-screen-5/"
+   }
+  ],
+  "rating": {
+   "value": 3.7,
+   "count": 780,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202024"
+  },
+  "highlights": [
+   {
+    "text": "Asian Cinemas opened this 5-screen multiplex in January 2024 with a combined 1,100 seats.",
+    "src": "Telugu Rajyam",
+    "url": "https://e.telugurajyam.com/entertainment/asian-vaishnavi-asian-cinemart-celebrates-opening-of-new-multiplex.html"
+   },
+   {
+    "text": "All five screens use 4K Xenon projection with Dolby 7.1.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/asian-cinemart-rc-puram/"
+   }
+  ],
+  "district": null
+ },
+ "SRCM": {
+  "name": "Sai Ranga 70MM",
+  "short": "Sai Ranga",
+  "area": "Miyapur",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm",
+   "4K Laser"
+  ],
+  "halls": [
+   {
+    "screen": "Sai Ranga 70MM",
+    "seats": 1055,
+    "width_ft": 58.6,
+    "projector": "4K RGB Laser",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/sai-ranga-70mm-sai-ranga-70mm/",
+    "screen_type": "Harkness Perlux HiWhite"
+   }
+  ],
+  "rating": {
+   "value": 3.9,
+   "count": 18579,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/15202021"
+  },
+  "highlights": [
+   {
+    "text": "A 1,055-seat single screen with a 58.6 ft wide screen and 4K RGB laser projection.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/sai-ranga-70mm-sai-ranga-70mm/"
+   }
+  ],
+  "district": null
+ },
+ "BRKH": {
+  "name": "Bhramaramba 70MM",
+  "short": "Bhramaramba",
+  "area": "Kukatpally",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm"
+  ],
+  "halls": [
+   {
+    "screen": "Bhramaramba 70MM",
+    "seats": 861,
+    "width_ft": 70,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/bhramaramba-70mm-bhramaramba-70mm/",
+    "screen_type": "70MM Silver Screen"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 25708,
+   "src": "Explurger",
+   "url": "https://www.explurger.com/pd/z3ghcstt0n6z77fuv"
+  },
+  "highlights": [
+   {
+    "text": "Bhramaramba and Mallikarjuna form one theatre complex, described as one of the most popular in the twin cities.",
+    "src": "M9 News",
+    "url": "https://www.m9.news/movienews/bramarambha-mallikarjuna-theaters-to-become-history/"
+   },
+   {
+    "text": "Listed among Hyderabad's 7 legendary theatres, with a 70 ft by 30 ft screen and 861 seats.",
+    "src": "Siasat",
+    "url": "https://www.siasat.com/hyderabads-7-legendary-theatres-that-fans-still-worship-3477076/"
+   }
+  ],
+  "district": null
+ },
+ "MAHM": {
+  "name": "Mallikarjuna 70MM",
+  "short": "Mallikarjuna",
+  "area": "Kukatpally",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm",
+   "DTS"
+  ],
+  "halls": [
+   {
+    "screen": "Mallikarjuna 70mm",
+    "seats": 863,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "DTS",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/mallikarjuna-70mm-mallikarjuna-70mm/",
+    "seats_in_layout": 861
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Mallikarjuna and Bhramaramba form one theatre complex, described as one of the most popular in the twin cities.",
+    "src": "M9 News",
+    "url": "https://www.m9.news/movienews/bramarambha-mallikarjuna-theaters-to-become-history/"
+   },
+   {
+    "text": "A single screen with Barco 2K projection and DTS sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/mallikarjuna-70mm/"
+   }
+  ],
+  "district": null
+ },
+ "AMCA": {
+  "name": "Asian M Cube Mall Attapur",
+  "short": "Asian M Cube",
+  "area": "Attapur",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 372,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-m-cube-mall-attapur-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 344,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-m-cube-mall-attapur-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 338,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-m-cube-mall-attapur-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 344,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-m-cube-mall-attapur-screen-4/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 18939,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/13925185"
+  },
+  "highlights": [
+   {
+    "text": "Screen 4 is the Dolby Atmos hall, with 344 seats and 4K Xenon projection.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-m-cube-mall-attapur-screen-4/"
+   }
+  ],
+  "district": null
+ },
+ "CPHY": {
+  "name": "Asian Cineplanet Kompally",
+  "short": "Asian Cineplanet",
+  "area": "Kompally",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 757,
+    "width_ft": 60,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cineplanet-kompally-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 539,
+    "width_ft": 50,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cineplanet-kompally-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 364,
+    "width_ft": 45,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cineplanet-kompally-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 332,
+    "width_ft": 45,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cineplanet-kompally-screen-4/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Screen 1 seats 757 in front of a 60 ft wide screen with Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/asian-cineplanet-kompally-screen-1/"
+   }
+  ],
+  "district": null
+ },
+ "ABCS": {
+  "name": "Cinepolis DSL Virtue Mall",
+  "short": "Cinepolis DSL",
+  "area": "Uppal",
+  "single": false,
+  "screens": 6,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 222,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-dsl-virtue-mall-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 220,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-dsl-virtue-mall-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 245,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-dsl-virtue-mall-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 220,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-dsl-virtue-mall-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 222,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-dsl-virtue-mall-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": 231,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-dsl-virtue-mall-audi-6/"
+   }
+  ],
+  "rating": {
+   "value": 3.0,
+   "count": 6,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/cinepolis-dsl-virtue-mall/"
+  },
+  "highlights": [
+   {
+    "text": "All six audis use 2K digital projection with Dolby 7.1.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/cinepolis-dsl-virtue-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/cinepolis-dsl-virtue-mall-uppal-hyderabad-CD9123"
+ },
+ "GOKU": {
+  "name": "Gokul 70MM",
+  "short": "Gokul 70MM",
+  "area": "Erragadda",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm",
+   "DTS"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 970,
+    "width_ft": null,
+    "projector": "4K Xenon",
+    "sound": "DTS Digital Surround",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/gokul-70mm-screen-1/",
+    "seats_in_layout": 981
+   }
+  ],
+  "rating": {
+   "value": 3.8,
+   "count": 22707,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/12871568"
+  },
+  "highlights": [
+   {
+    "text": "A 970-seat single screen with 4K projection and DTS sound.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/gokul-70mm-screen-1/"
+   }
+  ],
+  "district": null
+ },
+ "PNNG": {
+  "name": "PVR Next Galleria Mall",
+  "short": "PVR Galleria",
+  "area": "Panjagutta",
+  "single": false,
+  "screens": 8,
+  "tags": [
+   "Dolby Atmos",
+   "Recliners"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 203,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 145,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-2/"
+   },
+   {
+    "screen": "Audi 3 (Play House)",
+    "seats": 54,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-3-play-house/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 152,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 190,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": 144,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-6/"
+   },
+   {
+    "screen": "Audi 7",
+    "seats": 170,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-7/"
+   },
+   {
+    "screen": "Audi 8",
+    "seats": 220,
+    "width_ft": null,
+    "projector": "2K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-8/"
+   }
+  ],
+  "rating": {
+   "value": 4.3,
+   "count": 37736,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/125398"
+  },
+  "highlights": [
+   {
+    "text": "Audi 3 is a 54-seat Play House hall; Audi 1 and Audi 8 have Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/pvr-next-galleria-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-next-galleria-mall-panjagutta-hyderabad-CD1022281"
+ },
+ "PVTS": {
+  "name": "PVR Atrium Mall",
+  "short": "PVR Atrium",
+  "area": "Gachibowli",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 157,
+    "width_ft": 45,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-atrium-mall-audi-1/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 125,
+    "width_ft": 45,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-atrium-mall-audi-2/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 176,
+    "width_ft": 45,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-atrium-mall-audi-3/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 164,
+    "width_ft": 45,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-atrium-mall-audi-4/",
+    "seats_in_layout": 166,
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": 126,
+    "width_ft": 48,
+    "projector": "4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-atrium-mall-audi-5/",
+    "screen_type": "Silver Screen"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 7155,
+   "src": "Explurger",
+   "url": "https://www.explurger.com/pd/8h85lvt0wsyqfo8px"
+  },
+  "highlights": [
+   {
+    "text": "Opened in April 2022 as a 5-screen PVR with 927 seats, 4K projectors and Dolby Atmos.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/pvr-launches-new-5-screen-multiplex-in-hyderabad"
+   },
+   {
+    "text": "All five audis have 4K projection and Dolby Atmos; Audi 5 has the widest screen at 48 ft.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/pvr-atrium-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-atrium-mall-gachibowli-hyderabad-CD1022290"
+ },
+ "AKYJ": {
+  "name": "INOX Ashoka One Mall",
+  "short": "INOX Ashoka One",
+  "area": "Kukatpally Y Junction",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "4K Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 303,
+    "width_ft": 60,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-ashoka-one-mall-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 187,
+    "width_ft": null,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-ashoka-one-mall-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 186,
+    "width_ft": null,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-ashoka-one-mall-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 301,
+    "width_ft": null,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-ashoka-one-mall-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 297,
+    "width_ft": null,
+    "projector": "Barco 4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-ashoka-one-mall-screen-5/"
+   }
+  ],
+  "rating": {
+   "value": 4.1,
+   "count": 11,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/inox-ashoka-one-mall/"
+  },
+  "highlights": [
+   {
+    "text": "Opened as a PVR cinema in February 2023 with 5 screens and 1,274 seats, including last-row recliners.",
+    "src": "Free Press Journal",
+    "url": "https://www.freepressjournal.in/business/pvr-opens-its-16th-cinema-in-telegana-hyderabad-post-merger-with-inox"
+   },
+   {
+    "text": "All five screens use Barco 4K laser projection with Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/inox-ashoka-one-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-ashoka-one-mall-kukatpally-y-junction-hyderabad-CD1020782"
+ },
+ "ISTN": {
+  "name": "INOX Sattva Necklace Mall",
+  "short": "INOX Sattva",
+  "area": "Kavadiguda",
+  "single": false,
+  "screens": 7,
+  "tags": [
+   "4K Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 225,
+    "width_ft": 40,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-sattva-kavadiguda-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 142,
+    "width_ft": 40,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-sattva-kavadiguda-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 249,
+    "width_ft": 45,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/inox-sattva-kavadiguda-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 260,
+    "width_ft": 48,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/amb-sattva-kavadiguda-screen-4/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 233,
+    "width_ft": 40,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/amb-sattva-kavadiguda-screen-5/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 6",
+    "seats": 233,
+    "width_ft": 40,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/amb-sattva-kavadiguda-screen-6/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Screen 7",
+    "seats": 103,
+    "width_ft": 35,
+    "projector": "4K Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/amb-sattva-kavadiguda-screen-7/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 5,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/inox-sattva-kavadiguda/"
+  },
+  "highlights": [
+   {
+    "text": "Opened in May 2022 as INOX's fourth Hyderabad multiplex, with 7 screens and 1,534 seats including 103 recliners.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/inox-opens-fourth-multiplex-in-hyderabad"
+   },
+   {
+    "text": "Every screen has Dolby Atmos sound.",
+    "src": "Telangana Today",
+    "url": "https://telanganatoday.com/inox-opens-fourth-multiplex-in-hyderabad"
+   }
+  ],
+  "district": "https://www.district.in/movies/inox-sattva-necklace-mall-kavadiguda-hyderabad-CD1020781"
+ },
+ "SSRM": {
+  "name": "Sri Sai Ram 70MM",
+  "short": "Sri Sai Ram",
+  "area": "Malkajgiri",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm"
+  ],
+  "halls": [
+   {
+    "screen": "Sri Sai Ram 70MM",
+    "seats": 750,
+    "width_ft": 60,
+    "projector": "4K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/sri-sai-ram-70mm-sri-sai-ram-70mm/",
+    "seats_in_layout": 699
+   }
+  ],
+  "rating": {
+   "value": 4.5,
+   "count": 15,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/sri-sai-ram-70mm/"
+  },
+  "highlights": [
+   {
+    "text": "Listed among Hyderabad's 7 legendary theatres, with 750 seats.",
+    "src": "Siasat",
+    "url": "https://www.siasat.com/hyderabads-7-legendary-theatres-that-fans-still-worship-3477076/"
+   },
+   {
+    "text": "Its single hall has a 60 ft wide screen with 4K Xenon projection and Dolby 7.1.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/sri-sai-ram-70mm-sri-sai-ram-70mm/"
+   }
+  ],
+  "district": null
+ },
+ "JJPP": {
+  "name": "JP Cinemas Chandanagar",
+  "short": "JP Cinemas",
+  "area": "Chandanagar",
+  "single": false,
+  "screens": 5,
+  "tags": [
+   "Laser",
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 233,
+    "width_ft": null,
+    "projector": "4K RGB Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/jp-cinemas-chanda-nagar-screen-1/"
+   },
+   {
+    "screen": "Screen 2",
+    "seats": 382,
+    "width_ft": null,
+    "projector": "4K RGB Laser",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/jp-cinemas-chanda-nagar-screen-2/"
+   },
+   {
+    "screen": "Screen 3",
+    "seats": 224,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/jp-cinemas-chanda-nagar-screen-3/"
+   },
+   {
+    "screen": "Screen 4",
+    "seats": 219,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/jp-cinemas-chanda-nagar-screen-4/"
+   },
+   {
+    "screen": "Screen 5",
+    "seats": 220,
+    "width_ft": null,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/jp-cinemas-chanda-nagar-screen-5/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "Screens 1 and 2 use 4K RGB laser projection with Dolby Atmos; Screen 2 has 382 seats.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/jp-cinemas/"
+   }
+  ],
+  "district": null
+ },
+ "CMMA": {
+  "name": "Cinepolis Mantra Mall",
+  "short": "Cinepolis Mantra",
+  "area": "Attapur",
+  "single": false,
+  "screens": 6,
+  "tags": [
+   "Dolby 7.1"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-1/"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-2/"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-3/"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-4/"
+   },
+   {
+    "screen": "Audi 5",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-5/"
+   },
+   {
+    "screen": "Audi 6",
+    "seats": null,
+    "width_ft": null,
+    "projector": "2K Digital",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-6/"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 20617,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/125399"
+  },
+  "highlights": [
+   {
+    "text": "All six audis use 2K digital projection with Dolby 7.1.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/cinepolis-mantra-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/cinepolis-mantra-mall-upparpally-hyderabad-CD1977"
+ },
+ "ARJU": {
+  "name": "Arjun 70MM",
+  "short": "Arjun 70MM",
+  "area": "Kukatpally",
+  "single": true,
+  "screens": 1,
+  "tags": [
+   "Single screen",
+   "70mm"
+  ],
+  "halls": [
+   {
+    "screen": "Screen 1",
+    "seats": 735,
+    "width_ft": null,
+    "projector": "Barco 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/arjun-70mm-screen-1/"
+   }
+  ],
+  "rating": null,
+  "highlights": [
+   {
+    "text": "A 735-seat single screen laid out in 35 rows, with Barco 2K projection and Dolby 7.1.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/screen/arjun-70mm-screen-1/"
+   }
+  ],
+  "district": null
+ },
+ "INKM": {
+  "name": "Cine Town Indra Nagendra",
+  "short": "Indra Nagendra",
+  "area": "Karmanghat",
+  "single": false,
+  "screens": 2,
+  "tags": [
+   "Twin screens"
+  ],
+  "halls": [
+   {
+    "screen": "Indra",
+    "seats": 570,
+    "width_ft": 57,
+    "projector": "2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cine-town-indra-nagendra-indra/",
+    "seats_in_layout": 576,
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Nagendra",
+    "seats": 628,
+    "width_ft": 65,
+    "projector": "Digital 2K Xenon",
+    "sound": "Dolby 7.1",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/cine-town-indra-nagendra-nagendra/",
+    "seats_in_layout": 699
+   }
+  ],
+  "rating": {
+   "value": 3.8,
+   "count": 10,
+   "src": "HyderabadTheatres.com",
+   "url": "https://www.hyderabadtheatres.com/theaters/cine-town-indra-nagendra/"
+  },
+  "highlights": [
+   {
+    "text": "Two halls: Indra with 570 seats and a 57 ft screen, and Nagendra with 628 seats and a 65 ft screen.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/cine-town-indra-nagendra/"
+   }
+  ],
+  "district": null
+ },
+ "PVTP": {
+  "name": "PVR Preston Prime",
+  "short": "PVR Preston",
+  "area": "Gachibowli",
+  "single": false,
+  "screens": 4,
+  "tags": [
+   "Dolby Atmos"
+  ],
+  "halls": [
+   {
+    "screen": "Audi 1",
+    "seats": 241,
+    "width_ft": 42,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-preston-prime-audi-1/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 2",
+    "seats": 257,
+    "width_ft": 42,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-preston-prime-audi-2/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 3",
+    "seats": 257,
+    "width_ft": 42,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-preston-prime-audi-3/",
+    "screen_type": "Silver Screen"
+   },
+   {
+    "screen": "Audi 4",
+    "seats": 242,
+    "width_ft": 42,
+    "projector": "Digital 4K Xenon",
+    "sound": "Dolby Atmos",
+    "format": null,
+    "url": "https://www.hyderabadtheatres.com/screen/pvr-preston-prime-audi-4/",
+    "screen_type": "Silver Screen"
+   }
+  ],
+  "rating": {
+   "value": 4.2,
+   "count": 39167,
+   "src": "Google, via Wanderlog",
+   "url": "https://wanderlog.com/place/details/7383826"
+  },
+  "highlights": [
+   {
+    "text": "Opened with Preston Mall in July 2019 as four PVR screens with 1,000 seats.",
+    "src": "The Hans India",
+    "url": "https://www.thehansindia.com/news/cities/hyderabad/preston-mall-opens-in-gachibowli-545612"
+   },
+   {
+    "text": "All four audis have 42 ft wide screens with Dolby Atmos.",
+    "src": "HyderabadTheatres.com",
+    "url": "https://www.hyderabadtheatres.com/theaters/pvr-preston-mall/"
+   }
+  ],
+  "district": "https://www.district.in/movies/pvr-preston-gachibowli-hyderabad-CD1022285"
+ }
+}
