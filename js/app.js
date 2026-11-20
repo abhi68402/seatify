@@ -147,9 +147,7 @@ function restoreFocusAfterBack(m) {
   let q = a && `[data-a="${a.a}"]`;
   if (a) for (const k of ['id', 'tid', 'si', 'm']) if (a[k] != null) q += `[data-${k}="${CSS.escape(a[k])}"]`;
   const v = screenEl.getBoundingClientRect();
-  // the same theatre can appear twice (a shelf and the list): pick the copy that sits where the click was
-  const dist = (x) => Math.abs(x.getBoundingClientRect().top - v.top - a.y);
-  const el = q && [...screenEl.querySelectorAll(q)].sort((x, y) => dist(x) - dist(y))[0];
+  const el = q && screenEl.querySelector(q); // each theatre has one card on screen
   if (!el) { focusPage(); return; }
   el.focus({ preventScroll: true });
   const r = el.getBoundingClientRect();
@@ -369,44 +367,41 @@ function theatreCards(list = filtered()) {
   return list.map(theatreCard).join('');
 }
 function theatreCard(t) {
-  if (cardCache.has(t.id)) return cardCache.get(t.id);
-  const html = (() => {
-    const hs = screensOf(t);
-    const best = topSeats(getLayout(t, 0), 1)[0];
-    const seats = hs.reduce((a, _, i) => a + getLayout(t, i).seats.length, 0);
-    return `<li class="tcard">
-      <div class="tc-head"><span class="ring-lbl">${ring(best.m.score, 52)}<small>best seat</small></span><div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}</p></div>${I.chevR}</div>
-      ${ratingChip(t)}
-      <div class="tags">${verified(t)}${t.tags.slice(0, 2).map((g) => `<span class="tag">${esc(g)}</span>`).join('')}<span class="tag">${seats.toLocaleString('en-IN')} seats</span></div>
-      <p class="best">Best seat <b>${best.id}</b> · ${best.m.dist.toFixed(0)} m from a ${hs[0].screen.w} m screen</p>
-      ${(() => { const my = mySeat(); if (!my) return ''; if (my.t === t) return `<p class="mine-line">${I.heart} Your seat: <b>${esc(my.seat.id)}</b></p>`; const r = bestInTheatre(profileOf(my.seat), t); return `<p class="mine-line">${I.twin} Your seat here: <b>${esc(r.seat.id)}</b>${hs.length > 1 ? ' · ' + esc(hallName(r.L.hall)) : ''} · ${r.pct}% match</p>`; })()}
-    </li>`;
-  })();
-  cardCache.set(t.id, html);
-  return html;
+  const hs = screensOf(t);
+  const best = topSeats(getLayout(t, 0), 1)[0];
+  const seats = hs.reduce((a, _, i) => a + getLayout(t, i).seats.length, 0);
+  return `<li class="tcard">
+    <div class="tc-head"><span class="ring-lbl">${ring(best.m.score, 52)}<small>best seat</small></span><div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}</p></div>${I.chevR}</div>
+    ${ratingChip(t)}
+    <div class="tags">${verified(t)}${t.tags.slice(0, 2).map((g) => `<span class="tag">${esc(g)}</span>`).join('')}<span class="tag">${seats.toLocaleString('en-IN')} seats</span></div>
+    <p class="best">Best seat <b>${best.id}</b> · ${best.m.dist.toFixed(0)} m from a ${hs[0].screen.w} m screen</p>
+    ${(() => { const my = mySeat(); if (!my) return ''; if (my.t === t) return `<p class="mine-line">${I.heart} Your seat: <b>${esc(my.seat.id)}</b></p>`; const r = bestInTheatre(profileOf(my.seat), t); return `<p class="mine-line">${I.twin} Your seat here: <b>${esc(r.seat.id)}</b>${hs.length > 1 ? ' · ' + esc(hallName(r.L.hall)) : ''} · ${r.pct}% match</p>`; })()}
+  </li>`;
 }
-const cardCache = new Map(); // a theatre can sit on several shelves: build its card once per render
 
 // ───────────────────────── HOME SHELVES ─────────────────────────
 // With no search, the home list is a stack of horizontal shelves (like a streaming
-// app), so the page grows sideways as theatres are added. Every shelf is computed from the data,
-// so a new theatre joins the right shelves automatically. Just four shelves (the user wants the page
-// short): Biggest screens, Recliner comfort, Single-screen legends, Dolby Atmos. Shelves with fewer
-// than two theatres are hidden; a row shows up to SHELF_MAX cards and "See all" opens the full list.
+// app), so the page grows sideways as theatres are added. Every theatre sits on exactly ONE shelf:
+// shelves claim theatres in priority order (a theatre goes to the first shelf it fits), and the last
+// shelf is a catch-all, so none is repeated and none is lost. Shelves are computed from the data, so
+// a new theatre lands on the right shelf automatically. A row shows up to SHELF_MAX cards and
+// "See all" opens that shelf in full (its count always equals the cards it holds).
 const SHELF_MAX = 10;
 const maxW = (t) => Math.max(...screensOf(t).map((h) => h.screen.w));
 const hasRec = (t) => screensOf(t).some((_, i) => getLayout(t, i).seats.some((s) => s.tier === 'recliner' || s.tier === 'semi' || s.tier === 'lounger'));
 function shelves() {
-  const all = [...THEATRES];
+  let rest = [...THEATRES];
+  const claim = (fn) => { const got = rest.filter(fn); rest = rest.filter((t) => !got.includes(t)); return got; };
+  const single = claim((t) => t.single);                       // identity first: the single-screen halls
+  const big = claim((t) => maxW(t) >= 14).sort((a, b) => maxW(b) - maxW(a)); // then the widest multiplex screens
+  const comfy = [...claim(hasRec), ...rest];                   // recliner halls, then every other multiplex
   return [
-    { id: 'big', title: 'Biggest screens', sub: 'Widest screen first', list: all.filter((t) => maxW(t) >= 14).sort((a, b) => maxW(b) - maxW(a)) },
-    { id: 'recliners', title: 'Recliner comfort', sub: 'Halls with recliners or loungers', list: all.filter(hasRec) },
-    { id: 'single', title: 'Single-screen legends', sub: 'Big halls, balconies and the first-day-first-show crowd', list: all.filter((t) => t.single) },
-    { id: 'atmos', title: 'Dolby Atmos sound', sub: 'At least one hall with Atmos', list: all.filter((t) => screensOf(t).some((h) => h.atmos)) },
-  ].filter((sh) => sh.list.length >= 2);
+    { id: 'big', title: 'Biggest multiplex screens', sub: 'Widest screen first', list: big },
+    { id: 'single', title: 'Single-screen legends', sub: 'Big halls, balconies and the first-day-first-show crowd', list: single },
+    { id: 'comfort', title: 'Multiplex comfort', sub: 'Recliner halls first, then the other multiplexes', list: comfy },
+  ].filter((sh) => sh.list.length);
 }
-// "all" is the full list behind the button under the shelves, so a theatre that fits no shelf
-// (e.g. PVR Nexus 4DX) is still one tap away.
+// "all" is the flat list behind the button under the shelves.
 const shelfById = (id) => (id === 'all'
   ? { id: 'all', title: 'All theatres', sub: 'Every theatre on Vyu', list: filtered() }
   : shelves().find((sh) => sh.id === id) || null);
@@ -429,7 +424,6 @@ function shelvesHtml() {
 }
 // What the results area shows: one shelf in full, the shelves, or the search results.
 function resultsHtml(list) {
-  cardCache.clear();
   const sh = S.shelf && browsing() ? shelfById(S.shelf) : null;
   if (sh) return `<div class="shelf-page-head"><button class="linkbtn" data-a="shelves">${I.back} All shelves</button><h3 tabindex="-1" id="shelf-h">${esc(sh.title)}</h3><p>${esc(sh.sub)} · ${sh.list.length} theatres</p></div>
         <ul class="tlist" id="tlist">${theatreCards(sh.list)}</ul>`;
