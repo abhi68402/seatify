@@ -446,6 +446,102 @@ export const INFO = {
       { width: null, projector: '4K Xenon', sound: 'Dolby Atmos', which: 'Screen 5', url: 'https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-5/' },
     ],
   },
+  'asian-sha-shahensha': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.8, count: 17656, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/15202025/asian-shah-shahensha' },
+    highlights: [
+      { text: 'The two halls are named Sha (650 seats) and Shahensha (409 seats).', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/theaters/asian-sha-shahensha/' },
+    ],
+    halls: [
+      { width: null, projector: 'Digital 2K Xenon', sound: 'Dolby 7.1', which: 'Sha (Screen 1)', url: 'https://www.hyderabadtheatres.com/screen/asian-sha-shahensha-sha-screen-1/' },
+    ],
+  },
+  'cinepolis-sudha': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.2, count: 16943, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/6687141/cin%C3%A9polis-sudha' },
+    highlights: [
+      { text: 'The former Sudha 70mm in Lal Darwaza was remodelled and reopened on 20 October 2017 with five screens.', src: 'Cinema Treasures', url: 'https://cinematreasures.org/theaters/60954' },
+      { text: 'Cinepolis called it its 4th signature theatre in India, with 5 screens and 1,006 seats, in the Old City.', src: 'MediaNews4U', url: 'https://medianews4u.com/?p=2175362' },
+    ],
+    halls: [
+      { width: null, projector: '—', sound: '—', which: 'Auditorium 1', url: 'https://smartads.in/services/cinema/sudha-cinepolis-cinema-advertising-in-hyderabad' },
+    ],
+  },
+  'br-hitech': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.7, count: 14718, src: 'Yappe', url: 'https://yappe.in/telangana/hyderabad/br-hitech-theatre/1749423' },
+    highlights: [
+      { text: 'A single hall with a 65 ft wide screen and 696 seats.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/br-hitech-70mm-br-hitech/' },
+    ],
+    halls: [
+      { width: '65 ft', projector: 'Digital 2K Xenon', sound: 'Dolby 7.1', which: 'BR Hitech', url: 'https://www.hyderabadtheatres.com/screen/br-hitech-70mm-br-hitech/' },
+    ],
+  },
+  'pvr-musarambagh': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.3, count: 13433, src: 'Explurger', url: 'https://www.explurger.com/pd/ntuwtatu5rb532dx9' },
+    highlights: [
+      { text: 'Opened in March 2019 as PVR\'s 8th multiplex in Hyderabad, with 6 screens and 985 seats.', src: 'Indian Television', url: 'https://indiantelevision.com/mam/pvr-cinemas-expands-its-footprints-in-the-southern-market-with-the-launch-of-its-10th-multiplex-in-telangana/' },
+      { text: 'Its interiors are themed on theatrical art in an art deco style.', src: 'Indian Television', url: 'https://indiantelevision.com/mam/pvr-cinemas-expands-its-footprints-in-the-southern-market-with-the-launch-of-its-10th-multiplex-in-telangana/' },
+    ],
+    halls: [
+      { width: null, projector: '2K Digital', sound: 'Dolby 7.1', which: 'Audi 4', url: 'https://www.hyderabadtheatres.com/screen/pvr-musarambagh-audi-4/' },
+    ],
+  },
+  'sree-ramana': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.9, count: 12352, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/15202002/sree-ramana-theatre' },
+    highlights: [
+      { text: 'The larger of the two Sree Ramana halls, with 1,082 seats.', src: 'HyderabadTheatres.com', url: 'https://www.hyderabadtheatres.com/theaters/sree-ramana-70mm/' },
+      { text: 'It has 4K Xenon projection and Dolby 7.1 sound.', src: 'HyderabadTheatres.com', url: 'https://www.hyderabadtheatres.com/theaters/sree-ramana-70mm/' },
+    ],
+    halls: [
+      { width: null, projector: '4K Xenon', sound: 'Dolby 7.1', which: 'Sree Ramana 70MM', url: 'https://www.hyderabadtheatres.com/screen/sree-ramana-70mm-sree-ramana-70mm/' },
+    ],
+  },
+  'sushma': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.6, count: 12120, src: 'Yappe', url: 'https://yappe.in/telangana/sahebnagar-kalan/sushma-theater/1058339' },
+    highlights: [
+      { text: 'A single-screen hall with 1,082 seats.', src: 'HyderabadTheatres.com', url: 'https://www.hyderabadtheatres.com/theaters/sushma-theatre/' },
+      { text: 'It has 2K digital projection and Dolby Digital sound.', src: 'HyderabadTheatres.com', url: 'https://www.hyderabadtheatres.com/theaters/sushma-theatre/' },
+    ],
+    halls: [
+      { width: null, projector: '2K Digital', sound: 'Dolby Digital', which: 'Screen 1', url: 'https://www.hyderabadtheatres.com/screen/sushma-theatre-screen-1/' },
+    ],
+  },
+  'asian-jyothi': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.7, count: 11105, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/15202038/asian-jyothi-cinema' },
+    highlights: [
+      { text: 'A single hall of 500 seats.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/theaters/asian-jyothi/' },
+    ],
+    halls: [
+      { width: null, projector: '2K Digital', sound: 'Dolby Digital', which: 'Screen 1', url: 'https://www.hyderabadtheatres.com/screen/asian-jyothi-screen-1/' },
+    ],
+  },
+  'asian-tarakarama': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.0, count: 9088, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/15202036/asian-tarakarama-cineplex' },
+    highlights: [
+      { text: 'Built by the family of actor N. T. Rama Rao in 1978.', src: 'The News Minute', url: 'https://www.thenewsminute.com/article/hyderabad-s-renovated-tarakarama-theatre-reopens-after-10-yrs-launched-balakrishna-170955' },
+      { text: 'Renovated by Asian Cinemas and reopened by Nandamuri Balakrishna in December 2022, with Avatar: The Way of Water as the first film.', src: 'The News Minute', url: 'https://www.thenewsminute.com/article/hyderabad-s-renovated-tarakarama-theatre-reopens-after-10-yrs-launched-balakrishna-170955' },
+      { text: 'The renovation cut the hall from 975 seats to 590 and added sofas, recliners and 4K projection.', src: 'Telangana Today', url: 'https://telanganatoday.com/nandamuri-balakrishna-to-re-open-asian-tarakarama-on-december-14' },
+    ],
+    halls: [
+      { width: null, projector: 'Barco 4K', sound: 'Dolby 7.1', which: 'Screen 1', url: 'https://www.hyderabadtheatres.com/screen/asian-tarakarama-cineplex-screen-1/' },
+    ],
+  },
+  'vijetha': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.8, count: 8550, src: 'Yappe', url: 'https://yappe.in/telangana/hyderabad/vijetha-theatre/668140' },
+    highlights: [
+      { text: 'A single hall with a 52 ft screen, a Barco DP4K-23B projector and Dolby Atmos, seating 594.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/vijetha-70mm-vijetha-70mm/' },
+    ],
+    halls: [
+      { width: '52 ft', projector: 'Barco DP4K-23B', sound: 'Dolby Atmos', which: 'Vijetha 70MM', url: 'https://www.hyderabadtheatres.com/screen/vijetha-70mm-vijetha-70mm/' },
+    ],
+  },
 };
 
 export const infoOf = (tid) => INFO[tid] || null;
@@ -498,5 +594,14 @@ export const BOOKING = {
   'pvr-irrum-manzil': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-irrum-manzil-hyderabad/PIMH', district: 'https://www.district.in/movies/pvr-irrum-manzil-khairatabad-hyderabad-CD1022282' },
   'cinepolis-mantra': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/cinepolis-mantra-mall-attapur/CMMA', district: 'https://www.district.in/movies/cinepolis-mantra-mall-upparpally-hyderabad-CD1977' },
   'inox-odeon': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/inox-odeon-4k-laser-atmos-dts-x-rtc-x-roads/IOMH', district: 'https://www.district.in/movies/inox-odeon-4k-laser-dolby-atmos-dts-x-rtc-x-roads-CD1022247' },
+  'asian-sha-shahensha': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/asian-sha-shahensha-chintal/ACHI', district: null },
+  'cinepolis-sudha': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/cinepolis-sudha-cinemas-hyderabad/STHD', district: 'https://www.district.in/movies/cinepolis-sudha-cinemas-rajpal-nagar-hyderabad-CD3870' },
+  'br-hitech': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/br-hitech-70mm-madhapur/HMHD', district: null },
+  'pvr-musarambagh': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-musarambagh-hyderabad/PVUM', district: 'https://www.district.in/movies/pvr-musarambagh-new-malakpet-hyderabad-CD1022283' },
+  'sree-ramana': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/sree-ramana-70mm-4k-laser-dolby-7-1-amberpet/SRCA', district: 'https://www.district.in/movies/sree-ramana-theatre-70mm-4k-laser-dolby-7-1-amberpet-CD1102292' },
+  'sushma': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/sushma-2k-dolby-digital-cinema-vanasthalipuram/SCVM', district: 'https://www.district.in/movies/sushma-70mm-2k-dolby-digital-vanasthalipuram-hyderabad-CD4496' },
+  'asian-jyothi': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/asian-jyothi-rc-puram/ASJY', district: null },
+  'asian-tarakarama': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/asian-tarakarama-cineplex-kachiguda/TRHY', district: null },
+  'vijetha': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/vijetha-70mm-4k-atmos-borabanda/VTRB', district: null },
 };
 export const bookingOf = (tid) => BOOKING[tid] || null;

@@ -11,13 +11,18 @@ V = {}
 for line in open(os.path.join(D, 'venues.tsv')):
     c, name, lat, lng, area = line.rstrip('\n').split('\t'); V[c] = dict(bms=name, lat=float(lat), lng=float(lng), addr=area)
 
-SKIP = {'CPHY'}  # unlabelled box sections; add with the next batch
+SKIP = {'CPHY'}
+# single screens whose BookMyShow ground floor is only a few front rows under a large balcony: modelled as one
+# continuous raked hall (stacking the balcony traps the director's seat in the front rows)
+FLAT = {'TRHY', 'VTRB'}  # unlabelled box sections; add with the next batch
 IDS = {'AACN': 'aparna-nallagandla', 'CTNR': 'cinepolis-tnr', 'SRMO': 'sree-ramulu', 'MMCA': 'miraj-cinetown', 'IGMH': 'inox-gsm',
        'MMAH': 'moviemax-amr', 'ILKS': 'pvr-lakeshore', 'CVMU': 'cineverse-uppal', 'CPMH': 'cinepolis-lulu', 'GPRH': 'gpr-nizampet',
        'ASHN': 'asian-cinemart', 'SRCM': 'sai-ranga', 'BRKH': 'bhramaramba', 'MAHM': 'mallikarjuna', 'AMCA': 'asian-mcube',
        'ABCS': 'cinepolis-dsl', 'GOKU': 'gokul', 'PNNG': 'pvr-galleria',
        'PVYH': 'pvr-central', 'PVTP': 'pvr-preston', 'INMH': 'inox-kachiguda', 'ARMH': 'asian-radhika', 'MCSS': 'miraj-shalini-shivani',
-       'PRCX': 'pvr-rk-cineplex', 'TVHY': 'tivoli', 'PIMH': 'pvr-irrum-manzil', 'CMMA': 'cinepolis-mantra', 'IOMH': 'inox-odeon'}
+       'PRCX': 'pvr-rk-cineplex', 'TVHY': 'tivoli', 'PIMH': 'pvr-irrum-manzil', 'CMMA': 'cinepolis-mantra', 'IOMH': 'inox-odeon',
+       'ACHI': 'asian-sha-shahensha', 'STHD': 'cinepolis-sudha', 'HMHD': 'br-hitech', 'PVUM': 'pvr-musarambagh', 'SRCA': 'sree-ramana',
+       'SCVM': 'sushma', 'ASJY': 'asian-jyothi', 'TRHY': 'asian-tarakarama', 'VTRB': 'vijetha'}
 codes = sys.argv[3:] or [c for c in H if c not in SKIP]
 
 def slug(s): return re.sub(r'[^a-z0-9]+', '-', s.lower().replace('&', ' ')).strip('-')
@@ -61,10 +66,10 @@ def build(code):
     groups, cur = [], None
     for line in h['rows']:
         if line.startswith('##'):
-            m = re.match(r'##\s*(?:₹(\d+))?\s*(.*?)\s*\[', line)
+            m = re.match(r'##\s*(?:₹(\d+))?\s*(.*?)\s*\[([^@\]]*)', line)
             price, cat = (int(m.group(1)) if m.group(1) else None), m.group(2)
             if cat in ('?', ''): cat = 'Box'  # unsold box seats carry no price, so no '₹' title
-            cur = {'cat': cat, 'price': price, 'rows': []}; groups.append(cur); continue
+            cur = {'cat': cat, 'price': price, 'area': m.group(3), 'rows': []}; groups.append(cur); continue
         rtl = line.startswith('RTL ')
         body = line[4:] if rtl else line
         body = body.strip().strip("'")
@@ -99,6 +104,10 @@ def build(code):
         letters = {r.split(None, 1)[0].split(':')[0] for r, _ in g['rows'] if r != '-'}
         lab = title(g['cat'])
         needs_prefix = bool(letters & seen_letters) or any(l.isdigit() for l in letters)
+        # one class split over separate areas (e.g. a box on each side) gets a side in its prefix
+        if len({x['area'] for x in groups if x['cat'] == g['cat']}) > 1:
+            first = min(len(r.split(None, 1)[1]) - len(r.split(None, 1)[1].lstrip('.')) for r, _ in g['rows'] if r != '-')
+            lab = lab + (' Left' if first < width_cols / 2 else ' Right'); needs_prefix = True
         seen_letters.update(letters)
         parts = [f"tier: '{tier}'", f"label: {js(lab)}"]
         if needs_prefix: parts.append(f"prefix: {js(lab.replace(' Class', '') if lab.endswith(' Class') else lab)}")
@@ -106,9 +115,14 @@ def build(code):
         if tier in ('recliner', 'lounger', 'semi'): parts.append('colW: 0.7')
         rows = ',\n'.join('            ' + js(r) for r, _ in g['rows'])
         return '          { ' + ', '.join(parts) + ', rows: [\n' + rows + ',\n          ] }'
-    if single:
-        balc = [g for g in groups if is_balc(g['cat'])]
-        stalls = [g for g in groups if not is_balc(g['cat'])]
+    if single and code in FLAT:
+        secs = ["        { name: 'Hall', grid: [\n" + ',\n'.join(group_js(g, tier_of(g['cat'], True)) for g in groups) + ',\n        ] }']
+        riser = 0.35
+    elif single:
+        # everything from the top down to the last balcony-type class is on the balcony level
+        # (e.g. Tarakarama: Box, Recliner, Balcony Sofa | Lower Class)
+        last = max([i for i, g in enumerate(groups) if is_balc(g['cat'])], default=-1)
+        balc, stalls = groups[:last + 1], groups[last + 1:]
         secs = []
         # register letters in on-screen order (balcony first) so prefixes go on the later, repeated classes
         balc_js = [group_js(g, tier_of(g['cat'], True)) for g in balc]
