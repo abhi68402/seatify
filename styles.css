@@ -1044,8 +1044,7 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
 }
 @media (max-width: 479px) { .hero-cta .btn { flex: 1 1 0; } }
 @media (min-width: 641px) { .hero-preview svg { margin-bottom: -14px; } }
-/* phones: theatres first; the feature block and the three "how it works" cards follow (saves ~900 px of scrolling) */
-@media (max-width: 640px) { .page.home > .only { order: 1; } .page.home > .steps-wrap { order: 2; } .hero-cta .btn svg { flex: none; } }
+@media (max-width: 640px) { .hero-cta .btn svg { flex: none; } }
 @media (max-width: 389px) { .hero-cta .btn { font-size: 14px; gap: 6px; padding-inline: 6px; } .hero-cta .btn svg { width: 16px; height: 16px; } }
 
 /* ───────────────────────── phones: compact "Only on Vyu", Seat Twin and Motion ───────────────────────── */
@@ -1092,3 +1091,17 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
 .chip:hover { color: var(--text); border-color: var(--accent); }
 .chip[aria-pressed='true'] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 @media (max-width: 640px) { .dna-presets { gap: 6px; } .chip { padding: 0 12px; font-size: 13px; } }
+
+/* phones: "How it works" and "Only on Vyu" stay right under the hero (not below the theatres), kept small:
+   the three steps become one row of tiles (number, icon, title) and the feature heading becomes
+   screen-reader-only text under the small "Only on Vyu" label */
+@media (max-width: 640px) {
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .steps > li { justify-content: center; align-items: center; text-align: center; padding: 9px 6px; border-radius: 14px; min-height: 52px; }
+  .steps > li > span:last-child { justify-items: center; }
+  .steps b { font-size: 13px; line-height: 1.25; }
+  .steps b + span, .step-ico { display: none; }
+  .only { gap: 4px; margin-top: -6px; }
+  .only h2 { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .only .eyebrow { margin: 0; }
+}
