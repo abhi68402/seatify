@@ -121,6 +121,7 @@ svg { display: block; }
 
 /* ───────────────────────── shell ───────────────────────── */
 #app { position: fixed; inset: 0; overflow: hidden; background: var(--bg); }
+#app { bottom: auto; height: var(--vvh, 100dvh); } /* the visible area, set from visualViewport */
 #gl { position: absolute; inset: 0; touch-action: none; cursor: grab; opacity: 0; transition: opacity .5s ease; }
 #gl.on { opacity: 1; }
 #gl:active { cursor: grabbing; }
@@ -327,7 +328,9 @@ svg { display: block; }
 .tierhead.balc { color: var(--warn); }
 .seatrow { display: flex; align-items: center; }
 .rl { width: 24px; flex: none; text-align: center; font-size: 12px; font-weight: 600; color: var(--faint); }
-.rl.l { position: sticky; left: 0; z-index: 3; background: linear-gradient(90deg, var(--surface) 70%, transparent); }
+/* sticky row-letter gutter: solid, above every seat state, with a soft edge so seats visibly
+   slide underneath it when the map is scrolled sideways (no "A27"-style mixing) */
+.rl.l { position: sticky; left: 0; z-index: 7; align-self: stretch; display: grid; place-items: center; background: var(--surface); box-shadow: 6px 0 6px -6px rgba(23, 20, 17, .28); }
 .rs { position: relative; flex: none; height: 100%; }
 .seat { position: absolute; top: 3px; bottom: 3px; border-radius: 4px; background: var(--seat); color: var(--text); font-size: 11px; font-weight: 800; line-height: 1; display: grid; place-items: center; transition: transform .12s, background .2s, box-shadow .2s; }
 .seat.rec { background: var(--seat-rec); color: #fff; border-radius: 6px; }
@@ -384,8 +387,11 @@ svg { display: block; }
 .desk-only { display: none; }
 @media (hover: hover) and (pointer: fine) { .touch-only { display: none; } .desk-only { display: inline; } }
 .st-full { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); font-size: 13px; color: rgba(255, 255, 255, .85); background: rgba(21, 16, 17, .7); backdrop-filter: blur(10px); padding: 9px 16px; border-radius: 999px; opacity: 0; pointer-events: none; }
-#app.full .st-full { animation: hint 3.2s ease .6s forwards; }
-@keyframes hint { 0% { opacity: 0; } 15%, 75% { opacity: 1; } 100% { opacity: 0; } }
+/* full screen: the pill stays as a real button (a sure way back on any phone), dimming after a moment */
+.st-full { border: 0; font: inherit; font-weight: 600; cursor: pointer; bottom: max(28px, calc(env(safe-area-inset-bottom) + 16px)); min-height: 40px; }
+#app.full .st-full { pointer-events: auto; animation: hint 3.2s ease .3s forwards; }
+@keyframes hint { 0% { opacity: 0; } 15%, 75% { opacity: 1; } 100% { opacity: .5; } }
+@media (prefers-reduced-motion: reduce) { #app.full .st-full { animation: none; opacity: .8; } }
 #stage.no-seat .seat-pill, #stage.no-seat .st-seg, #stage.no-seat .st-move, #stage.no-seat .st-hint { display: none; }
 /* 3D couldn't start: say why, offer a retry, keep the seat card (scores don't need WebGL) */
 #stage.no3d .st-tools, #stage.no3d .st-seg, #stage.no3d .st-move, #stage.no3d .st-hint { display: none; }
@@ -452,8 +458,12 @@ svg { display: block; }
 #app.full .seat-card { opacity: 0; pointer-events: none; transform: translateY(24px); }
 #app[data-sheet='side'].full .seat-card { transform: translateX(24px); }
 
-/* tablet+ : labelled scene controls and a one-row top bar */
-@media (min-width: 1560px) { .tbtn span { display: inline; } .tbtn { padding: 0 16px; } }
+/* Scene controls size themselves to the 3D area (#stage), not the window: in the desktop
+   split view the stage is the window minus the 440 px seat-map panel. */
+#stage { container: stage / inline-size; }
+/* text labels on House lights / Full house / Screen / Reset only when the bar has room for them
+   next to the centred Seat view | Aerial switch (~1700 px of stage) */
+@container stage (min-width: 1720px) { .tbtn span { display: inline; } .tbtn { padding: 0 16px; } }
 @media (min-width: 640px) {
   .st-seg { top: max(12px, env(safe-area-inset-top)); }
   .appbar-in { height: 68px; }
@@ -479,6 +489,11 @@ svg { display: block; }
 #app[data-sheet='float'] .st-hint { left: auto; right: 20px; bottom: 192px; max-width: 280px; text-align: right; }
 #app[data-sheet='float'] .st-top { left: 20px; right: 20px; top: 20px; }
 #app[data-sheet='float'] .st-seg { top: 20px; }
+/* too narrow to fit seat pill + switch + tools on one line: the switch drops to a second row */
+@container stage (max-width: 819px) {
+  #app #stage .st-seg { top: calc(max(12px, env(safe-area-inset-top)) + 56px); }
+  #app[data-sheet='float'] #stage .st-seg { top: 76px; }
+}
 
 /* ───────────────────────── modal & toast ───────────────────────── */
 #modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
@@ -1118,3 +1133,26 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
 /* 3D view on touch screens: the gesture hint shows for a few seconds, then gets out of the way */
 @media (pointer: coarse) { .st-hint { animation: vyu-hint-out .6s ease 5s forwards; } }
 @keyframes vyu-hint-out { to { opacity: 0; visibility: hidden; } }
+
+/* Near me: a quiet bar above the shelves; distance on each card */
+.near-bar { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 14px; }
+.near-bar small { font-size: 13px; color: var(--muted); }
+.near-btn svg { width: 16px; height: 16px; color: var(--accent); }
+.near-btn.on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.near-btn.busy { opacity: .6; }
+.tcard .km { color: var(--accent); font-weight: 700; }
+/* Share this seat, in the seat drawer */
+.share-btn { width: 100%; }
+.share-btn svg { width: 18px; height: 18px; }
+/* Add to Home Screen offer: a slim card above the bottom edge on phones */
+#install { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 60; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow-md); transform: translateY(140%); transition: transform .35s cubic-bezier(.2, .9, .3, 1); }
+#install.on { transform: none; }
+#install .ins-ico { width: 40px; height: 40px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--accent); color: #fff; }
+#install .ins-ico svg { width: 22px; height: 22px; }
+#install .ins-txt { display: grid; gap: 1px; min-width: 0; flex: 1; }
+#install .ins-txt b { font-size: 14px; }
+#install .ins-txt small { font-size: 12.5px; color: var(--muted); }
+#install .btn, #install .ins-x { flex: none; }
+#install .ins-x { width: 40px; height: 40px; }
+#app[data-route='theatre'] #install { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 76px); } /* above the sticky bottom bar */
+@media (prefers-reduced-motion: reduce) { #install { transition: none; } }

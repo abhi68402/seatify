@@ -12,6 +12,7 @@ const svg = (d, extra = '') => `<svg viewBox="0 0 24 24" fill="none" stroke="cur
 const I = {
   back: svg('<path d="M15 18l-6-6 6-6"/>'),
   info: svg('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'),
+  share: svg('<circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.4M8.3 13.2l7.4 4.4"/>'),
   pin: svg('<path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'),
   bookmark: svg('<path d="M6 4h12v17l-6-4-6 4z"/>'),
   moon: svg('<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>'),
@@ -271,6 +272,9 @@ function render() {
       warmHall();
     }
   } else if (r === 'view') { screenEl.innerHTML = ''; renderStage(); startScene(); }
+  // install offer: remember that a seat was looked at; offer it later on the home or theatre page only
+  if (exploring()) { if (S.focus) try { localStorage.setItem('vyu.seenSeat', '1'); } catch {} hideInstall(false); }
+  else setTimeout(maybeOfferInstall, 1500);
 }
 
 let toastT;
@@ -371,7 +375,7 @@ function theatreCard(t) {
   const best = topSeats(getLayout(t, 0), 1)[0];
   const seats = hs.reduce((a, _, i) => a + getLayout(t, i).seats.length, 0);
   return `<li class="tcard">
-    <div class="tc-head"><span class="ring-lbl">${ring(best.m.score, 52)}<small>best seat</small></span><div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}</p></div>${I.chevR}</div>
+    <div class="tc-head"><span class="ring-lbl">${ring(best.m.score, 52)}<small>best seat</small></span><div class="tc-title"><h3><button class="stretch" data-a="theatre" data-id="${t.id}">${esc(t.name)}</button></h3><p>${esc(t.area)} · ${hs.length > 1 ? hs.length + ' screens' : esc(hallName(hs[0]))}${NEAR ? ` · <b class="km">${kmText(kmTo(t))}</b>` : ''}</p></div>${I.chevR}</div>
     ${ratingChip(t)}
     <div class="tags">${verified(t)}${t.tags.slice(0, 2).map((g) => `<span class="tag">${esc(g)}</span>`).join('')}<span class="tag">${seats.toLocaleString('en-IN')} seats</span></div>
     <p class="best">Best seat <b>${best.id}</b> · ${best.m.dist.toFixed(0)} m from a ${hs[0].screen.w} m screen</p>
@@ -389,13 +393,36 @@ function theatreCard(t) {
 const SHELF_MAX = 10;
 const maxW = (t) => Math.max(...screensOf(t).map((h) => h.screen.w));
 const hasRec = (t) => screensOf(t).some((_, i) => getLayout(t, i).seats.some((s) => s.tier === 'recliner' || s.tier === 'semi' || s.tier === 'lounger'));
+// ── Near me: distances to every theatre, worked out on the phone ──
+// Privacy: the location is asked for only when the user taps "Near me", at low accuracy, rounded to
+// ~1 km before use, kept in memory only (never stored, never sent: Vyu has no server), and gone on reload.
+let NEAR = null; // { lat, lng } rounded
+const kmTo = (t) => { if (!NEAR) return null; const R = 6371, r = Math.PI / 180, dLa = (t.lat - NEAR.lat) * r, dLo = (t.lng - NEAR.lng) * r;
+  const a = Math.sin(dLa / 2) ** 2 + Math.cos(NEAR.lat * r) * Math.cos(t.lat * r) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(a)); };
+const kmText = (km) => (km < 1 ? '< 1 km' : km < 10 ? km.toFixed(1) + ' km' : Math.round(km) + ' km');
+function findNearMe(btn) {
+  if (NEAR) { NEAR = null; refreshResults(); toast('Distances hidden'); return; }
+  if (!navigator.geolocation) { toast('This browser cannot share a location'); return; }
+  if (btn) { btn.disabled = true; btn.classList.add('busy'); }
+  navigator.geolocation.getCurrentPosition((pos) => {
+    NEAR = { lat: Math.round(pos.coords.latitude * 100) / 100, lng: Math.round(pos.coords.longitude * 100) / 100 };
+    refreshResults(); $('#results')?.scrollIntoView({ block: 'start' });
+    const n = [...THEATRES].sort((a, b) => kmTo(a) - kmTo(b))[0];
+    toast(`Nearest: ${n.short}, ${kmText(kmTo(n))}`);
+  }, (err) => {
+    if (btn) { btn.disabled = false; btn.classList.remove('busy'); }
+    toast(err.code === 1 ? 'Location is off for this site. You can still browse every theatre.' : 'Could not get your location. Try again outdoors or later.');
+  }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 600000 });
+}
 function shelves() {
   let rest = [...THEATRES];
   const claim = (fn) => { const got = rest.filter(fn); rest = rest.filter((t) => !got.includes(t)); return got; };
   const single = claim((t) => t.single);                       // identity first: the single-screen halls
   const big = claim((t) => maxW(t) >= 14).sort((a, b) => maxW(b) - maxW(a)); // then the widest multiplex screens
   const comfy = [...claim(hasRec), ...rest];                   // recliner halls, then every other multiplex
+  const near = NEAR ? [{ id: 'near', title: 'Nearest to you', sub: 'Straight-line distance from where you are', list: [...THEATRES].sort((a, b) => kmTo(a) - kmTo(b)) }] : [];
   return [
+    ...near,
     { id: 'big', title: 'Biggest multiplex screens', sub: 'Widest screen first', list: big },
     { id: 'single', title: 'Single-screen legends', sub: 'Big halls, balconies and the first-day-first-show crowd', list: single },
     { id: 'comfort', title: 'Multiplex comfort', sub: 'Recliner halls first, then the other multiplexes', list: comfy },
@@ -427,7 +454,7 @@ function resultsHtml(list) {
   const sh = S.shelf && browsing() ? shelfById(S.shelf) : null;
   if (sh) return `<div class="shelf-page-head"><button class="linkbtn" data-a="shelves">${I.back} All shelves</button><h3 tabindex="-1" id="shelf-h">${esc(sh.title)}</h3><p>${esc(sh.sub)} · ${sh.list.length} theatres</p></div>
         <ul class="tlist" id="tlist">${theatreCards(sh.list)}</ul>`;
-  if (browsing()) return `<div class="shelves">${shelvesHtml()}</div>`;
+  if (browsing()) return `<div class="near-bar"><button class="btn ghost sm near-btn${NEAR ? ' on' : ''}" data-a="near" aria-pressed="${!!NEAR}">${I.pin}<span>${NEAR ? 'Hide distances' : 'Theatres near me'}</span></button><small>${NEAR ? 'Sorted by distance on your phone' : 'Your location stays on your phone'}</small></div><div class="shelves">${shelvesHtml()}</div>`;
   const n = list.length;
   return `<div class="search-status"><p><b>${n}</b> ${n === 1 ? 'theatre matches' : 'theatres match'} “${esc(S.q.trim())}”</p>${n ? `<button class="linkbtn" data-a="gs-clear">${I.close || '×'} Clear search</button>` : ''}</div>
         <ul class="tlist" id="tlist">${theatreCards(list)}</ul>`;
@@ -769,6 +796,36 @@ function hallSpecs(t, si) {
 // BookMyShow / District (new tab); the seat drawer repeats them with the seat to pick. Row/number match
 // BookMyShow in transcribed halls and are approximate elsewhere.
 const bookLink = (t, url, name, cls) => `<a class="${cls}" href="${url}" target="_blank" rel="noopener" aria-label="Book at ${esc(t.short || t.name)} on ${name} (opens in a new tab)">`;
+// Share: the link opens this exact seat in 3D. It carries only the theatre, hall and seat (nothing
+// personal: not My Seat, saved seats or location). Uses the phone's share sheet, else copies the link.
+// Add to Home Screen: offered once, after the user has looked from a seat, on a phone that isn't already
+// running Vyu as an app. Android/Chrome uses the browser's install prompt; iPhone Safari gets the
+// two-tap instructions (it has no prompt). "Not now" is remembered on the device only.
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvt = e; });
+const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent);
+function maybeOfferInstall() {
+  let seen = false, no = false; try { seen = localStorage.getItem('vyu.seenSeat') === '1'; no = localStorage.getItem('vyu.install') === 'no'; } catch {}
+  if (!seen || no || standalone() || !coarse.matches || $('#install') || exploring()) return;
+  if (!installEvt && !isIOS()) return;
+  const el = document.createElement('div'); el.id = 'install'; el.setAttribute('role', 'region'); el.setAttribute('aria-label', 'Install Vyu');
+  el.innerHTML = `<span class="ins-ico" aria-hidden="true">${I.seat}</span><span class="ins-txt"><b>Add Vyu to your home screen</b><small>${installEvt ? 'Opens like an app and works offline' : 'Tap Share, then “Add to Home Screen”'}</small></span>${installEvt ? '<button class="btn primary sm" data-a="install">Add</button>' : ''}<button class="icon-btn ins-x" data-a="install-x" aria-label="Not now">${I.close}</button>`;
+  app.appendChild(el); requestAnimationFrame(() => el.classList.add('on'));
+}
+function hideInstall(remember) { if (remember) try { localStorage.setItem('vyu.install', 'no'); } catch {} const el = $('#install'); if (el) { el.classList.remove('on'); setTimeout(() => el.remove(), 300); } }
+async function installApp() { if (!installEvt) return; installEvt.prompt(); const r = await installEvt.userChoice.catch(() => null); installEvt = null; hideInstall(r?.outcome !== 'accepted'); }
+async function shareSeat() {
+  const t = T(), seat = L().byId.get(S.focus); if (!seat) return;
+  const url = location.origin + location.pathname + `#/t/${encodeURIComponent(t.id)}/${S.si}/seat/${encodeURIComponent(seat.id)}`;
+  const text = `Row ${seat.rowLabel} · Seat ${seat.num} at ${t.short}, ${hallName(hallOf())}: view score ${seat.m.score}/100. See the screen from this seat:`;
+  if (navigator.share) {
+    try { await navigator.share({ title: `Vyu · ${t.short} ${seat.id}`, text, url }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; } // closed the share sheet: nothing to do
+  }
+  try { await navigator.clipboard.writeText(text + ' ' + url); toast('Link copied: paste it anywhere'); }
+  catch { toast('Copy the link from the address bar to share this seat'); }
+}
 function bookSeatCard(t, seat) {
   const b = bookingOf(t.id);
   if (!b) return '';
@@ -1034,7 +1091,7 @@ function stageHtml() {
     <span></span><button data-a="move" data-d="down" aria-label="Row further back">${I.arrow(180)}</button><span></span>
   </div>
   <p class="st-hint" id="sthint"></p>
-  <p class="st-full">Tap to show controls</p>
+  <button class="st-full" type="button" data-a="unfull">Tap to show controls</button>
   <aside class="seat-card pe" aria-label="Seat details"></aside>`;
 }
 function renderStage() {
@@ -1075,6 +1132,7 @@ function cardHtml() {
       <div class="bars" aria-label="Score breakdown">${parts.map(([n, v]) => `<div><span>${n}</span><i style="--v:${Math.round(v * 100)}%"></i></div>`).join('')}</div>
       <ul class="insights">${insightFor(seat).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
       ${bookSeatCard(t, seat)}
+      <button class="btn ghost share-btn" data-a="share">${I.share}<span>Share this seat</span></button>
       <button class="btn ghost back-map" data-a="change">${I.back} Back to the seat map</button>
     </div>
     <div class="hud-main">
@@ -1343,6 +1401,10 @@ function act(el) {
       break;
     case 'seats': go('seats', { zoom: null, top: -1, focus: null, open: false }); break;
     case 'how': openHow(); break;
+    case 'near': findNearMe(el); break;
+    case 'share': shareSeat(); break;
+    case 'install': installApp(); break;
+    case 'install-x': hideInstall(true); break;
     case 'book': openBook(); break;
     case 'twin': openTwin(el.dataset.tid || S.tid, el.dataset.si != null ? +el.dataset.si : S.si, el.dataset.id || S.focus); break;
     case 'twin-go': {
@@ -1431,6 +1493,7 @@ function act(el) {
       if (isSplit()) $(`.seat[data-id="${CSS.escape(key.id)}"]`)?.classList.toggle('sv', isSaved(key.tid, key.si, key.id));
       break;
     }
+    case 'unfull': setFull(false); break;
     case 'opensaved': go(isSplit() ? 'seats' : 'view', { tid: el.dataset.tid, si: +el.dataset.si, focus: id, open: false, zoom: null }); break;
   }
 }
@@ -1512,18 +1575,35 @@ stageEl.addEventListener('pointerup', (e) => {
 
 // Tap (not drag) the 3D view to hide or show all controls: full-screen viewing.
 let tapStart = null;
-glEl.addEventListener('pointerdown', (e) => { tapStart = { x: e.clientX, y: e.clientY, t: performance.now() }; });
-glEl.addEventListener('pointerup', (e) => {
-  if (!tapStart || !exploring() || !S.focus) return;
-  const moved = Math.hypot(e.clientX - tapStart.x, e.clientY - tapStart.y);
-  if (moved < 8 && performance.now() - tapStart.t < 350) setFull(!S.full);
-  tapStart = null;
+// Real fingers wobble and linger more than a mouse: allow 14 px and 600 ms. While the controls
+// are hidden, a tap anywhere on the stage (not only the canvas) brings them back.
+glEl.addEventListener('pointerdown', (e) => { if (e.isPrimary) tapStart = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+app.addEventListener('pointerup', (e) => {
+  if (!tapStart || !e.isPrimary) return;
+  const s = tapStart; tapStart = null;
+  if (!exploring() || !S.focus) return;
+  if (!glEl.contains(e.target) && !(S.full && stageEl.contains(e.target))) return;
+  if (e.target.closest?.('[data-a]')) return; // a control handles its own tap
+  const moved = Math.hypot(e.clientX - s.x, e.clientY - s.y);
+  if (moved < 14 && performance.now() - s.t < 600) setFull(!S.full);
 });
+glEl.addEventListener('pointercancel', () => { tapStart = null; });
 function setFull(on) {
   S.full = on;
   app.classList.toggle('full', on);
   positionFloating();
 }
+
+// Phones: size the app to the part of the screen the browser really shows. Some mobile browsers
+// (iOS Safari's floating toolbar) report a layout viewport that runs under their own controls,
+// which hid the sticky Explore / Tickets bar. Pinch-zoom is ignored.
+const vv = window.visualViewport;
+function syncViewport() {
+  if (!vv || Math.abs(vv.scale - 1) > 0.01) return;
+  document.documentElement.style.setProperty('--vvh', Math.round(vv.height) + 'px');
+}
+vv?.addEventListener('resize', syncViewport);
+syncViewport();
 
 let lastLayout = '';
 function onResize() {
