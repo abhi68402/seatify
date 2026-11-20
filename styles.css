@@ -1105,3 +1105,16 @@ a.book-row:hover { border-color: var(--accent); background: var(--surface-2); }
   .only h2 { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .only .eyebrow { margin: 0; }
 }
+
+/* Seat map on phones: a "Whole hall / Zoom in" toggle in the card's corner, and soft edges on the sides
+   that still have seats scrolled out of view (the left fade starts after the row-letter gutter) */
+.mapcard { position: relative; }
+.mapfit { position: absolute; top: 10px; right: 10px; z-index: 8; min-height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line-2); box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 700; color: var(--text); }
+.mapfit svg { width: 14px; height: 14px; }
+.mapfit::before { content: ''; position: absolute; inset: -4px; } /* 44 px touch target */
+.mapcard.more-r .mapwrap { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+.mapcard.more-l .mapwrap { -webkit-mask-image: linear-gradient(to right, #000 26px, rgba(0, 0, 0, .1) 28px, #000 60px); mask-image: linear-gradient(to right, #000 26px, rgba(0, 0, 0, .1) 28px, #000 60px); }
+.mapcard.more-l.more-r .mapwrap { -webkit-mask-image: linear-gradient(to right, #000 26px, rgba(0, 0, 0, .1) 28px, #000 60px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 26px, rgba(0, 0, 0, .1) 28px, #000 60px, #000 calc(100% - 36px), transparent); }
+/* 3D view on touch screens: the gesture hint shows for a few seconds, then gets out of the way */
+@media (pointer: coarse) { .st-hint { animation: vyu-hint-out .6s ease 5s forwards; } }
+@keyframes vyu-hint-out { to { opacity: 0; visibility: hidden; } }

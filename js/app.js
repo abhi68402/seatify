@@ -845,10 +845,19 @@ function mapAvail() {
   const panel = isSplit() ? 440 : Math.min(innerWidth, 820);
   return panel - 2 * (isSplit() ? 20 : 16) - 2 * 24;
 }
+// Seat map: fade the left/right edge while there are seats scrolled out of view on that side,
+// so on phones it is obvious a wide hall continues (the map starts centred).
+function syncMapEdges() {
+  const mw = $('.mapwrap'), card = mw?.closest('.mapcard'); if (!card) return;
+  const end = mw.scrollWidth - mw.clientWidth - 2;
+  card.classList.toggle('more-l', mw.scrollLeft > 2); card.classList.toggle('more-r', mw.scrollLeft < end);
+}
+document.addEventListener('scroll', (e) => { if (e.target.classList?.contains('mapwrap')) syncMapEdges(); }, true);
 function renderSeats() {
   const t = T(), Lx = L(), h = hallOf(), hs = screensOf(t);
   const base = mapAvail() / (Lx.maxHalf * 2);
-  if (S.zoom == null) S.zoom = Math.min(3.2, Math.max(1, (coarse.matches ? 18 : 14) / (0.55 * base)));
+  const comfy = Math.min(3.2, Math.max(1, (coarse.matches ? 18 : 14) / (0.55 * base))); // zoom where seats are easy to tap
+  if (S.zoom == null) S.zoom = comfy;
   const pxm = base * S.zoom;
   const width = Lx.maxHalf * 2 * pxm;
   const flash = new Set(S.flash || []);
@@ -896,6 +905,7 @@ function renderSeats() {
     ${hs.length > 1 ? `<div class="seg wide" role="group" aria-label="Choose a screen">${hs.map((x, i) => `<button data-a="screen" data-id="${i}" aria-pressed="${i === S.si}">${esc(hallName(x))}</button>`).join('')}</div>` : ''}
     <div class="mapcard">
       <div class="arc" aria-hidden="true"><svg viewBox="0 0 400 70" preserveAspectRatio="none"><defs><linearGradient id="sl" x1="0" x2="1"><stop offset="0" stop-color="#c8432e" stop-opacity="0"/><stop offset=".5" stop-color="#c8432e"/><stop offset="1" stop-color="#c8432e" stop-opacity="0"/></linearGradient><radialGradient id="sg" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#c8432e" stop-opacity=".10"/><stop offset="1" stop-color="#c8432e" stop-opacity="0"/></radialGradient></defs><path d="M20 26 Q200 -8 380 26 L380 70 L20 70 Z" fill="url(#sg)"/><path d="M20 26 Q200 -8 380 26" fill="none" stroke="url(#sl)" stroke-width="2.6"/></svg><span>SCREEN · ${h.screen.w} M</span></div>
+      ${comfy > 1.05 ? `<button class="mapfit" data-a="fit" aria-label="${S.zoom > 1.01 ? 'Show the whole hall' : 'Zoom in to the seats'}">${S.zoom > 1.01 ? I.minus : I.plus}<span>${S.zoom > 1.01 ? 'Whole hall' : 'Zoom in'}</span></button>` : ''}
       <div class="mapwrap" role="group" aria-label="Seat map, screen at the top"><div class="mapinner" style="width:${width + 48}px">${rowsHtml}</div></div>
       ${S.heat ? '<div class="heatbar"><span>Weaker view</span><i></i><span>Better view</span></div>' : ''}<ul class="legend">${legend.filter(([c]) => !S.heat || !['seat', 'rec', 'mot'].includes(c)).map(([c, l]) => `<li><i class="sw ${c}"></i>${l}</li>`).join('')}</ul>
     </div>
@@ -910,6 +920,7 @@ function renderSeats() {
     <button class="btn ${focus ? 'primary' : ''}" id="sumbtn" data-a="sit" data-id="${focus ? esc(focus.id) : ''}" ${focus ? '' : 'disabled'}>View seat</button></div>`;
   const mw = $('.mapwrap');
   if (mw) mw.scrollLeft = S.keepScroll ?? (mw.scrollWidth - mw.clientWidth) / 2;
+  syncMapEdges();
   S.keepScroll = null; S.flash = null;
 }
 const sumHtml = (f) => (f ? `<small>Selected · ${esc(f.tierLabel)}</small><b>${esc(f.id)} · score ${f.m.score}</b>` : '<small>Tap any seat to sit in it</small><b class="dim">No seat selected</b>');
@@ -1387,6 +1398,7 @@ function act(el) {
     case 'closemodal': closeModal(); break;
     case 'heat': S.heat = !S.heat; S.keepScroll = $('.mapwrap')?.scrollLeft; renderSeats(); break;
     case 'zoom': S.zoom = Math.max(1, Math.min(4, S.zoom * (+el.dataset.d > 0 ? 1.3 : 1 / 1.3))); S.keepScroll = $('.mapwrap')?.scrollLeft; renderSeats(); break;
+    case 'fit': S.zoom = S.zoom > 1.01 ? 1 : null; S.keepScroll = null; renderSeats(); $('.mapfit')?.focus({ preventScroll: true }); break;
     case 'top': {
       const list = topSeats(L(), 5);
       S.top = (S.top + 1) % list.length;
