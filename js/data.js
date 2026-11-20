@@ -1158,6 +1158,358 @@ export const THEATRES = [
       ],
     },
   },
+  // ───────────── Read from BookMyShow seat objects (20 Nov 2026, second batch): the biggest hall of each ─────────────
+  {
+    id: 'pvr-central', name: 'PVR Central Mall', short: 'PVR Central', area: 'Panjagutta',
+    lat: 17.4268, lng: 78.4532, single: false, source: 'bms', tags: ['Recliners', 'Dolby 7.1'],
+    hall: {
+      // BookMyShow seat objects, 416 seats (AUDI 5, read 21 Nov 2026). Biggest of: AUDI 2=234; AUDI 1=255; AUDI 3=141; AUDI 5=416; AUDI 4=255
+      name: 'Audi 5', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 13.0, h: 6.24, bottom: 1.2, curve: 0 },
+      firstRow: 5.2, riser: 0.35, rtl: true,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Classic', price: 295, rows: [
+            'S  oooooooooooooooooooooooooooooo',
+            'R  oooo..ooooooooooooooooooo..ooo',
+            'Q  oooo..ooooooooooooooooooo..ooo',
+            'P  oooo..ooooooooooooooooooo..ooo',
+            'N  oooo..ooooooooooooooooooo..ooo',
+            'M  oooo..ooooooooooooooooooo..ooo',
+            'L  oooo..ooooooooooooooooooo..ooo',
+            'K  oooo..ooooooooooooooooooo',
+            '-',
+            'J  oooo..ooooooooooooooooooo',
+            'H  oooo..ooooooooooooooooooo',
+            'G  oooo..ooooooooooooooooooo',
+            'F  oooo..ooooooooooooooooooo',
+            'E  oooo..ooooooooooooooooooo',
+            'D  oooo..ooooooooooooooooooo',
+            'C  oooo..ooooooooooooooooooo',
+            'B  oooo..ooooooooooooooooooo',
+            'A  oooo..ooooooooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'pvr-preston', name: 'PVR Preston Prime', short: 'PVR Preston', area: 'Gachibowli',
+    lat: 17.4308, lng: 78.3735, single: false, source: 'bms', tags: ['Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 256 seats (AUDI 03, read 21 Nov 2026). Biggest of: AUDI 04[ATMOS]=217; AUDI 03[ATMOS]=256; AUDI 02[ATMOS]=256; AUDI 01[ATMOS]=217
+      name: 'Audi 3', format: '2D', atmos: true, screenNote: '42 ft wide (hyderabadtheatres.com); height estimated',
+      screen: { w: 12.8, h: 6.14, bottom: 1.2, curve: 0 },
+      firstRow: 5.1, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Classic', price: 295, rows: [
+            'A:8  .......ooooooooooooooooo',
+            'B:1/6/22  ooo..oooooooooooooo..ooo',
+            'C:1/6/22  ooo..oooooooooooooo..ooo',
+            'D:1/6/22  ooo..oooooooooooooo..ooo',
+            'E:1/6/22  ooo..oooooooooooooo..ooo',
+            'F:6/22  .....oooooooooooooo..ooo',
+            'G:6/22  .....oooooooooooooo..ooo',
+            'H:6/22  .....oooooooooooooo..ooo',
+            'I:6/22  .....oooooooooooooo..ooo',
+            'J:6/22  .....oooooooooooooo..ooo',
+            '-',
+            'K:1/6/22  ooo..oooooooooooooo..ooo',
+            'L:1/6/22  ooo..oooooooooooooo..ooo',
+            'M:1/6/22  ooo..oooooooooooooo..ooo',
+            'N:6  .....oooooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'inox-kachiguda', name: 'INOX Maheshwari Parmeshwari', short: 'INOX Kachiguda', area: 'Kachiguda',
+    lat: 17.3907, lng: 78.4884, single: false, source: 'bms', tags: ['Dolby 7.1'],
+    hall: {
+      // BookMyShow seat objects, 244 seats (Screen 5, read 21 Nov 2026). Biggest of: Screen 5=244; Screen 2=161; Screen 1=236; Screen 3=139; Screen 4=241
+      name: 'Screen 5', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 11.5, h: 5.52, bottom: 1.2, curve: 0 },
+      firstRow: 4.6, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'classic', label: 'Executive', price: 249, rows: [
+            'A  ooooooooooooooooooooooooooo',
+            'B:1/7/22  ooo...ooooooooooooo..oooooo',
+            'C:1/7/22  ooo...ooooooooooooo..oooooo',
+            'D:1/7/22  ooo...ooooooooooooo..oooooo',
+            'E:7/22  ......ooooooooooooo..oooooo',
+            'F:7/22  ......ooooooooooooo..oooooo',
+            'G:7/22  ......ooooooooooooo..oooooo',
+            'H:7/22  ......ooooooooooooo..oooooo',
+            'I:7/22  ......ooooooooooooo..oooooo',
+            'J:7/22  ......ooooooooooooo..oooooo',
+            'K:1/7/22  ooo...ooooooooooooo..oooooo',
+            'L:7/22  ......ooooooooooooo..oo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'asian-radhika', name: 'Asian Radhika Multiplex', short: 'Asian Radhika', area: 'ECIL',
+    lat: 17.4767, lng: 78.5632, single: false, source: 'bms', tags: ['Dolby 7.1', '3D'],
+    hall: {
+      // BookMyShow seat objects, 382 seats (SCREEN 2, read 21 Nov 2026). Biggest of: SCREEN 2[2K]=382; SCREEN 1[2K]=341; SCREEN 3[2K]=201
+      name: 'Screen 2', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 11.5, h: 5.52, bottom: 1.2, curve: 0 },
+      firstRow: 4.6, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'Box', rows: [
+            'A  oo',
+            'A:3  oo',
+            'A:5  oo',
+            'A:7/11  oo..oooooo',
+            'A:9/17  oo..oooooo',
+          ] },
+          { tier: 'prime', label: 'Gold', prefix: 'Gold', price: 200, rows: [
+            'A  ...........oooooooooooooooo',
+            'B  ...........ooooooooooo..ooo',
+            'C  ...........ooooooooooo..ooo',
+            'D  oooooooooooooooooooooo..ooo',
+            'E  oooooo.oooooooooooooo...ooo',
+            'F  oooooo.oooooooooooooo',
+            'G  oooooo.oooooooooooooo',
+            'H  oooooo.oooooooooooooo',
+            'I  oooooo.oooooooooooooo',
+            'J  oooooo.oooooooooooooo',
+            '-',
+            'K  oooooo.oooooooooooooo..oooo',
+            'L  oooooo.oooooooooooooo..oooo',
+            'M  oooooo.oooooooooooooo..oooo',
+            'N  oooooo.oooooooooooooo..oooo',
+            'O  oooooo.oooooooooooooo..oooo',
+            'P  oooooo.oooooooooooooo..oooo',
+            'Q  oooooo.oooooooooooooo..oooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'miraj-shalini-shivani', name: 'Miraj Shalini Shivani', short: 'Miraj Shalini', area: 'Kothapet',
+    lat: 17.3678, lng: 78.5363, single: false, source: 'bms', tags: ['Dolby 7.1', '3D'],
+    hall: {
+      // BookMyShow seat objects, 569 seats (SCREEN4, read 21 Nov 2026). Biggest of: SCREEN4=569; SCREEN 2=454; SCREEN 3=130; SCREEN 1=94
+      name: 'Screen 4', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 15.0, h: 7.2, bottom: 1.2, curve: 0 },
+      firstRow: 6.0, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'Gold', price: 350, rows: [
+            'A  ...ooooooooooooooooooooooooooooo',
+          ] },
+          { tier: 'classic', label: 'Executive', price: 295, rows: [
+            'B  oooooooo..ooooooooooooooo..oooooooo',
+            'C  oooooooo..ooooooooooooooo..oooooooo',
+            'D  oooooooo..ooooooooooooooo..oooooooo',
+            'E  oooooooo..ooooooooooooooo..oooooooo',
+            'F  oooooooo..ooooooooooooooo..oooooooo',
+            'G  oooooooo..ooooooooooooooo..oooooooo',
+            'H  oooooooo..ooooooooooooooo..oooooooo',
+            '-',
+            'J  oooooooo..ooooooooooooooo..oooooooo',
+            '-',
+            'K  ooooooooo..ooo......oooo..oooooooo',
+            'L  ooooooooo..ooo......oooo..oooooooo',
+            'M  .oooooooo..ooo......oooo..oooooooo',
+            'N  .oooooooo..ooo......oooo..oooooooo',
+            'O  ...........oooo.....oooo..ooooooo',
+            '-',
+            'P  .oooooooo..oooooooooooo...ooooooo',
+            'Q  ..ooooooo..oooooooooooo...ooooooo',
+            'R  ..ooooooo..oooooooooooo...ooooooo',
+            'S  ..ooooooo..oooooooooooo....oooooo',
+            'T  ..ooooooo..oooooooooooo....oooooo',
+            'U  ...oooooo..oooooooooooo....oooooo',
+            'V  ......ooo..oooooooooooo....ooo',
+            'W  ...........oooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'pvr-rk-cineplex', name: 'PVR RK Cineplex', short: 'PVR RK Cineplex', area: 'Banjara Hills',
+    lat: 17.4232, lng: 78.4277, single: false, source: 'bms', tags: ['Dolby Atmos', 'Recliners'],
+    hall: {
+      // BookMyShow seat objects, 481 seats (SCREEN 1, read 21 Nov 2026). Biggest of: SCREEN 1[ATMOS]=481; SCREEN 3=270; SCREEN 2=250
+      name: 'Screen 1', format: '2D', atmos: true, screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 15.0, h: 7.2, bottom: 1.2, curve: 0 },
+      firstRow: 6.0, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 354, colW: 0.7, rows: [
+            'Q  ....oooooooooooooooooooooooooooo',
+            'P  ....ooooo.ooooooooooo..oooooooo',
+          ] },
+          { tier: 'classic', label: 'Classic', price: 295, rows: [
+            'N  ooooooo.oooooooooooooo.oooooooooooo',
+            'M  ooooooo.oooooooooooooo.oooooooooooo',
+            'L  ooooooo.oooooooooooooo.oooooooooooo',
+            'K  ooooooo.oooooooooooooo.oooooooooooo',
+            'J  ooooooo.oooooooooooooo.oooooooooooo',
+            '-',
+            'H  ooooooo.oooooooooooooo.oooooooooooo',
+            'G  ooooooo.oooooooooooooo.oooooooooooo',
+            'F  ooooooo.oooooooooooooo.oooooooooooo',
+            'E  ooooooo.oooooooooooooo.oooooooooooo',
+            'D  ooooooo.oooooooooooooo.oooooooooooo',
+            'C  ooooooo.oooooooooooooo.oooooooooooo',
+            'B  ooooooo.oooooooooooooo.oooooooooooo',
+            'A  ooooooo.oooooooooooooo.oooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'tivoli', name: 'Tivoli Cinemas', short: 'Tivoli', area: 'Secunderabad',
+    lat: 17.4481, lng: 78.4928, single: false, source: 'bms', tags: ['Laser', 'Dolby 7.1', '3D'],
+    hall: {
+      // BookMyShow seat objects, 757 seats (EXTREEME, read 21 Nov 2026). Biggest of: SCREEN 1[LASER DOLBY 7.1]=397; SCREEN 2[LASER DOLBY 7.1]=223; EXTREEME[DOLBY 7.1 EXTREME ]=757; SCREEN 3[SCREEN 3]=56
+      name: 'Screen 4 · EXTREEME', format: 'LASER', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 16.5, h: 7.92, bottom: 1.2, curve: 0 },
+      firstRow: 6.6, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'prime', label: 'Gold Upper', price: 295, rows: [
+            'A  .ooooooooo',
+            'B  .oooooooooo',
+            'C  .oooooooooooooooooooooooooooooooooooo',
+            'D  .ooooooooooo..oooooooooo..ooooooooooo',
+            'E  .ooooooooooo..oooooooooo..ooooooooooo',
+            'F  .ooooooooooo..oooooooooo..ooooooooooo',
+            'G:1//19  .ooooooooooo..ooo....ooo..ooooooooooo',
+            'H:1//19  .ooooooooooo..ooo....ooo..ooooooooooo',
+            'I:1//19  .ooooooooooo..ooo....ooo..ooooooooooo',
+            'J:1//19  .ooooooooooo..ooo....ooo..ooooooooooo',
+            'K:1//19  .ooooooooooo..ooo....ooo..ooooooooooo',
+            'L:1//19  .ooooooooooo..ooo....ooo..ooooooooooo',
+            '-',
+            'M  .ooooooooooo..oooooooooo..oooooooooo',
+            'N  .ooooooooooo..oooooooooo..oooooooooo',
+          ] },
+          { tier: 'prime', label: 'Gold Lower', price: 295, rows: [
+            'O  ooooooooooooooooo....ooooooooooooooooo',
+            'P:1/22  .ooooooooooo.............ooooooooooo',
+            'Q  .ooooooooooo.oooooooooo..ooooooooooo',
+            'R  .ooooooooooo.oooooooooo..ooooooooooo',
+            'S  .ooooooooooo.oooooooooo..ooooooooooo',
+            'T  .ooooooooooo.oooooooooo..ooooooooooo',
+            'U  .ooooooooooo.oooooooooo..ooooooooooo',
+            'V  .ooooooooooo.oooooooooo..ooooooooooo',
+            'W  .ooooooooooo.oooooooooo..ooooooooooo',
+            'X  .ooooooooooo.oooooooooo..ooooooooooo',
+            'Y  .ooooooooooo.oooooooooo..ooooooooooo',
+            'Z  .ooooooooooo.oooooooooo..ooooooooooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'pvr-irrum-manzil', name: 'PVR Irrum Manzil', short: 'PVR Irrum Manzil', area: 'Irrum Manzil',
+    lat: 17.4209, lng: 78.4553, single: false, source: 'bms', tags: ['4DX', 'Dolby Atmos'],
+    hall: {
+      // BookMyShow seat objects, 282 seats (AUDI 06, read 21 Nov 2026). Biggest of: AUDI 07=242; AUDI 04=140; AUDI 02=104; AUDI 01 4DX[4DX]=96; AUDI 06=282; AUDI 05=150; AUDI 03=168
+      name: 'Audi 6', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 11.0, h: 5.28, bottom: 1.2, curve: 0 },
+      firstRow: 4.4, riser: 0.35, rtl: true,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 354, colW: 0.7, rows: [
+            'M  .....oooooooooooooooo.oo',
+          ] },
+          { tier: 'classic', label: 'Classic', price: 295, rows: [
+            'L  ooooooo.ooooooooooooo.oooo',
+            '-',
+            'K  ooooooo.ooooooooooooo.oooo',
+            'J  ooooooo.ooooooooooooo.oooo',
+            'H  ooooooo.ooooooooooooo.oooo',
+            'G  ooooooo.ooooooooooooo.oooo',
+            'F  ooooooo.ooooooooooooo.oooo',
+            'E  ooooooo.ooooooooooooo.oooo',
+            'D  ooooooo.ooooooooooooo.oooo',
+            'C  ooooooo.ooooooooooooo.oooo',
+            'B  ooooooo.ooooooooooooo.oooo',
+            'A  ooooooo.ooooooooooooo.oooo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'cinepolis-mantra', name: 'Cinepolis Mantra Mall', short: 'Cinepolis Mantra', area: 'Attapur',
+    lat: 17.3538, lng: 78.4206, single: false, source: 'bms', tags: ['Dolby 7.1'],
+    hall: {
+      // BookMyShow seat objects, 225 seats (AUDI04, read 21 Nov 2026). Biggest of: AUDI01=219; AUDI05=218; AUDI04=225; AUDI06=217; AUDI02=215; AUDI03=166
+      name: 'Audi 4', format: '2D', screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 12.0, h: 5.76, bottom: 1.2, curve: 0 },
+      firstRow: 4.8, riser: 0.35, rtl: true,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'VIP', price: 404, colW: 0.7, rows: [
+            'K  oo..oo..oo..oo..oo..oo',
+          ] },
+          { tier: 'classic', label: 'Normal', price: 345, rows: [
+            'J  oooo..oooooooooooooo',
+            '-',
+            'I  oooo..oooooooooooooo..oooooo',
+            'H  oooo..oooooooooooooo..oooooo',
+            'G  oooo..oooooooooooooo..oooooo',
+            'F  oooo..oooooooooooooo..oooooo',
+            'E  oooo..oooooooooooooo..oo',
+            'D  oooo..oooooooooooooo..oo',
+            'C  oooo..oooooooooooooo..oo',
+            'B  oooo..oooooooooooooo..oo',
+            'A  oooo...ooooooooooooo..oo',
+          ] },
+        ] },
+      ],
+    },
+  },
+  {
+    id: 'inox-odeon', name: 'INOX Odeon', short: 'INOX Odeon', area: 'RTC X Roads',
+    lat: 17.4056, lng: 78.4964, single: false, source: 'bms', tags: ['Dolby Atmos', 'DTS:X'],
+    hall: {
+      // BookMyShow seat objects, 257 seats (SCREEN 5, read 21 Nov 2026). Biggest of: SCREEN 2[ATMOS]=203; SCREEN 6=179; SCREEN 5[ATMOS]=257; SCREEN 7=163; SCREEN 1=183; SCREEN 3[ATMOS]=191; SCREEN 4=139; SCREEN 8=91
+      name: 'Screen 5', format: '2D', atmos: true, screenNote: 'Screen size estimated from the seating width; height estimated',
+      screen: { w: 10.0, h: 4.8, bottom: 1.2, curve: 0 },
+      firstRow: 4.2, riser: 0.35,
+      sections: [
+        { name: 'Stalls', grid: [
+          { tier: 'recliner', label: 'Recliner', price: 354, colW: 0.7, rows: [
+            'O  ooo....oooooooo....ooo',
+          ] },
+          { tier: 'prime', label: 'Prime', price: 295, rows: [
+            'N  ooo.ooooooooooooo..oooo',
+            'M  ooo.ooooooooooooo..oooo',
+            'L  ooo.ooooooooooooo..oooo',
+            'K  ooo.ooooooooooooo..oooo',
+            'J  ooo.ooooooooooooo..oooo',
+            'H  ooo.ooooooooooooo..oooo',
+          ] },
+          { tier: 'classic', label: 'Classic', price: 295, rows: [
+            'G  ....oooooooooooooo.oooo',
+            'F  ....oooooooooooooo.oooo',
+            'E  ....oooooooooooooo.oooo',
+            'D  ....oooooooooooooo.oooo',
+            'C  ....oooooooooooooo.oooo',
+            'B  ....oooooooooooooo.oooo',
+            'A  .......ooooooooooo.oooo',
+          ] },
+        ] },
+      ],
+    },
+  },
 ];
 
 export const theatreById = (id) => THEATRES.find((t) => t.id === id);

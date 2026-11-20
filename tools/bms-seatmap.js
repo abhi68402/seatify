@@ -19,8 +19,8 @@ window.V = {
   sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
 
   // buytickets page: every screen with its shows, attributes and price classes (from the page's own JSON)
-  screens() {
-    const html = document.documentElement.outerHTML, out = {};
+  screens(doc = document) {
+    const html = doc.documentElement.outerHTML, out = {};
     for (const m of html.matchAll(/"SessionId":"(\d+)"/g)) {
       let s = m.index, dep = 0; for (; s > 0; s--) { const c = html[s]; if (c === '}') dep++; else if (c === '{') { if (!dep) break; dep--; } }
       let e = m.index, d2 = 0; for (; e < html.length; e++) { const c = html[e]; if (c === '{') d2++; else if (c === '}') { if (!d2) break; d2--; } }
@@ -36,8 +36,8 @@ window.V = {
     return Object.values(out).map((x) => ({ screen: x.screen, n: x.n, attrs: [...x.attrs].join(','), cats: [...x.cats].join('|'), sess: [...new Set(x.sess)] }));
   },
   // which screens to compare: a recognised large format alone, else all of them
-  plan(code) {
-    const sc = V.screens(); const big = sc.find((x) => /IMAX|PXL|EPIQ|\bICE\b|MACRO ?XE|ONYX|P\[XL\]/i.test(x.screen + ' ' + x.attrs));
+  plan(code, doc = document) {
+    const sc = V.screens(doc); const big = sc.find((x) => /IMAX|PXL|EPIQ|\bICE\b|MACRO ?XE|ONYX|P\[XL\]/i.test(x.screen + ' ' + x.attrs));
     const list = (big ? [big] : sc).map((x) => { const [ev, sid, date] = x.sess[0].split('/'); return { screen: x.screen, attrs: x.attrs, cats: x.cats, url: '/movies/hyderabad/seat-layout/' + ev + '/' + code + '/' + sid + '/' + date }; });
     localStorage.__vyuPlan = JSON.stringify({ code, all: sc.map((x) => x.screen + (x.attrs ? '[' + x.attrs + ']' : '')), list, counts: {} });
     return list.length;
@@ -50,7 +50,7 @@ window.V = {
     if (!groups.length) return null;
     const seats = groups.map((g) => { const o = g.attrs.seatObj; const r = g.findOne('Rect') || g; const p = r.getAbsolutePosition(st); const sc = r.getAbsoluteScale ? r.getAbsoluteScale().x : 1;
       return { x: p.x + (r.width ? r.width() * sc / 2 : 0), y: p.y, row: o.rowNumber, num: +o.displaySeatNumber || +o.seatNumber, area: o.areaCode, price: +o.curPrice }; });
-    const labels = st.find('Text').filter((t) => /₹|Rs\.?\s?\d/.test(t.text())).map((t) => ({ y: t.getAbsolutePosition(st).y, text: t.text().replace(/\s+/g, ' ').trim() })).sort((a, b) => a.y - b.y);
+    const labels = st.find('Text').filter((t) => { const s = t.text().trim(); return /₹|Rs\.?\s?\d/.test(s) || (/[A-Za-z]{3,}/.test(s) && !/eyes this way/i.test(s)); }).map((t) => ({ y: t.getAbsolutePosition(st).y, text: t.text().replace(/\s+/g, ' ').trim() })).sort((a, b) => a.y - b.y);
     return { seats, labels };
   },
   // rows top-to-bottom in data.js grid syntax: '## <price label>' per class, "'-'" walkways,
@@ -118,4 +118,47 @@ window.V = {
     localStorage.__vyuAll = JSON.stringify(all);
     return P.code + ': ' + b.screen + ' ' + R.n + ' seats' + (R.warn.length ? ' WARN ' + R.warn.join('; ') : '') + ' | saved ' + Object.keys(all).length;
   },
+  // Whole cinemas in the background, all in hidden frames (no page navigation, nothing printed):
+  //   eval(localStorage.__vyu); V.runAll(['PVYH', 'PVTP'], 'YYYYMMDD')   then poll  V.status()
+  frameDoc: (url, ready, timeout = 30000) => new Promise((res) => {
+    const f = document.createElement('iframe'); f.style.cssText = 'position:fixed;left:0;top:0;width:1280px;height:1500px;opacity:0;pointer-events:none;z-index:-1';
+    const t0 = Date.now(); f.src = url; document.body.appendChild(f);
+    const t = setInterval(() => {
+      if (Date.now() - t0 > timeout) { clearInterval(t); f.remove(); return res(null); }
+      try { const w = f.contentWindow; if (!w || w.document.readyState !== 'complete') return;
+        const v = ready(w); if (v == null) return; clearInterval(t); res({ f, w, v });
+      } catch (e) { /* still loading */ }
+    }, 800);
+  }),
+  async runOne(code, date) {
+    const log = (m) => { const L = JSON.parse(localStorage.__vyuLog || '[]'); L.push(code + ': ' + m); localStorage.__vyuLog = JSON.stringify(L); };
+    // showtimes page: ready when its JSON lists sessions, or give up after ~8 s of a loaded page with none
+    const page = await V.frameDoc('/cinemas/hyderabad/x/buytickets/' + code + '/' + date, (w) => { if (V.screens(w.document).length) return true; w.__n = (w.__n || 0) + 1; return w.__n > 10 ? false : null; });
+    if (!page || !page.v) { if (page) page.f.remove(); log('no shows found'); return; }
+    V.plan(code, page.w.document); page.f.remove();
+    const P = JSON.parse(localStorage.__vyuPlan);
+    for (let i = 0; i < P.list.length; i++) P.counts[i] = P.list.length === 1 ? 1 : await V.inFrame(P.list[i].url);
+    let bi = 0; for (const [i, c] of Object.entries(P.counts)) if (+c > +(P.counts[bi] || 0)) bi = +i;
+    P.best = bi; localStorage.__vyuPlan = JSON.stringify(P);
+    let K = null;
+    for (let attempt = 0; attempt < 2 && !K; attempt++) {
+      const fr = await V.frameDoc(P.list[bi].url, (w) => {
+        const k = V.konva(w); const n = k ? k.seats.length : 0;
+        if (n && n === w.__last) return k; w.__last = n;
+        if (!n) { const b = [...w.document.querySelectorAll('button')].find((x) => /^(Continue|Accept)$/i.test(x.textContent.trim())); if (b) b.click(); }
+        return null; });
+      if (fr) { K = fr.v; fr.f.remove(); }
+    }
+    if (!K) { log('seat map did not load'); return; }
+    const R = V.rowsOut(K), b = P.list[bi], all = JSON.parse(localStorage.__vyuAll || '{}');
+    all[code] = { screen: b.screen, attrs: b.attrs, cats: b.cats, url: b.url, screens: P.list.map((x, i) => x.screen + (x.attrs ? '[' + x.attrs + ']' : '') + '=' + (P.counts[i] ?? '?')), allScreens: P.all, n: R.n, warn: R.warn, rows: R.out };
+    localStorage.__vyuAll = JSON.stringify(all);
+    log(b.screen + ' ' + R.n + ' seats (' + P.list.map((x, i) => P.counts[i]).join('/') + ')' + (R.warn.length ? ' WARN ' + R.warn.join('; ') : ''));
+  },
+  async runAll(codes, date) {
+    localStorage.__vyuLog = '[]'; localStorage.__vyuRun = 'running';
+    for (const c of codes) { try { await V.runOne(c, date); } catch (e) { const L = JSON.parse(localStorage.__vyuLog); L.push(c + ': ERR ' + e); localStorage.__vyuLog = JSON.stringify(L); } }
+    localStorage.__vyuRun = 'done';
+  },
+  status: () => localStorage.__vyuRun + ' | ' + JSON.parse(localStorage.__vyuLog || '[]').join(' || '),
 };

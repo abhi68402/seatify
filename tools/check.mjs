@@ -22,6 +22,9 @@ for (const t of THEATRES) {
     const minX = Math.min(...D.row.seats.map((s) => Math.abs(s.x))), depth = D.z / L.refCalc.backZ;
     const ok = best === D && depth >= 0.55 && depth <= 0.78 && Math.abs(D.x) <= minX + 0.6 && (n <= 5 || ri < n - 2);
     if (!ok) fail++;
+    // every seat id (row + printed number) must be unique, or the numbering was transcribed wrong
+    const dupes = L.seats.length - new Set(L.seats.map((s) => s.id)).size;
+    if (dupes) { fail++; console.log(`BAD ${t.id} / ${h.name}: ${dupes} duplicate seat ids`); }
     seats += L.seats.length;
     console.log(`${ok ? 'ok ' : 'BAD'} ${(t.id + ' / ' + h.name).padEnd(38)} ${String(L.seats.length).padStart(4)} seats · director ${D.id.padEnd(9)} ${D.m.score} (row ${ri + 1}/${n}, ${(depth * 100).toFixed(0)}% back, ${D.m.fov.toFixed(0)}°) · front ${front.m.score} · back ${back.m.score}`);
   });

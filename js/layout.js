@@ -24,7 +24,7 @@ function normaliseSection(sec, hall) {
         const t = line.trim();
         if (t === '-' || t === '') { out.push({ walkway: true, pitch: g.walkway || 1.0 }); return; }
         const m = t.match(/^([^\s:]+)(?::([\d/]+))?\s+(.*)$/);
-        const st = m[2] ? m[2].split('/').map(Number) : [1];
+        const st = m[2] ? m[2].split('/').map((v) => (v === '' ? null : +v)) : [1]; // '' = continue from the previous block
         out.push({
           tier: g.tier, label: m[1], start: st[0], starts: st.length > 1 ? st : null, cells: m[3].replace(/\s/g, '.'),
           tierLabel: g.label, price: g.price, align: 'grid', colW: g.colW, prefix: g.prefix,

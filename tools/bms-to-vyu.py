@@ -15,7 +15,9 @@ SKIP = {'CPHY'}  # unlabelled box sections; add with the next batch
 IDS = {'AACN': 'aparna-nallagandla', 'CTNR': 'cinepolis-tnr', 'SRMO': 'sree-ramulu', 'MMCA': 'miraj-cinetown', 'IGMH': 'inox-gsm',
        'MMAH': 'moviemax-amr', 'ILKS': 'pvr-lakeshore', 'CVMU': 'cineverse-uppal', 'CPMH': 'cinepolis-lulu', 'GPRH': 'gpr-nizampet',
        'ASHN': 'asian-cinemart', 'SRCM': 'sai-ranga', 'BRKH': 'bhramaramba', 'MAHM': 'mallikarjuna', 'AMCA': 'asian-mcube',
-       'ABCS': 'cinepolis-dsl', 'GOKU': 'gokul', 'PNNG': 'pvr-galleria'}
+       'ABCS': 'cinepolis-dsl', 'GOKU': 'gokul', 'PNNG': 'pvr-galleria',
+       'PVYH': 'pvr-central', 'PVTP': 'pvr-preston', 'INMH': 'inox-kachiguda', 'ARMH': 'asian-radhika', 'MCSS': 'miraj-shalini-shivani',
+       'PRCX': 'pvr-rk-cineplex', 'TVHY': 'tivoli', 'PIMH': 'pvr-irrum-manzil', 'CMMA': 'cinepolis-mantra', 'IOMH': 'inox-odeon'}
 codes = sys.argv[3:] or [c for c in H if c not in SKIP]
 
 def slug(s): return re.sub(r'[^a-z0-9]+', '-', s.lower().replace('&', ' ')).strip('-')
@@ -28,6 +30,7 @@ def tier_of(cat, single):
     if 'RECLIN' in u or u == 'VIP': return 'recliner'
     if 'SOFA' in u: return 'semi'
     if single and re.search(r'BALCONY|BOX|MAHARAJA|UPPER', u): return 'balcony'
+    if 'BOX' in u: return 'prime'
     if re.search(r'GOLD|ROYAL|PRIME|PLATINUM|EXECUTIVEP', u): return 'prime'
     return 'classic'
 def is_balc(cat): return bool(re.search(r'BALCONY|BOX|MAHARAJA|UPPER', cat.upper()))
@@ -38,7 +41,7 @@ def match_hall(code, screen):
     halls = (F.get(code) or {}).get('halls') or []
     if len(halls) == 1: return halls[0]
     u = screen.upper()
-    for kw in ['MACRO', 'PXL', 'P[XL]', 'MAGNUS', 'INFINITY']:
+    for kw in ['MACRO', 'PXL', 'P[XL]', 'MAGNUS', 'INFINITY', 'EXTREEME']:
         if kw in u.replace(' ', ''):
             for h in halls:
                 if kw.replace('[', '').replace(']', '') in h['screen'].upper().replace('[', '').replace(']', '').replace(' ', ''): return h
@@ -46,6 +49,8 @@ def match_hall(code, screen):
     for h in halls:
         if num_of(h['screen']) == n: return h
     return None
+
+for c in codes: IDS.setdefault(c, slug((F.get(c) or {}).get('short') or V[c]['bms']))
 
 def js(s): return "'" + s.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
@@ -58,6 +63,7 @@ def build(code):
         if line.startswith('##'):
             m = re.match(r'##\s*(?:₹(\d+))?\s*(.*?)\s*\[', line)
             price, cat = (int(m.group(1)) if m.group(1) else None), m.group(2)
+            if cat in ('?', ''): cat = 'Box'  # unsold box seats carry no price, so no '₹' title
             cur = {'cat': cat, 'price': price, 'rows': []}; groups.append(cur); continue
         rtl = line.startswith('RTL ')
         body = line[4:] if rtl else line

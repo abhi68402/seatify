@@ -338,6 +338,114 @@ export const INFO = {
       { width: null, projector: '2K Xenon', sound: 'Dolby Atmos', which: 'Audi 8', url: 'https://www.hyderabadtheatres.com/screen/pvr-next-galleria-mall-audi-8/' },
     ],
   },
+  'pvr-central': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.1, count: 41472, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/550860/pvr-panjagutta-hyderabad' },
+    highlights: [
+      { text: 'Located on the 5th floor of Hyderabad Central Mall at Panjagutta.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/theaters/pvr-central-mall/' },
+      { text: 'Audi 5 is the largest hall, with 390 seats and 4K projection.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-5/' },
+    ],
+    halls: [
+      { width: null, projector: 'Digital 4K Xenon', sound: 'Dolby 7.1', which: 'Audi 5', url: 'https://www.hyderabadtheatres.com/screen/pvr-central-mall-panjagutta-audi-5/' },
+    ],
+  },
+  'pvr-preston': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.2, count: 39167, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/7383826' },
+    highlights: [
+      { text: 'Opened with Preston Mall in July 2019 as four PVR screens with 1,000 seats.', src: 'The Hans India', url: 'https://www.thehansindia.com/news/cities/hyderabad/preston-mall-opens-in-gachibowli-545612' },
+      { text: 'All four audis have 42 ft wide screens with Dolby Atmos.', src: 'HyderabadTheatres.com', url: 'https://www.hyderabadtheatres.com/theaters/pvr-preston-mall/' },
+    ],
+    halls: [
+      { width: '42 ft', projector: 'Digital 4K Xenon', sound: 'Dolby Atmos', which: 'Audi 3', url: 'https://www.hyderabadtheatres.com/screen/pvr-preston-prime-audi-3/' },
+    ],
+  },
+  'inox-kachiguda': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.2, count: 33971, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/12559545/inox-maheshwari-parameshwari' },
+    highlights: [
+      { text: 'Stands on the site of the 1980s Maheshwari and Parameshwari twin theatres, known for what was probably the first escalator in a public space in Hyderabad.', src: 'The News Minute', url: 'https://www.thenewsminute.com/telangana/sangeet-odeon-iconic-hyd-theatres-have-faded-oblivion-86620' },
+      { text: 'The twin theatres were demolished and rebuilt as the Maheshwari Parameshwari INOX multiplex in 2010.', src: 'The News Minute', url: 'https://www.thenewsminute.com/telangana/sangeet-odeon-iconic-hyd-theatres-have-faded-oblivion-86620' },
+    ],
+    halls: [
+      { width: null, projector: '2K Digital', sound: 'Dolby 7.1', which: 'Screen 5', url: 'https://www.hyderabadtheatres.com/screen/inox-maheshwari-parmeshwari-mall-screen-5/' },
+    ],
+  },
+  'asian-radhika': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.1, count: 33632, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/2159824/asian-radhika-multiplex' },
+    highlights: [
+      { text: 'All three screens use 2K Xenon projection with Dolby 7.1 sound, with 757 seats in total.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/theaters/asian-radhika-multiplex/' },
+    ],
+    halls: [
+      { width: null, projector: 'Digital 2K Xenon', sound: 'Dolby 7.1', which: 'Screen 2', url: 'https://www.hyderabadtheatres.com/screen/asian-radhika-multiplex-ecil-screen-2/' },
+    ],
+  },
+  'miraj-shalini-shivani': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.0, count: 32065, src: 'Yappe', url: 'https://yappe.in/telangana/hyderabad/miraj-cinemas-shalini-shivani/220299' },
+    highlights: [
+      { text: 'Screen 4 is the largest hall, with 571 seats.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-4/' },
+    ],
+    halls: [
+      { width: null, projector: 'Digital 2K Xenon', sound: 'Dolby 7.1', which: 'Screen 4', url: 'https://www.hyderabadtheatres.com/screen/miraj-shalini-shivani-screen-4/' },
+    ],
+  },
+  'pvr-rk-cineplex': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.2, count: 22538, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/8052078/pvr-rk-cineplex-hyderabad' },
+    highlights: [
+      { text: 'Screen 1 is the largest hall, with 481 seats, 4K projection and Dolby Atmos.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/pvr-rk-cineplex-screen-1/' },
+    ],
+    halls: [
+      { width: null, projector: '4K Digital', sound: 'Dolby Atmos', which: 'Screen 1', url: 'https://www.hyderabadtheatres.com/screen/pvr-rk-cineplex-screen-1/' },
+    ],
+  },
+  'tivoli': {
+    asOf: '20 Nov 2026',
+    rating: { value: 3.9, count: 22254, src: 'Yappe', url: 'https://yappe.in/telangana/secunderabad/tivoli-cinema/1039905' },
+    highlights: [
+      { text: 'Named by The Hans India as the one old Secunderabad cinema that stood the test of time, upgraded to newer projection technology.', src: 'The Hans India', url: 'https://www.thehansindia.com/posts/index/Telangana/2017-08-11/Moving-memories-of-vanished-movie-halls/318187' },
+      { text: 'Screen 4 is branded EXTREEME and is the largest hall, with 757 seats.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/tivoli-cinemas-extreeme/' },
+    ],
+    halls: [
+      { width: null, projector: '2K Laser', sound: 'Dolby 7.1', which: 'Screen 4 (EXTREEME)', url: 'https://www.hyderabadtheatres.com/screen/tivoli-cinemas-extreeme/' },
+    ],
+  },
+  'pvr-irrum-manzil': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.0, count: 18715, src: 'Explurger', url: 'https://www.explurger.com/pd/s55nrkrmgaxwhdy41' },
+    highlights: [
+      { text: 'Opened as PVR\'s seventh multiplex in Hyderabad, with 7 screens and 1,182 seats across 42,461 sq ft.', src: 'Dalal Street Journal', url: 'https://www.dsij.in/appmindshare/pvr-opens-7-screen-multiplex-in-hyderabad-4940' },
+      { text: 'PVR announced the opening in November 2018, with BARCO 2K projection and Dolby 7.1 sound in all auditoriums.', src: 'Business Standard', url: 'https://www.business-standard.com/article/news-cm/pvr-opens-7-screen-multiplex-in-telangana-118113000367_1.html' },
+      { text: 'Audi 1 is a 4DX auditorium with 96 seats and a 50 ft screen.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-1-4dx/' },
+    ],
+    halls: [
+      { width: null, projector: '2K Xenon', sound: 'Dolby 7.1', which: 'Audi 6', url: 'https://www.hyderabadtheatres.com/screen/pvr-irrum-manzil-audi-6/' },
+    ],
+  },
+  'cinepolis-mantra': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.2, count: 20617, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/125399' },
+    highlights: [
+      { text: 'All six audis use 2K digital projection with Dolby 7.1.', src: 'HyderabadTheatres.com', url: 'https://www.hyderabadtheatres.com/theaters/cinepolis-mantra-mall/' },
+    ],
+    halls: [
+      { width: null, projector: '2K Digital', sound: 'Dolby 7.1', which: 'Audi 4', url: 'https://www.hyderabadtheatres.com/screen/cinepolis-mantra-mall-audi-4/' },
+    ],
+  },
+  'inox-odeon': {
+    asOf: '20 Nov 2026',
+    rating: { value: 4.2, count: 335, src: 'Google, via Wanderlog', url: 'https://wanderlog.com/place/details/20332595' },
+    highlights: [
+      { text: 'Built on the site of the old Odeon complex at RTC X Roads, which held Odeon 70mm, Odeon Deluxe and Mini Odeon and was a release centre for Telugu blockbusters for decades.', src: 'The News Minute', url: 'https://www.thenewsminute.com/telangana/sangeet-odeon-iconic-hyd-theatres-have-faded-oblivion-86620' },
+      { text: 'The 8-screen INOX opened at the old Odeon site as the 19th PVR INOX cinema in Hyderabad, taking the chain to 119 screens in the city.', src: 'Cinejosh', url: 'https://cinejosh.com/news/1/125757/inox-odeon-opened-at-rtc-x-roads.html' },
+      { text: 'Screen 8 has DTS:X sound with 2K laser projection.', src: 'HyderabadTheatres', url: 'https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-8/' },
+    ],
+    halls: [
+      { width: null, projector: '4K Xenon', sound: 'Dolby Atmos', which: 'Screen 5', url: 'https://www.hyderabadtheatres.com/screen/inox-odeon-mall-screen-5/' },
+    ],
+  },
 };
 
 export const infoOf = (tid) => INFO[tid] || null;
@@ -380,5 +488,15 @@ export const BOOKING = {
   'cinepolis-dsl': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/cinepolis-dsl-virtue-mall-uppal-hyderabad/ABCS', district: 'https://www.district.in/movies/cinepolis-dsl-virtue-mall-uppal-hyderabad-CD9123' },
   'gokul': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/gokul-70mm-4k-dts-erragadda/GOKU', district: null },
   'pvr-galleria': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-next-galleria-mall-panjagutta/PNNG', district: 'https://www.district.in/movies/pvr-next-galleria-mall-panjagutta-hyderabad-CD1022281' },
+  'pvr-central': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-central-mall-panjagutta/PVYH', district: 'https://www.district.in/movies/pvr-panjagutta-central-mall-hyderabad-CD1022251' },
+  'pvr-preston': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-preston-gachibowli-hyderabad/PVTP', district: 'https://www.district.in/movies/pvr-preston-gachibowli-hyderabad-CD1022285' },
+  'inox-kachiguda': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/inox-maheshwari-parmeshwari-mall-kachiguda/INMH', district: 'https://www.district.in/movies/inox-maheshwari-parmeshwari-mall-kachiguda-hyderabad-CD1020777' },
+  'asian-radhika': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/asian-radhika-multiplex-ecil/ARMH', district: null },
+  'miraj-shalini-shivani': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/miraj-cinemas-shalini-shivani-kothapet/MCSS', district: 'https://www.district.in/movies/miraj-cinemas-shalini-shivani-kothapet-CD183' },
+  'pvr-rk-cineplex': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-rk-cineplex-hyderabad/PRCX', district: 'https://www.district.in/movies/pvr-rk-cineplex-rk-complex-hyderabad-CD1022256' },
+  'tivoli': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/tivoli-cinemas-secunderabad/TVHY', district: null },
+  'pvr-irrum-manzil': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/pvr-irrum-manzil-hyderabad/PIMH', district: 'https://www.district.in/movies/pvr-irrum-manzil-khairatabad-hyderabad-CD1022282' },
+  'cinepolis-mantra': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/cinepolis-mantra-mall-attapur/CMMA', district: 'https://www.district.in/movies/cinepolis-mantra-mall-upparpally-hyderabad-CD1977' },
+  'inox-odeon': { bms: 'https://in.bookmyshow.com/cinemas/hyderabad/inox-odeon-4k-laser-atmos-dts-x-rtc-x-roads/IOMH', district: 'https://www.district.in/movies/inox-odeon-4k-laser-dolby-atmos-dts-x-rtc-x-roads-CD1022247' },
 };
 export const bookingOf = (tid) => BOOKING[tid] || null;

@@ -4,7 +4,7 @@
 
 ### *View your seat before you sit.*
 
-Step into any seat of **31 Hyderabad cinemas** in 3D, and see what the view is really like before you go.
+Step into any seat of **41 Hyderabad cinemas** in 3D, and see what the view is really like before you go.
 
 **[▶ Try it live](https://www.cinevyu.site/)**
 
@@ -33,14 +33,14 @@ Vyu fixes that. Pick a theatre, pick a seat, and **fly into the hall** to look a
 |---|---|
 | 🪑 **Seat-by-seat 3D view** | A human-eye camera with about 105° field of view, realistic seated eye heights and an anatomically sized audience. |
 | 📊 **0–100 view score** | Every seat is scored on field of view, off-axis angle, look-up angle, sightline clearance, balcony overhang and sound, with plain-language reasons. |
-| 🏛️ **31 Hyderabad theatres** | Maroon curtains, velvet and damask multiplexes, and whitewashed single screens with ceiling fans. |
+| 🏛️ **41 Hyderabad theatres** | Maroon curtains, velvet and damask multiplexes, and whitewashed single screens with ceiling fans. |
 | ✅ **Honest data** | 7 halls are matched row-for-row to real seat maps. 6 are labelled approximate reconstructions. |
 | 🔖 **Saved seats** | Shortlist seats and compare them. Saved in your browser. |
 | 📱 **Responsive** | Phones from 360 px up to wide desktops. The desktop layout splits the seat map and the live 3D view. |
 | ♿ **Accessible** | Skip link, keyboard seat navigation with arrow keys, screen-reader announcements, focus management and reduced-motion support. |
 | 🎬 **Director's seat** | Every hall's top seat is the director's seat, placed by geometry: the distance where the screen fills its target angle (D = W ÷ 2·tan(θ/2)), blended with the two-thirds-back rule and checked against a 30° look-up limit. Each theatre page shows the working. Scores follow SMPTE (30° minimum) and THX (36–40°) viewing guidance. |
 | ⭐ **Ratings, specs & highlights** | Each theatre shows an audience rating (with its source and review count), what's special about it, and published specs (screen width, projector, sound) for every hall, all linked to their sources. |
-| 🪞 **Seat Twin** (only on Vyu) | Mark your seat once, or describe the view you like with two sliders (Seat DNA). Vyu finds that same view in all 35 halls: same screen width in your eyes, same look-up, same side angle. Every theatre then shows "your seat here". |
+| 🪞 **Seat Twin** (only on Vyu) | Mark your seat once, or describe the view you like with two sliders (Seat DNA). Vyu finds that same view in all 45 halls: same screen width in your eyes, same look-up, same side angle. Every theatre then shows "your seat here". |
 | 📱 **Motion Look** (only on Vyu) | On a phone, move the phone itself to look around the hall, like a window into the cinema. Uses the motion sensor; no headset or app. |
 | 📴 **Works offline** | No backend, CDN, web fonts or API calls: three.js and fonts are vendored. A service worker stores the whole site (~3 MB) on the first visit, so it then opens and runs with no internet. Installable as an app. |
 
